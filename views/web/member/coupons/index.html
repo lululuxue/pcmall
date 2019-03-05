@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox clear">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+		 	<div class="userbox clear">
+		 		<div class="useraside">
+					<{include file="web/member/menu.html"}>
+		 		</div>
+		 		<div class="usercontent">
+		 			<div class="usertitle">
+		 				我的优惠券
+		 			</div>
+					<div class="addressbox" style="font-weight:normal;">
+						<div class="fenbtnbox">
+							<input type="button" value="兑换" class="fenbtn" style="cursor: pointer" onclick="window.location.href='<{site_url("/member/coupons/exchange")}>'">
+						</div>
+					</div>
+ 					<div class="fenitembox">
+ 						<table class="fen-table">
+ 							<tr>
+ 								<th>优惠券名称</th>
+ 								<th>使用时间</th>
+ 								<th>使用范围</th>
+								<th>使用店铺</th>
+								<th>优惠券金额</th>
+ 							</tr>
+							<{foreach $list as $key}>
+							<tr>
+								<td><{$key.name}></td>
+								<td><{date('Y-m-d',$key.start_time)}>-<{date('Y-m-d',$key.end_time)}></td>
+								<td>订单满<{$key.use_price}>元可用</td>
+								<td><{$key.shop_name}></td>
+								<td>¥ <{$key.amount}></td>
+							</tr>
+							<{/foreach}>
+ 						</table>
+						<!--分页-->
+						<{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+ 					</div>
+		 		</div>
+		 	</div>
+		 	
+		 	
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+<script>
+$(function(){
+	
+
+})	
+</script>
+</body>
+</html>

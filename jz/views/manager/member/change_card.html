@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+	<link href="/public/H-ui/css/style.css" rel="stylesheet" type="text/css">
+	<style>
+		.no-display{display:none}
+	</style>
+</head>
+<body>
+<nav class="breadcrumb">
+	变更申请 <a class="btn btn-success radius r mr-20" style="line-height:1.6em" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20">
+	<button class="btn1 recharge-btn btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 申请</button>
+	<button class="btn2 recharge-btn btn" type="submit"><i class="Hui-iconfont">&#xe665;</i> 待审批</button>
+	<form action="<{site_url('/manager/member/member/change_card_save')}>" method="post" class="form form-horizontal" id="add" enctype="multipart/form-data">
+
+		<input type="hidden" name="id" value="">
+		<input type="hidden" name="cat" value="1">
+		<div class="row cl">
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2">会员卡号：</label>
+				<div class="formControls col-3">
+					<input type="text" onchange="select_card(this.value)" class="input-text" value="" name="card_no" datatype="m" nullmsg="会员卡号错误">
+				</div>
+			</div>
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2">剩余金额：</label>
+				<div class="formControls col-3">
+					<span class="count"></span>
+				</div>
+			</div>
+
+		</div>
+		<div class="row cl">
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2"><span class="c-red">*</span>凭证扫描件：</label>
+				<div class="formControls col-3">
+					<a href="<{$item.image}>" target="_blank"><img src="<{$item.image}>" width="50" <{if $item.image==''}>style="display: none;"<{/if}>></a>
+					<input type="hidden" value="" name="image">
+					<input type="file" name="image_pic" id="image_pic" onchange="upload_file(this);" style="width: 150px;display:none">
+					<span onclick="$('#image_pic').click();" style="background-color:#d9d9d9;cursor:pointer;display:inline-block;width:100px;height:30px;line-height:30px;border:1px solid #d9d9d9;text-align:center">选择文件</span>
+				</div>
+			</div>
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2"><span class="c-red">*</span>剩余保养券金额：</label>
+				<div class="formControls col-3">
+					<span class="care_count"></span>
+				</div>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2">钟点工折扣：</label>
+				<div class="formControls col-3">
+					<input type="text" class="input-text" value="" name="people_discount">
+				</div>
+			</div>
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2">保养折扣：</label>
+				<div class="formControls col-3">
+					<input type="text" class="input-text" value="" name="care_discount">
+				</div>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2">会员卡有效期：</label>
+				<div class="formControls col-3">
+					<input type="text" class="input-text laydate-icon" value="" name="endtime" onclick="laydate({min:laydate.now(),istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" datatype="*" nullmsg="请选择服务时间" style="padding-right:0;height:auto;">
+				</div>
+			</div>
+			<div class="width:40%:float:left;">
+				<label class="form-label col-2">会员卡隶属总店：</label>
+				<div class="formControls col-2">
+					<span class="select-box">
+						<select name="company" class="select" value='重庆公司' disabled=disabled>
+							<option value="重庆公司">重庆公司</option>
+						</select>
+					</span>
+				</div>
+				<div class="formControls col-2">
+					<span class="select-box">
+						<select name="shop" class="select">
+							<option value="总店">--请选择总店--</option>
+						</select>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>申请备注：</label>
+			<div class="formControls col-3">
+				<textarea style="height:50px;" class="input-text" value="" name="note"></textarea>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>变更申请</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+	<form action="<{site_url('/manager/member/member/change_card_save')}>" method="post" class="form form-horizontal no-display" id="add1" enctype="multipart/form-data">
+		<div class="mt-20">
+			<table class="table table-border table-bordered table-bg table-hover table-sort">
+				<thead>
+				<tr class="text-c">
+					<th>会员卡号</th>
+					<th>剩余金额</th>
+					<th>钟点工折扣</th>
+					<th>保养折扣</th>
+					<th>会员有效期</th>
+					<th>隶属总店</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody class="add-tr">
+				<{foreach $list as $key}>
+				<tr class="text-c">
+					<td><{$key.card_no}></td>
+					<td><{$key.count}></td>
+					<td><{$key.people_discount}></td>
+					<td><{$key.care_discount}></td>
+					<td><{$key.endtime|date_format:"%Y-%m-%d %H:%I:%S"}></td>
+					<td><{$key.shop}></td>
+					<td class="text-l">
+						<a style="text-decoration:none;color:#2691FD" class="ml-5" onClick="open_iframe('申请','<{site_url("/manager/member/member/card_up_verify/<{$key.Id}>")}>')" href="javascript:;" title="申请">申请</a>
+					</td>
+				</tr>
+				<{/foreach}>
+				</tbody>
+			</table>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<{ajax_upload()}>
+<script language="JavaScript">
+
+	function select_card(card_no){
+	    $.ajax({
+			type:"post",
+			url:"/manager/member/member/card_info",
+			data:{card_no:card_no},
+			dataType:"json",
+			success:function(res){
+                if (res.status == "y") {
+                    $(".count").html(res.result.count);
+                    $(".care_count").html(res.result.care_count);
+                    $("input[name=care_discount]").val(res.result.care_discount);
+                    $("input[name=people_discount]").val(res.result.people_discount);
+                    $("input[name=endtime]").val(res.result.endtime);
+                    $("input[name=id]").val(res.result.Id);
+                }
+			}
+		})
+	}
+	var spec_num = 0;
+	$(function() {
+		//验证表单
+		$.Tipmsg.r = null;
+		$("#add").Validform({
+			tiptype: function (msg) {
+				layer.msg(msg);
+			},
+			tipSweep: true,
+			ajaxPost: true,
+			callback: function (data) {
+				if (data.status == "y") {
+					//window.history.go(-1);
+                    layer.msg('提交成功');
+                    //layer_close();
+                    $("#add").addClass('no-display');
+                    $("#add1").removeClass('no-display');
+                    $(".btn1").removeClass('btn-success');
+                    $(".btn2").addClass('btn-success');
+					var str = '<tr class="text-c">';
+                        str += '<td>'+data.result.result.card_no+'</td>';
+                    	str += '<td>'+data.result.result.count+'</td>';
+						str += '<td>'+data.result.result.people_discount+'</td>';
+                    	str += '<td>'+data.result.result.care_discount+'</td>';
+						str += '<td>'+data.result.result.endtime+'</td>';
+                    	str += '<td>'+data.result.result.shop+'</td>';
+                    	str += '<td class="text-l">';
+                        str += '<a style="text-decoration:none;color:#2691FD" class="ml-5" onClick="open_iframe(';
+                        str += "'申请'";
+
+                        str += ",'/manager/member/member/card_up_verify/"+data.result.result.Id+"'";
+                        str += ')" ';
+                        str += 'href="javascript:;" title="申请">申请</a>';
+                        str += '</td>';
+                        str += '</tr>';
+
+                    $(".add-tr tr:first").before(str);
+					//局部刷新input
+                    $("#add input").val('');
+                    $("#add textarea").val('')
+                    $("input[name=cat]").val(1);
+                    $(".count").html('');
+                    $(".care_count").html('');
+				}
+			}
+		});
+	});
+
+
+
+	$(function(){
+		//模型选择
+		$('[name="model_id"]').change(function(){
+			model_select($(this).val());
+		})
+
+		//表单回填
+		//var formObj = new Form();
+		//formObj.init(<{ch_json_encode($item)}>);
+
+	})
+
+	$(".recharge-btn").click(function(){
+        $(".recharge-btn").removeClass('btn-success');
+        $(this).addClass('btn-success');
+        var index = $(this).index();
+        if(index == 0){
+            $("#add").removeClass('no-display');
+            $("#add1").addClass('no-display');
+		}else{
+            $("#add").addClass('no-display');
+            $("#add1").removeClass('no-display');
+		}
+        //局部刷新input
+        $("#add input").val('');
+        $("#add textarea").val('')
+        $("input[name=cat]").val(1);
+        $(".count").html('');
+        $(".care_count").html('');
+	})
+
+    //添加图片展示
+    function show_upload(spec_pic, url){
+        $("#"+spec_pic).parent().find('img').attr('src',url);
+        $("#"+spec_pic).parent().find('img').show();
+        $("#"+spec_pic).parent().find('a').attr('href',url);
+        $("#"+spec_pic).parent().find('[type="hidden"]').val(url);
+    }
+</script>
+</body>
+</html>

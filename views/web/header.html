@@ -1,0 +1,112 @@
+<!-- top -->
+<div class="topwrap">
+	<div class="wrapbox clear">
+		<div class="topL">
+			您好！欢迎光临<{config_item('website_title')}>!
+			<{if get_m_id()==''}>
+			<a href="<{site_url("/welcome/login?redirect_url=<{urlencode($redirect_url)}>")}>">
+				[登录]
+			</a>
+			<a href="<{site_url("/welcome/reg?redirect_url=<{urlencode($redirect_url)}>")}>">
+				[免费注册]
+			</a>
+			<{else}>
+			<{assign login_member get_member_data(get_m_id())}>
+			<{$login_member.username}>
+			<a href="<{site_url("/welcome/loginout")}>">
+			[退出]
+			</a>
+			<{/if}>
+		</div>
+		<div class="topR">
+			<a href="<{site_url("/member")}>" class="top_a">
+				会员中心
+			</a>
+			<a href="<{site_url("/member/order")}>" class="top_a">
+				我的订单
+			</a>
+			<a href="javascript:void(0)" class="top_a">
+				客服电话：<span class="tel">400-888-8888</span>
+			</a>
+		</div>
+	</div>
+</div>
+<!-- search -->
+<div class="wrapbox">
+	<div class="searchwrap clear">
+		<div class="searchwrapL">
+			<a href="<{site_url("/welcome")}>"><img src="/views/web/skin/images/logo.png"></a>
+		</div>
+		<div class="searchwrapM">
+			<form name="search" id="search" method="post" action="<{site_url("/goods/goods_list")}>" onsubmit="return key_search();" style="width:100%;">
+			<div class="searchbox">
+				<div class="searchboxL">
+					<input type="text" class="searchinput" name="keyword" placeholder="搜索关键字">
+				</div>
+				<div class="searchboxR">
+					<input type="submit" value="搜索" class="searchbtn">
+				</div>
+			</div>
+			</form>
+			<script language="JavaScript">
+				function key_search(){
+					var keyword = $('#search [name="keyword"]').val();
+					if (keyword=='') {
+						layer.open({content: '关键字不能为空',time: 1});
+						return false;
+					} else {
+						$('#search').submit();
+					}
+				}
+			</script>
+			<div class="keywordwrap">
+				<p class="keyword">关键词：</p>
+				<ul class="keyworditem">
+					<{show_adv(5,'<li>','</li>')}>
+				</ul>
+			</div>
+		</div>
+		<div class="searchwrapR">
+			<div class="searchcart">
+				<div class="searchcart_dot" id="my_cart_count">0</div>
+				<a href="<{site_url("/cart")}>">去购物车结算</a>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- nav -->
+<div class="navwrap">
+	<div id="navmenuwrap" class="wrapbox" onmouseover="$('.wrapbox').addClass('on')" onmouseout="$('.wrapbox').removeClass('on')">
+		<div class="navmenu">
+			全部商品分类
+		</div>
+		<div class="navsortbox">
+			<div id ="navsort" >
+				<{assign cat_list ym_list('goods_category',['where'=>['reid'=>0]], 10, 1, 'sortnum asc,id asc')}>
+				<{foreach $cat_list as $val=>$key}>
+				<div class="sortitem" onmouseover="this.className='sortitem on'" onmouseleave="this.className='sortitem'">
+					<a href="<{site_url("/goods/goods_list?cat_id=<{$key.id}>")}>" class="sort_a"><{$key.name}></a>
+					<div class="sortlist">
+						<ul class="sortlistitem">
+							<{assign cat_list_down ym_list('goods_category',['where'=>['reid'=>$key.id]], '', '', 'sortnum asc,id asc')}>
+							<{foreach $cat_list_down as $v=>$k}>
+							<li>
+								<a href="<{site_url("/goods/goods_list?cat_id=<{$k.id}>")}>">
+									<div class="sortlistimg">
+										<img src="<{$k.image}>">
+									</div>
+									<div class="sortlistText">
+										<{$k.name}>
+									</div>
+								</a>
+							</li>
+							<{/foreach}>
+						</ul>
+					</div>
+				</div>
+				<{/foreach}>
+			</div>
+		</div>
+
+	</div>
+</div>

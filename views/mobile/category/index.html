@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/swiper.min.css">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body>
+<!-- search start -->
+<section class="searchwrap flexbox">
+    <div class="logbox flexbox">
+        <img src="/views/mobile/skin/images/logo.png">
+    </div>
+    <div class="searchbox flexbox">
+        <input type="text" class="searchstyle" placeholder="搜索商品">
+        <div class="searchbtnbox">
+            <img src="/views/mobile/skin/images/search_btn.png">
+        </div>
+    </div>
+</section>
+<!-- search end -->
+<section class="contentbox ">
+    <!-- leftnav start -->
+    <aside class="nav" id="left_category_list">
+        <a href="javascript:void(0)" data-value="flag" class="nav_a nav_flag">推荐</a>
+    </aside>
+    <!--左侧分类模板start-->
+    <script type='text/html' id='left_category_list_Template'>
+        {{each result}}
+        <a href="javascript:void(0)" data-value="{{$value.id}}" class="nav_a nav_{{$value.id}}">{{$value.name}}</a>
+        {{/each}}
+    </script>
+    <!--左侧分类模板end-->
+    <!-- leftnav end -->
+    <!--分类列表 start  -->
+    <section class="prolist" id="category_list">
+    </section>
+    <!--分类模板start-->
+    <script type='text/html' id='category_list_Template'>
+        <dl>
+        {{each result}}
+        {{if $value.down != ''}}
+            <dt>{{$value.name}}</dt>
+            <dd>
+                {{each $value.down as v}}
+                <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?cat_id=")}>{{v.id}}" class="gridsitem_a2">
+                    <div class="sortImgwrap">
+                        <img src="{{v.image}}">
+                    </div>
+                    <p class="gridsitem_label">{{v.name}}</p>
+                </a>
+                {{/each}}
+            </dd>
+        </dl><dl>
+        {{else}}
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?cat_id=")}>{{$value.id}}" class="gridsitem_a2">
+                <div class="sortImgwrap">
+                    <img src="{{$value.image}}">
+                </div>
+                <p class="gridsitem_label">{{$value.name}}</p>
+            </a>
+            {{if $index+1%3==0}}</dl><dl>{{/if}}
+        {{/if}}
+        {{/each}}
+        </dl>
+    </script>
+    <!--分类模板end-->
+    <!--分类列表 end -->
+</section>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/swiper.min.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script>
+    $(function () {
+        //左侧分类展示
+        category('left_category_list');
+        //默认推荐的
+        var id = getQueryString('cat_id');
+        if(id){
+            category('category_list', id,1);
+        }else{
+            category('category_list', 'flag');
+        }
+        //切换菜单
+        $('#left_category_list').on('click', 'a', function () {
+            $('#left_category_list a').removeClass('activea');
+            $(this).addClass('activea');
+            category('category_list', $(this).attr('data-value'), 1);
+        });
+    });
+
+    //获取url参数
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
+
+    //分类请求
+    function category(div_id, cat_id, level) {
+        $.ajax({
+            type: "POST",
+            url: "<{site_url('/api/goods/category/')}>",
+            data: "reid=" + cat_id + '&level=' + level,
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 'y') {
+                    var html = template(div_id + '_Template', data);
+                    if (div_id == 'left_category_list') {
+                        $('#' + div_id).append(html);
+                        if(cat_id){
+                            $('#left_category_list a').removeClass('activea');
+                            $(`.nav_`+cat_id).addClass('activea');
+                            console.log( $(`.nav_`+cat_id).text());
+                        }
+                    } else {
+                        $('#' + div_id).html(html);
+                        if(cat_id){
+                            $('#left_category_list a').removeClass('activea');
+                            $(`.nav_`+cat_id).addClass('activea');
+                            console.log( $(`.nav_`+cat_id).text());
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+<script>
+    window.onload = function () {
+        // 设置左侧导航栏高度
+        var headerHeight = $(".searchwrap").height();
+        var footerHeight = $(".navbar").height();
+        var navHeight = (window.innerHeight - headerHeight - footerHeight) + 'px';
+        // var assortHeight  = (window.innerHeight - headerHeight - footerHeight-20) +'px' ;
+        $('.nav').css("height", navHeight);
+
+        var id = getQueryString('cat_id');
+        if(id){
+            category('category_list', id,1);
+        }else{
+            category('category_list', 'flag');
+        }
+    }
+
+    $(".searchbtnbox").click(function(){
+        var keyword = $(".searchstyle").val();
+        window.location.href =  '/<{get_web_type()}>/goods/goods_list?keyword='+keyword;;
+    })
+    $(".searchbtnbox img").click(function(){
+        var keyword = $(".searchstyle").val();
+        window.location.href =  '/<{get_web_type()}>/goods/goods_list?keyword='+keyword;;
+    })
+</script>
+<{if get_client() == 'weixin'}>
+<{include file="mobile/wechat_share.html"}>
+<script language="JavaScript">
+    wx.ready(function () {
+        var share_title = "<{config_item('website_title')}>";
+        var share_desc = "";
+        var share_link = "<{site_url('/<{get_web_type()}>')}>";
+        var share_imgurl = "<{config_item('base_url')}><{config_item('website_logo')}>";
+        wx_share(share_title, share_desc, share_link, share_imgurl);
+    });
+
+</script>
+<{/if}>
+</body>
+</html>
+
+
+
+

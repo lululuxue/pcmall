@@ -1,0 +1,132 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="breadcrumb">
+	收费 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20" style="padding-top: 0px;">
+	<div class="text-c pt-20" style="text-align:left;">
+		<form action="<{site_url('/manager/work/work/fee_list/')}>" method="post" class="form form-horizontal" id="search" name="search">
+			<span class="select-box" style="width:100px">
+				<select name="company" class="select">
+					<option value="">重庆公司</option>
+
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="shop" class="select" onchange="sub_shop_all(this.value)">
+					<option value="">--请选择总店--</option>
+					<{foreach $shop_list as $v}>
+					<option value="<{$v.name}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="sub_shop" class="select">
+
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<input type="text" class="input-text laydate-icon" value="" name="start_time" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" placeholder="请选择服务开始时间" style="padding:0;height:auto;border:none">
+			</span>
+			<span class="select-box" style="width:150px">
+				<input type="text" class="input-text laydate-icon" value="" name="end_time" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" placeholder="请选择服务结束时间" style="padding:0;height:auto;border:none">
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="type" class="select">
+					<option value="">-请选择条件-</option>
+					<option value="phone">联系电话</option>
+					<option value="reid">项目类别</option>
+					<option value="service_name">服务项目</option>
+				</select>
+			</span>
+			<input type="text" name="name" placeholder="请输入查询内容" style="width:150px" class="input-text">
+			<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		</form>
+	</div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+			<tr class="text-c">
+				<th>流水号</th>
+				<th>签章工号</th>
+				<th>签收日期</th>
+				<th>服务分店</th>
+				<th>服务项目</th>
+				<th>业务来源</th>
+				<th>卡号</th>
+				<th>缴费人</th>
+				<th>应收金额</th>
+				<th>实收金额</th>
+				<th>客户姓名</th>
+				<th>联系电话</th>
+				<th>服务地址</th>
+				<th>发单时间</th>
+				<th>服务时间</th>
+				<th>收费备注</th>
+				<th>帮扶人员</th>
+				<th>总部审核人</th>
+			</tr>
+			</thead>
+			<tbody>
+			<{foreach $list as $key}>
+			<tr style="cursor:pointer;" class="text-c" onClick="open_iframe('收费','<{site_url("/manager/work/work/fee_add/<{$key.id}>")}>')" title="收费">
+				<td><{$key.order_no}></td>
+				<td></td>
+				<td></td>
+				<td><{$key.sub_shop}></td>
+				<td><{$key.name}></td>
+				<td class="text-l"></td>
+				<td class="text-l"><{$key.card_no}></td>
+				<td class="text-l"><{$key.fee_people}></td>
+				<td class="text-l"><{$key.promotion_price}></td>
+				<td class="text-l"><{$key.price_real}></td>
+				<td class="text-l"><{$key.full_name}></td>
+				<td class="text-l"><{$key.phone}></td>
+				<td class="text-l"><{$key.address}></td>
+				<td class="text-l"><{$key.addtime}></td>
+				<td class="text-l"><{$key.worktime}></td>
+				<td class="text-l"><{$key.fee_note}></td>
+				<td class="text-l"></td>
+				<td class="text-l"></td>
+			</tr>
+			<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--分页-->
+
+<{page_view('page',$page_count,search_array_to_link($search_where))}>
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script language="JavaScript">
+	$(function(){
+		//表单回填
+		var formObj = new Form();
+		formObj.init(<{ch_json_encode($search_where)}>);
+
+        sub_shop_all('<{$search_where.shop}>','<{$search_where.sub_shop}>')
+	})
+
+
+</script>
+</body>
+</html>

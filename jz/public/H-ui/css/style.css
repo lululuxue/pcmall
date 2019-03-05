@@ -1,0 +1,82 @@
+* {
+    word-wrap: break-word;
+}
+body{ margin:0px; padding:0px;}
+body,table,td,tr,ul,li{ font-size:14px; color:#666; line-height:20px; font-family: "Microsoft Yahei","Hiragino Sans GB","Helvetica Neue",Helvetica,tahoma,arial,"WenQuanYi Micro Hei",Verdana,sans-serif,"\5B8B\4F53"; -webkit-font-smoothing: antialiased;}
+form{margin:0px; padding:0px;}
+a:link,a:visited{color:#666;text-decoration: none;}
+a:hover {text-decoration: none; color: #0B6CBC;}
+a:active {text-decoration: none;}
+ul,li{ list-style-type:none; padding:0px; margin:0px;}
+img{ border:0px;}
+.hong{ color:#F00;}
+.clear{ clear:both;}
+
+/*头部*/
+/*
+.top_header{ width:100%; margin:0px auto; background-color:#60A5EB;}
+.top_header span{ color:#FFF;}
+.top_header a{ color:#FFF;}
+.top_left{ float:left; width:180px; line-height: 60px; font-size: 16px; font-weight: bold; text-align: center;}
+.top_menu{ float: left; line-height:60px;}
+.top_right{ text-align: right; line-height:60px; float:right; margin-right:15px;}
+*/
+/*
+.top_header{ width:100%; margin:auto auto;
+    background:-moz-linear-gradient(top,rgba(0,208,186,1), rgba(1,186,188,1));
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#00d0ba), to(rgba(1,186,188,1)));
+    background:-o-linear-gradient(top,rgba(0,208,186,1), rgba(1,186,188,1));
+    border-bottom:1px solid #e1e1e1;
+}
+*/
+.top_header{ width:100%; margin:auto auto;
+    background: -webkit-linear-gradient(#00d0ba, #01babc); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#00d0ba, #01babc); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#00d0ba, #01babc); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#00d0ba, #01babc); /* 标准的语法 */
+    border-bottom:1px solid #e1e1e1;
+    min-width:1200px;
+}
+.top_header span{ color:#FFF;}
+.top_header a{ color:#FFF; display: inline-block;height: 80px;line-height: 80px;}
+.top_header a .span{ margin-top:28px;display: block;height: 24px;line-height: 24px;border-left: 1px solid #fff;padding:0 5px}
+.top_left{ float:left; width:290px;height:80px;}
+.top_left img{ margin:25px 10px;width:250px;}
+.top_menu{ float: left; line-height:80px;font-size:14px;font-weight:bold;}
+.top_menu img{float:left;width:20px;margin-right:5px;}
+.top_right{ text-align: right; line-height:80px; float:right; margin-right:15px;}
+/*
+.top_menu .active{
+    background:-moz-linear-gradient(top,rgba(249,172,84,1), rgba(255,159,51,1));
+    background:-webkit-gradient(linear, 0 0, 0 bottom, from(#f9ac54), to(rgba(255,159,51,1)));
+    background:-o-linear-gradient(top,rgba(249,172,84,1), rgba(255,159,51,1));
+}
+*/
+.top_menu .active{
+    background: -webkit-linear-gradient(#f9ac54, #ff9f33); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#f9ac54, #ff9f33); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#f9ac54, #ff9f33); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#f9ac54, #ff9f33); /* 标准的语法 */
+}
+
+/*左边*/
+
+.left_menu{ width:99%;}
+.left_menu_parent{ width:100%; height:60px; line-height:60px; border-bottom: 1px solid #e5e5e5; border-top: 1px solid #e5e5e5;}
+.left_menu_parent a{ margin-left: 20px;}
+.left_menu_down{ width:100%;}
+.left_menu_down li{ width:100%; line-height:60px;border-bottom:1px solid #e1e1e1;}
+.left_menu_down li:hover{color:#fff;
+    background: -webkit-linear-gradient(#f9ac54, #ff9f33); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#f9ac54, #ff9f33); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#f9ac54, #ff9f33); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#f9ac54, #ff9f33); /* 标准的语法 */
+}
+.left_menu_down li a{ padding-left:60px;display:block;height:60px;line-height:60px;color:#fff;}
+li .a-active{
+    background: -webkit-linear-gradient(#f9ac54, #ff9f33); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#f9ac54, #ff9f33); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#f9ac54, #ff9f33); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#f9ac54, #ff9f33); /* 标准的语法 */
+}
+.left_menu_down .left-img{position: absolute;top: 18px;width: 24px;left: 30px;}

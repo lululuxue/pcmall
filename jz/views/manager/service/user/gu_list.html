@@ -1,0 +1,104 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="breadcrumb">
+	固定人员 <a class="btn btn-success radius r mr-20" style="line-height:1.6em" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20" style="padding-top: 0px;">
+	<div class="text-c pt-20" style="text-align:left;">
+		<form action="<{site_url('/manager/service/user/gu_list/')}>" method="post" class="form form-horizontal" id="search" name="search">
+			<span class="select-box" style="width:150px">
+				<select disabled name="company" class="select">
+					<option value="">重庆公司</option>
+
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="shop" class="select" onchange="sub_shop_all(this.value)">
+					<option value="">--请选择总店--</option>
+					<{foreach $shop_list as $v}>
+					<option value="<{$v.name}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="sub_shop" class="select">
+
+				</select>
+			</span>
+			<input type="text" name="name" placeholder="请输入姓名" style="width:150px" class="input-text">
+			<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		</form>
+	</div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+			<tr class="text-c">
+				<th>编号</th>
+				<th>固定类别</th>
+				<th>间隔期限</th>
+				<th>服务时间</th>
+				<th>客户姓名</th>
+				<th>联系电话</th>
+				<th>详细地址</th>
+				<th>服务项目</th>
+				<th>约单备注</th>
+			</tr>
+			</thead>
+			<tbody>
+			<{foreach $list as $key}>
+			<tr class="text-c">
+				<td><{$key.id}></td>
+				<{if $key.normal_id == 1}>
+				<td>周几</td>
+				<{else if $key.normal_id == 2}>
+				<td>隔天</td>
+				<{else}>
+				<td>每月几号</td>
+				<{/if}>
+				<td><{$key.value}></td>
+				<td class="text-l"><{$key.dealtime|date_format:"%Y-%m-%d %H:%M:%S"}></td>
+				<td class="text-l"><{$key.name}></td>
+				<td class="text-l"><{$key.username}></td>
+				<td class="text-l"><{$key.address}></td>
+				<td class="text-l"><{$key.service_name}></td>
+				<td class="text-l"><{$key.note}></td>
+			</tr>
+			<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--分页-->
+
+<{page_view('page',$page_count,search_array_to_link($search_where))}>
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script language="JavaScript">
+
+	$(function(){
+		//表单回填
+		var formObj = new Form();
+		formObj.init(<{ch_json_encode($search_where)}>);
+        sub_shop_all('<{$search_where.shop}>','<{$search_where.sub_shop}>');
+	})
+
+</script>
+</body>
+</html>

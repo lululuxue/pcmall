@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+    <style>
+        .left-img{position:absolute;font-size:0.28rem;top:0.2rem;right:0.2rem;height:auto;background: #72972C;display:block;padding:0.2rem;border-radius:0.1rem;color:#fff}
+        .collectDbox .collectT{color:#d9d9d9;line-height:0.5rem;font-size:0.22rem}
+        .collectDbox .collectT span{color:#666;font-size:0.28rem}
+    </style>
+</head>
+<body>
+
+
+<header class="topbar" style="background:#fff;">
+    <div class="conwrap flexbox">
+        <div class="topbarL">
+            <a class="topbar_a" href="javascript:history.go(-1)">
+            <img src="/views/mobile/skin/images/left_arrow.png"/>
+            </a>
+        </div>
+        <div class="topbarM">区域顾问</div>
+        <div class="topbarR" id="selectbtn"></div>
+    </div>
+</header>
+<!-- content start -->
+<section class="wrap">
+    <div class="goodsListwrap" id="dpsc_list">
+        <!-- 单个商品 start -->
+        <div class="collectListbox" id="favorite_list_<{$key.concern_id}>" style="background-color: #fff">
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?brand_id=<{$key.id}>&brand_name=<{$key.name}>")}>" class="goodsList_a">
+                <div class="collectListC" style="width:1rem;height:1rem;">
+                    <img style="border-radius:0.5rem" src="/public/images/AA.jpg">
+                </div>
+                <div class="goodsListR">
+                    <div class="collectDbox">
+                        <p class="collectT"> <span>赵小刀 </span>13878458785</p>
+                        <p class="collectT">服务区域：天河</p>
+                    </div>
+                    <span class="left-img">马上联系</span>
+                </div>
+            </a>
+        </div>
+        <!-- 单个商品 end -->
+        <!-- 单个商品 start -->
+        <div class="collectListbox" id="favorite_list_<{$key.concern_id}>" style="background-color: #fff">
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?brand_id=<{$key.id}>&brand_name=<{$key.name}>")}>" class="goodsList_a">
+            <div class="collectListC" style="width:1rem;height:1rem;">
+                <img style="border-radius:0.5rem" src="/public/images/AA.jpg">
+            </div>
+            <div class="goodsListR">
+                <div class="collectDbox">
+                    <p class="collectT"> <span>陈鑫 </span>13778458785</p>
+                    <p class="collectT">服务区域：黄埔</p>
+                </div>
+                <span class="left-img">马上联系</span>
+            </div>
+            </a>
+        </div>
+        <!-- 单个商品 end -->
+        <!-- 单个商品 start -->
+        <div class="collectListbox" id="favorite_list_<{$key.concern_id}>" style="background-color: #fff">
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?brand_id=<{$key.id}>&brand_name=<{$key.name}>")}>" class="goodsList_a">
+            <div class="collectListC" style="width:1rem;height:1rem;">
+                <img style="border-radius:0.5rem" src="/public/images/AA.jpg">
+            </div>
+            <div class="goodsListR">
+                <div class="collectDbox">
+                    <p class="collectT"> <span>李海茹 </span>13878458785</p>
+                    <p class="collectT">服务区域：番禺</p>
+                </div>
+                <span class="left-img">马上联系</span>
+            </div>
+            </a>
+        </div>
+        <!-- 单个商品 end -->
+        <!-- 单个商品 start -->
+        <div class="collectListbox" id="favorite_list_<{$key.concern_id}>" style="background-color: #fff">
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?brand_id=<{$key.id}>&brand_name=<{$key.name}>")}>" class="goodsList_a">
+            <div class="collectListC" style="width:1rem;height:1rem;">
+                <img style="border-radius:0.5rem" src="/public/images/AA.jpg">
+            </div>
+            <div class="goodsListR">
+                <div class="collectDbox">
+                    <p class="collectT"> <span>陈晓晓 </span>13878458785</p>
+                    <p class="collectT">服务区域：清远</p>
+                </div>
+                <span class="left-img">马上联系</span>
+            </div>
+            </a>
+        </div>
+        <!-- 单个商品 end -->
+        <!-- 单个商品 start -->
+        <div class="collectListbox" id="favorite_list_<{$key.concern_id}>" style="background-color: #fff">
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?brand_id=<{$key.id}>&brand_name=<{$key.name}>")}>" class="goodsList_a">
+            <div class="collectListC" style="width:1rem;height:1rem;">
+                <img style="border-radius:0.5rem" src="/public/images/AA.jpg">
+            </div>
+            <div class="goodsListR">
+                <div class="collectDbox">
+                    <p class="collectT"> <span>卢金水 </span>13878458785</p>
+                    <p class="collectT">服务区域：萝岗</p>
+                </div>
+                <span class="left-img">马上联系</span>
+            </div>
+            </a>
+        </div>
+        <!-- 单个商品 end -->
+        <!-- 单个商品 start -->
+        <div class="collectListbox" id="favorite_list_<{$key.concern_id}>" style="background-color: #fff">
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?brand_id=<{$key.id}>&brand_name=<{$key.name}>")}>" class="goodsList_a">
+            <div class="collectListC" style="width:1rem;height:1rem;">
+                <img style="border-radius:0.5rem" src="/public/images/AA.jpg">
+            </div>
+            <div class="goodsListR">
+                <div class="collectDbox">
+                    <p class="collectT"> <span>陈春生 </span>13878458785</p>
+                    <p class="collectT">服务区域：黄埔</p>
+                </div>
+                <span class="left-img">马上联系</span>
+            </div>
+            </a>
+        </div>
+        <!-- 单个商品 end -->
+        <!-- 单个商品 start -->
+        <div class="collectListbox" id="favorite_list_<{$key.concern_id}>" style="background-color: #fff">
+            <a href="<{site_url("/<{get_web_type()}>/goods/goods_list?brand_id=<{$key.id}>&brand_name=<{$key.name}>")}>" class="goodsList_a">
+            <div class="collectListC" style="width:1rem;height:1rem;">
+                <img style="border-radius:0.5rem" src="/public/images/AA.jpg">
+            </div>
+            <div class="goodsListR">
+                <div class="collectDbox">
+                    <p class="collectT"> <span>卢西奥 </span>13878458785</p>
+                    <p class="collectT">服务区域：越秀</p>
+                </div>
+                <span class="left-img">马上联系</span>
+            </div>
+            </a>
+        </div>
+        <!-- 单个商品 end -->
+    </div>
+</section>
+<!--content end  -->
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laypage/laypage.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script language="JavaScript">
+    //全选
+    $(function () {
+        $('#checkbox_all').click(function () {
+            if ($('#checkbox_all').prop('checked') == true) {
+                $('#dpsc_list [name="f_id[]"]').prop('checked', true);
+            } else {
+                $('#dpsc_list [name="f_id[]"]').prop('checked', false);
+            }
+        })
+
+    })
+    //选择店铺判断是否全部选择
+    function check_f() {
+        var total_shop_num = $('#dpsc_list [name="f_id[]"]').length;//总数
+        var checked_shop_num = $('#dpsc_list [name="f_id[]"]:checked').length;//选中的总数
+
+        if (checked_shop_num >= total_shop_num) {
+            $('#checkbox_all').prop('checked', true);
+        } else {
+            $('#checkbox_all').prop('checked', false);
+        }
+    }
+
+    //批量取消收藏
+    function delete_all() {
+        var id = new Array();
+        $('#dpsc_list [name="f_id[]"]:checked').each(function () {
+            var f_id = $(this).val();
+            id.push(f_id);
+        })
+        $.ajax({
+            type: "POST",
+            url: "<{site_url('/mobile/member/favorite/del_concern_brand')}>",
+            data: {'id': id},
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+                if (data.status == 'y') {
+                    $.each(id, function (index, content) {
+                        $('#favorite_list_' + content).remove();
+                    });
+
+                }
+            }
+        });
+    }
+/*
+    //单个取消收藏
+    function delete_all(id) {
+        $.ajax({
+            type: "POST",
+            url: "<{site_url('/mobile/member/favorite/del_concern_brand')}>",
+            data: {'id': id},
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 'y') {
+                    $('#favorite_list_' + id).remove();
+                }
+            }
+        });
+    }
+*/
+    window.onload = function () {
+        // 设置左侧导航栏高度
+        var headerHeight = $(".topbar").height();
+        var headerHeight1 = $(".pronavbox").outerHeight();
+        var headerHeight2 = $(".blank").outerHeight();
+        var footerHeight = $("footer").outerHeight();
+        var navHeight = (window.innerHeight - headerHeight - headerHeight1 - headerHeight2 - 10 - footerHeight) + 'px';
+        // var assortHeight  = (window.innerHeight - headerHeight - footerHeight-20) +'px' ;
+        $('.no-order').css("height", navHeight);
+    }
+
+</script>
+</body>
+</html>
+
+
+
+

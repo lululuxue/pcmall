@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js" ></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/public/js/jquery.qrcode-0.12.0.min.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox">
+		 	<div class="scrapnav">
+		 		您的当前位置：<a href="/web">首页</a>><a href="javascript:void(0)">微信扫码支付</a>
+		 	</div>
+		 	<div class="contenwrap" style="margin-bottom:20px; min-height: 0px; text-align: center;">
+				<h2>使用微信扫一扫支付</h2>
+				<div id="container">
+				<img width="200" height="200" src=""/>
+				</div>
+		 	</div>
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<script language="JavaScript">
+		$(function(){
+			setTimeout("order_pay_status()", 2000);
+			var options = {
+				render: "image",
+				ecLevel: 'H',//识别度
+				fill: '#000',//二维码颜色
+				background: '#ffffff',//背景颜色
+				quiet: 2,//边距
+				width: 200,//宽度
+				height: 200,
+				text: "<{$code_url}>",//二维码内容
+				//中间logo start
+				/*mode: 4,
+				 mSize: 11 * 0.01,
+				 mPosX: 50 * 0.01,
+				 mPosY: 50 * 0.01,
+				 image:$('#img-buffer')[0],//logo图片*/
+				//中间logo end
+				label: 'jQuery.qrcode',
+				fontname: 'Ubuntu',
+				fontcolor: '#ff9818',
+			};
+			$('#container').empty().qrcode(options);
+		})
+		//查询订单支付状态
+		function order_pay_status(){
+			$.ajax({
+				type:"POST",
+				url: '/api/member/order/order_pay_status',
+				data: 'order_no=<{$order_no}>',
+				dataType:"json",
+				success: function(data){
+					if (data.status=='y') {
+						window.location.href='<{$pay_complete_url}>';
+					} else {
+						setTimeout("order_pay_status()", 2000);
+					}
+				}
+			});
+		}
+	</script>
+</body>
+</html>

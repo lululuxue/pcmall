@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>
+    .Nodisplay{display:none}
+    .city-picker-selector .selector-item{float:left;border:1px solid #ddd;height:28px;line-height:28px;margin-right:10px;width:100px;}
+    .city-picker-selector .selector-item a{padding-left:8px;}
+    .city-picker-selector .selector-item .selector-list{z-index: 10000;position: absolute;background: #fff;border: 1px solid #ddd;width:100px;margin-left:-1px;}
+    .city-picker-selector .selector-item .selector-list ul li{padding-left:8px;height:30px;line-height:30px;}
+    .city-picker-selector .selector-item .selector-list ul .active{background: #3bb4f2;color:#fff}
+    #address{border:1px solid #ddd;margin-top:10px;width:326px;height:28px;padding-left:10px }
+</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/admin/user/save_address')}>" method="post" class="form form-horizontal" id="add">
+        <{foreach $list as $val}>
+		<div class="row cl">
+			<label class="form-label col-1"><input type="radio"  name="is_chose" value="<{$val.id}>"></label>
+			<div class="formControls col-7">
+                 <p>
+                    <span><{$val.full_name}></span>
+                    <span><{$val.tel}></span>
+                </p>
+                <p>
+                    <{if $val.is_default == 1}>
+                    <span style="color:#ff0000">默认</span>
+                    <{/if}>
+                    <span><{$val.province}> <{$val.city}> <{$val.area}> <{$val.address}></span> <a style="text-decoration:none;color:#2691FD" class="ml-5" href="<{site_url("/admin/user/edit_address/<{$val.id}>")}>" title="修改">修改</a>
+                </p>
+
+			</div>
+		</div>
+        <{/foreach}>
+
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="m_id" value="<{$m_id}>">
+                <button onClick="addressChose()" class="btn btn-primary radius" type="button">&nbsp;&nbsp;确定&nbsp;&nbsp;</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;关闭&nbsp;&nbsp;</button>
+                <button onClick="open_iframe('','/admin/user/add_address3/<{$m_id}>')" class="btn btn-primary radius" type="button"> &nbsp;&nbsp;添加地址&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="/public/js/citydata.js"></script>
+<script type="text/javascript" src="/public/js/cityPicker-1.0.0.js?v=1"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                if($('.province a').html()){
+                    layer.msg('请输入省份');
+                }
+                if($('.city a').html()){
+                    layer.msg('请输入城市');
+                }
+                if($('.district a').html()){
+                    layer.msg('请输入地区');
+                }
+                $('input[name=province]').val($('.province a').html());
+                $('input[name=city]').val($('.city a').html());
+                $('input[name=area]').val($('.district a').html());
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+            console.log(data)
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+
+        var selector = $('#city-picker-selector').cityPicker({
+            dataJson: cityData,
+            renderMode: true,
+            search: false,
+            linkage: false
+        });
+    })
+   // window.address_id = 0;
+    function addressChose(){
+        var obj = $("input[name=is_chose]");
+        for(var i=0; i<obj.length; i ++){
+            if(obj[i].checked){
+                //alert(obj[i].value);
+                //window.address_id = obj[i].value;
+                setCookie('address_id',obj[i].value,'7200');
+                setCookie('address_id',obj[i].value,'7200');
+                setCookie('address_id',obj[i].value,'7200');
+                setCookie('address_id',obj[i].value,'7200');
+                setCookie('address_id',obj[i].value,'7200');
+            }
+        }
+    }
+
+    /**
+     *
+     * @param c_name
+     * @param value
+     * @param expiredays
+     */
+    function setCookie(c_name,value,expiredays)
+    {
+        var exdate=new Date()
+        exdate.setDate(exdate.getDate()+expiredays)
+        document.cookie=c_name+ "=" +escape(value)+
+            ((expiredays==null) ? "" : ";expires="+exdate.toGMTString())
+    }
+
+
+
+
+
+</script>
+</body>
+</html>

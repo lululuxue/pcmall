@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+	<meta content="yes" name="apple-mobile-web-app-capable">
+	<meta content="black" name="apple-mobile-web-app-status-bar-style">
+	<meta content="telephone=no" name="format-detection">
+	<link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body style="position:relative;background:#f2f4f4 url(/views/mobile/skin/images/sharebg.png) no-repeat;background-size:100%;">
+<!-- content start -->
+<section class="wrap">
+	<div class="shareImg">
+		<div id="container"></div>
+		<!--<p class="sharechar">长按二维码关注食者无疆</p>-->
+	</div>
+	<div class="sharebtnbox">
+		<img src="/views/mobile/skin/images/sharebtn.png" id="sharebtn">
+	</div>
+</section>
+<div class="sharemask">
+	<div class="sharemaskbox">
+		<img src="/views/mobile/skin/images/share.png" alt="">
+	</div>
+</div>
+
+<!--content end  -->
+<img style="display: none;" id="img-buffer" src="<{config_item('website_logo')}>" >
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/jquery.qrcode-0.12.0.min.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script language="JavaScript">
+	$(function(){
+		var options = {
+			render: "image",
+			ecLevel: 'H',//识别度
+			fill: '#000',//二维码颜色
+			background: '#ffffff',//背景颜色
+			quiet: 2,//边距
+			width: 200,//宽度
+			height: 200,
+			text: "<{site_url("/<{get_web_type()}>?flag_user=<{$member_data.id}>")}>",//二维码内容
+			//中间logo start
+			mode: 4,
+			mSize: 11 * 0.01,
+			mPosX: 50 * 0.01,
+			mPosY: 50 * 0.01,
+			image:$('#img-buffer')[0],//logo图片
+			//中间logo end
+			label: 'jQuery.qrcode',
+			fontname: 'Ubuntu',
+			fontcolor: '#ff9818',
+		};
+		$('#container').empty().qrcode(options);
+
+
+		// 分享遮罩层
+		$('#sharebtn').click(function(){
+			$('.sharemask').show();
+		});
+		$('.sharemask').click(function(){
+			$(this).hide();
+		});
+	})
+</script>
+<{if get_client() == 'weixin'}>
+<{include file="mobile/wechat_share.html"}>
+<script language="JavaScript">
+	wx.ready(function(){
+		var share_title  = "<{config_item('website_title')}>";
+		var share_desc   = "";
+		var share_link   = "<{site_url("/<{get_web_type()}>")}>";
+		var share_imgurl = "<{config_item('base_url')}><{config_item('website_logo')}>";
+		wx_share(share_title, share_desc, share_link, share_imgurl);
+	});
+</script>
+<{/if}>
+</body>
+</html>
+
+
+
+

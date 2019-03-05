@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{$shop_data.shop_name}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/seller/market/promotion/save')}>" method="post" class="form form-horizontal" id="add">
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>活动名称：</label>
+			<div class="formControls col-7">
+				<input type="text" class="input-text" value="" name="name" datatype="*" nullmsg="请输入活动名称！">
+			</div>
+		</div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>开始日期：</label>
+            <div class="formControls col-7">
+                <input type="text" class="input-text" value="" name="start_time" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly datatype="*" nullmsg="请选择开始日期！">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>结束日期：</label>
+            <div class="formControls col-7">
+                <input type="text" class="input-text" value="" name="end_time" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly datatype="*" nullmsg="请选择结束日期！">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>参与会员组：</label>
+            <div class="formControls col-7">
+                <input type="checkbox" id="checkbox-0" name="user_group[]" value="0" <{if  in_array(0, $item.user_group)}>checked<{/if}>>
+                <label for="checkbox-0">全部</label>
+                <{foreach $group_list  as $key}>
+                <input type="checkbox" id="checkbox-<{$key.id}>" name="user_group[]" value="<{$key.id}>" <{if in_array($key.id, $item.user_group)}>checked<{/if}>>
+                <label for="checkbox-<{$key.id}>"><{$key.group_name}></label>
+                <{/foreach}>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>购物金额：</label>
+            <div class="formControls col-7">
+                <input type="text" class="input-text" value="" name="use_price" datatype="price" nullmsg="请输入订单起用金额！" errormsg="订单起用金额格式错误">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>活动规则：</label>
+            <div class="formControls col-7">
+                <select name="type" datatype="*" nullmsg="请选择规则！">
+                    <option value="">请选择规则</option>
+                    <option value="1">购物金额满{X}减</option>
+                    <option value="2">购物金额满{X}优惠</option>
+                    <option value="3">购物金额满{X}赠积分</option>
+                    <option value="4">购物金额满{X}免运费</option>
+                    <option value="5">购物金额满{X}赠优惠券</option>
+                </select>
+                <span id="type_value_box"></span>
+
+                <!--活动规则-->
+                <script type='text/html' id='type_valueTemplate'>
+                    {{if type>=1 && type<=3}}
+                    <input type="text" class="input-text" value="" name="type_value" datatype="n" nullmsg="请输入赠送值！" errormsg="请赠送值只能是数字" style="width: 60px;">
+                    {{if type==1}}元{{else if type==2}}折1-100%{{else if type==3}}个{{/if}}
+                    {{/if}}
+                    {{if type==5}}
+                    <select name="type_value" style="width: 100px;" datatype="*" nullmsg="请选择优惠券！">
+                        <option value="">请选择优惠券</option>
+                        <{foreach $coupons_list as $key}>
+                        <option value="<{$key.id}>" <{if $key.id==$item.type_value}>selected<{/if}>><{$key.name}></option>
+                        <{/foreach}>
+                    </select>一张
+                    {{/if}}
+                </script>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>简介：</label>
+            <div class="formControls col-7">
+                <textarea name="desc" cols="" rows="" class="textarea"  placeholder="活动简介" datatype="*1-100" dragonfly="true" nullmsg="活动简介不能为空！" onKeyUp="textarealength(this,100)"></textarea>
+                <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+            </div>
+        </div>
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+
+        //全部选择用户组
+        $('[id="checkbox-0"]').click(function(){
+            if ($(this).prop('checked')==true) {
+                $('[name="user_group[]"]').prop('checked', true);
+            } else {
+                $('[name="user_group[]"]').prop('checked', false);
+            }
+        })
+    })
+
+    //展示规则对应值
+    function set_type_value(type){
+        var html = template('type_valueTemplate', {'type':type});
+        $('#type_value_box').html(html);
+    }
+
+    $(function(){
+        //选择规则
+        $('[name="type"]').change(function(){
+            set_type_value($(this).val());
+        })
+
+        <{if $item!=''}>
+            //展示规则对应值
+            set_type_value(<{$item.type}>);
+        <{/if}>
+        //表单回填
+        var formObj = new Form();
+        formObj.init(<{ch_json_encode($item)}>);
+    })
+</script>
+</body>
+</html>

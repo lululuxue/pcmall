@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+	<script type="text/javascript" src="/public/js/validform.js"></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">会员中心</a>><a href="javascript:void(0)">免费注册</a>
+		 	</div>
+		 	<div class="contenwrap">
+		 		<div class="publictitle">
+		 			免费注册
+		 		</div>
+				<form name="reg" id="reg" method="post" action="<{site_url('/api/user/reg/user_reg')}>">
+		 		<div class="exchangebox">
+		 			<div class="loginboxleft_box clear">
+	 					<div class="loginleft">
+	 						账户：
+	 					</div>
+	 					<div class="loginright">
+	 						<input type="text" class="inputText" name="username"  placeholder="手机" datatype="m" nullmsg="请输入手机号码" errormsg="手机格式不正确" ajaxurl="<{site_url('/api/user/reg/repeat_username')}>">
+	 					</div>
+	 				</div>
+					<{if config_item('sms_open')=='1'}>
+	 				<div class="loginboxleft_box clear">
+	 					<div class="loginleft">
+	 						验证码：
+	 					</div>
+	 					<div class="loginright">
+	 						<input type="text" class="verifyinputText" name="code" placeholder="验证码" datatype="n" nullmsg="请输入验证码！" errormsg="验证码只能是数字">
+	 						<input type="button" name="get_code" value="发送验证码" class="verifyText">
+	 					</div>
+	 				</div>
+					<{/if}>
+	 				<div class="loginboxleft_box clear">
+	 					<div class="loginleft">
+	 						密码：
+	 					</div>
+	 					<div class="loginright">
+	 						<input type="password" class="inputText" name="password" class="infostyle" placeholder="6-15位的数字字母"  datatype="*" nullmsg="请输入密码">
+	 					</div>
+	 				</div>
+	 				<input type="submit" class="exchangebtn" value="确认注册">
+		 		</div>
+				</form>
+			</div>
+		 	
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<script type="text/javascript" src="/views/web/conf_js/code.js"></script>
+	<script type="text/javascript" >
+		//验证表单
+		$(function(){
+			$.Tipmsg.r=null;
+			$("#reg").Validform({
+				tiptype:function(msg){
+					layer.msg(msg);
+				},
+				tipSweep:true,
+				ajaxPost:true,
+				callback:function(data){
+					if(data.status=="y"){
+						window.location.href="<{$redirect_url}>";
+					}
+				}
+			});
+		})
+	</script>
+</body>
+</html>

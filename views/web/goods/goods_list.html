@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/public/js/laypage/laypage.js"></script>
+	<script type="text/javascript" src="/public/js/echo.min.js"></script>
+	<script type="text/javascript" src="/views/web/conf_js/product.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox">
+		 	<div class="scrapnav" style=" border-bottom: 1px dashed #e7e7e7;">
+		 		您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="javascript:void(0)"><{$goods_category_data.name}></a>
+		 	</div>
+		 	<div class="prolist_choicewrap">
+				<{if $res_data.brand_list}>
+		 		<div class="prolist_pricebox">
+		 			<div class="prolist_price">
+		 				品牌：
+		 			</div>
+		 			<ul class="prolist_priceitem clear">
+						<li class="prolist_pricelist <{if $search_where.brand_id==''}>prolist_priceactive<{/if}>"><a href="<{search_array_to_link($search_where, ['brand_id'=>''])}>">全部</a></li>
+						<{foreach $res_data.brand_list as $key}>
+						<li class="prolist_pricelist <{if $search_where.brand_id==$key.id}>prolist_priceactive<{/if}>"><a href="<{search_array_to_link($search_where, ['brand_id'=>$key.id])}>"><{$key.name}></a></li>
+						<{/foreach}>
+		 			</ul>
+		 		</div>
+				<{/if}>
+				<{foreach $res_data.attr_list as $key}>
+				<div class="prolist_pricebox">
+					<div class="prolist_price">
+						<{$key.name}>：
+					</div>
+					<ul class="prolist_priceitem clear">
+						<li class="prolist_pricelist <{if $search_where.attr[$key.id]==''}>prolist_priceactive<{/if}>"><a href="<{search_array_to_link($search_where, ["attr[<{$key.id}>]"=>''])}>">全部</a></li>
+						<{foreach $key.value as $k}>
+						<li class="prolist_pricelist <{if $search_where.attr[$key.id]==$k}>prolist_priceactive<{/if}>"><a href="<{search_array_to_link($search_where, ["attr[<{$key.id}>]"=>$k])}>"><{$k}></a></li>
+						<{/foreach}>
+					</ul>
+				</div>
+				<{/foreach}>
+				<div class="prolist_pricebox">
+					<div class="prolist_price">
+						价格筛选：
+					</div>
+					<ul class="prolist_priceitem clear">
+						<li class="prolist_pricelist <{if $search_where.min_price=='' && $search_where.max_price==''}>prolist_priceactive<{/if}>"><a href="<{search_array_to_link($search_where, ['min_price'=>'','max_price'=>''])}>">全部</a></li>
+						<{foreach $res_data.price_list as $key}>
+						<{assign price_arr explode('-',$key)}>
+						<li class="prolist_pricelist <{if $search_where.min_price==$price_arr[0] && $search_where.max_price==$price_arr[1]}>prolist_priceactive<{/if}>"><a href="<{search_array_to_link($search_where, ['min_price'=>$price_arr[0],'max_price'=>$price_arr[1]])}>"><{$key}></a></li>
+						<{/foreach}>
+					</ul>
+				</div>
+		 	</div>
+		 	<div class="prolist_rangewrap">
+		 		<div class="prolist_range">
+		 			默认排序
+		 		</div>
+		 		<ul class="clear">
+					<{foreach config_item('goods_orderby_name') as $val=>$key}>
+		 			<li class="prolist_rangelist">
+		 				<a href="<{search_array_to_link($search_where, ['orderby'=>$val,'orderby_type'=>$new_orderby_type])}>">
+							<{$key}>
+		 					<div class="prolist_rangeimg">
+		 						<img src="/views/web/skin/images/sort_<{if $search_where.orderby==$val && $search_where.orderby_type=='desc'}>down<{else}>up<{/if}><{if $search_where.orderby==$val}>_c<{/if}>.png">
+		 					</div>
+		 				</a>
+		 			</li>
+					<{/foreach}>
+		 		</ul>
+		 	</div>
+		 	<div class="prolist_wrap clear">
+		 		<ul>
+					<{foreach $res_data.goods_list as $key}>
+		 			<li class="prolist_box">
+						<a href="<{site_url("/goods/product/<{$key.id}>")}>">
+			 				<div class="prolist_listimg">
+								<img src="/public/images/loading.gif" data-echo="<{$key.image}>" width="240" height="240" class="productimg">
+			 				</div>	
+			 				<div class="prolist_listTitlebox">
+								<{$key.name}>
+							</div>
+							<div class="prolist_listpbox">
+								<div class="prolist_listpleft">
+									市场价：<span>￥<{$key.market_price}></span>
+									<div class="prolist_listcart" onclick="list_join_cart(<{$key.id}>);">
+										<img src="/views/web/skin/images/icon07.png">
+									</div>
+								</div>
+								<div class="prolist_listpRight">
+									销售价：￥<{$key.sell_price}>
+									<div class="prolist_listcollect" onclick="favorite_add(<{$key.id}>);return false;">
+										<img src="/views/web/skin/images/icon08.png">
+									</div>
+								</div>
+							</div>
+						</a>
+		 			</li>
+					<{/foreach}>
+		 		</ul>
+				<!--分页-->
+				<{page_view('pages_bar',$res_data.page_count,search_array_to_link($search_where),5,'首页','尾页')}>
+		 	</div>
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<script>
+		//图片预加载
+		Echo.init({
+			offset: 500,
+			throttle: 0
+		});
+
+		//列表页加入购物车
+		function list_join_cart(goods_id){
+			layer.open({
+				type: 2,
+				title: false,
+				area: ['100%', '100%'],
+				shade: 0.8,
+				closeBtn: 0,
+				shadeClose: true,
+				offset: 'rb', //右下角弹出
+				content: '/goods/join_cart_product/'+goods_id
+			});
+		}
+	</script>
+</body>
+</html>

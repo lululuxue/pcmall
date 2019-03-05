@@ -1,0 +1,75 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="breadcrumb">
+	<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 数据统计 <span class="c-gray en">&gt;</span> 平均消费统计 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20" style="padding-top: 0px;">
+	<div class="text-c pt-20">
+		<form action="<{site_url('/manager/report/consumption_avg/')}>" method="post" class="form form-horizontal" id="search" name="search">
+			<input type="text" class="input-text" placeholder="开始时间" name="start_time" onclick="laydate()" readonly style="width: 100px">-
+			<input type="text" class="input-text" placeholder="结束时间" name="end_time" onclick="laydate()" readonly style="width: 100px">
+			<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+			<button onclick="window.location.href='<{search_array_to_link($search_where)}>&export=1'" class="btn btn-primary" type="button"><i class="Hui-iconfont">&#xe640;</i> 导出</button>
+		</form>
+	</div>
+	<div class="text-c pt-20" id="container">
+
+	</div>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/highcharts/highcharts.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script language="JavaScript">
+	$(function(){
+		//表单回填
+		var formObj = new Form();
+		formObj.init(<{ch_json_encode($search_where)}>);
+	})
+</script>
+<script language="JavaScript">
+	$(function () {
+		$('#container').highcharts({
+			title: {
+				text: '平均消费统计',
+				x: -20 //center
+			},
+			xAxis: {
+				categories: <{ch_json_encode($list.categories)}>
+			},
+			yAxis: {
+				title: {
+					text: '单位(元)'
+				},
+				plotLines: [{
+					value: 0,
+					width: 1,
+					color: '#808080'
+				}]
+			},
+			tooltip: {
+				valueSuffix: '元'
+			},
+			series: [{
+				name: '平均消费',
+				data: [<{join(',',$list.value)}>]
+			}]
+		});
+	});
+</script>
+</body>
+</html>

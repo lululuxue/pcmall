@@ -1,0 +1,252 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/manager/service/user/call_submit')}>" method="post" class="form form-horizontal" id="add">
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">工单信息</label>
+        </div>
+		<div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客户姓名：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.full_name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">服务项目：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.service_name}></span>
+                </div>
+            </div>
+		</div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">常用电话：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.phone}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">是否搽玻璃：</label>
+                <div class="formControls col-3">
+                    <{if $user_data.is_boli == 1}>
+                    <span>是</span>
+                    <{else}>
+                    <span>否</span>
+                    <{/if}>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">应收金额：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.promotion_price}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">是否有防护网：</label>
+                <div class="formControls col-3">
+                    <{if $user_data.is_pro == 1}>
+                    <span>是</span>
+                    <{else}>
+                    <span>否</span>
+                    <{/if}>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工作人数：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.sex}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">指定人员：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.people}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">所带工具：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.tool}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">服务时间：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.worktime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">录入人：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.admin_name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">地址：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.address}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工作人员：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.real_people}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工单类型：</label>
+                <div class="formControls col-3">
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">本次工单备注：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.note}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">会员卡信息</label>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">会员卡卡号：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.card_no}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">剩余金额：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.count}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">钟点折扣：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.people_discount}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">保养类折扣：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.care_discount}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">会员卡有效时间：</label>
+                <div class="formControls col-3">
+                    <span><{$user_data.endtime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">回访信息</label>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">回访时间：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text laydate-icon" value="<{$user_data.call_time|date_format:'%Y-%m-%d %H:%M:%S'}>" name="calltime" onclick="laydate({min:laydate.now(),istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" datatype="*" nullmsg="请时间" style="padding-right:0;height:auto;">
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客户反馈：</label>
+                <div class="formControls col-3">
+                <span class="select-box" style="width:150px">
+                    <select name="callback" class="select" value="1">
+                        <option value="1">满意</option>
+                        <option value="2">一般</option>
+                        <option value="3">不满意</option>
+                    </select>
+			    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">回返内容：</label>
+                <div class="formControls col-3">
+                    <textarea  style="height:50px;" class="input-text" value="" name="note"><{$user_data.call_note}></textarea>
+                </div>
+            </div>
+        </div>
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="order_id" value="<{$user_data.id}>">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        //formObj.init(<{ch_json_encode($user_data)}>);
+    })
+
+
+</script>
+</body>
+</html>

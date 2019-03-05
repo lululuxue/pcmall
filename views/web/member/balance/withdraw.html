@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/public/js/validform.js"></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+			 <form class="form form-horizontal" name="add" id="add" method="post" action="<{site_url('/api/member/balance/withdraw_save')}>">
+		 	<div class="yuwrap" style="min-height:500px;">
+		 		<div class="yubox" style="padding:0 20px;">
+		 			<div class="publictitle" >
+			 			余额提现
+			 		</div>
+	 				<div class="loginboxleft_box clear" style="width:400px;">
+	 					<div class="yuleft" >
+	 						提现金额：
+	 					</div>
+	 					<div class="loginright">
+							<input type="text" class="inputText" name="amount" placeholder="最多可以提现￥<{$member_user_data.balance}>" datatype="price" nullmsg="请输入提现金额" errormsg="金额格式错误"/>
+	 					</div>
+	 				</div>
+					<div class="loginboxleft_box clear" style="width:400px;">
+						<div class="yuleft" >
+							提现方式：
+						</div>
+						<div class="loginright">
+							<select name="type" onchange="select_type(this.value)" class="inputText">
+								<option value="1">银行卡</option>
+								<option value="2">支付宝</option>
+								<!--<option value="3">微信</option>-->
+							</select>
+						</div>
+					</div>
+					<div class="loginboxleft_box clear" style="width:400px;">
+						<div class="yuleft" >
+							姓名：
+						</div>
+						<div class="loginright">
+							<input type="text" class="inputText" name="name" datatype="*" nullmsg="姓名不能为空">
+						</div>
+					</div>
+					<div id="bank_name" class="loginboxleft_box clear" style="width:400px;">
+						<div class="yuleft" >
+							银行开户行：
+						</div>
+						<div class="loginright">
+							<input type="text" class="inputText" name="bank_name">
+						</div>
+					</div>
+					<div class="loginboxleft_box clear" style="width:400px;">
+						<div class="yuleft" >
+							账号：
+						</div>
+						<div class="loginright">
+							<input type="text" class="inputText" name="pay_number" datatype="*" nullmsg="账号不能为空">
+						</div>
+					</div>
+					<div class="loginboxleft_box clear" style="width:400px;">
+						<div class="yuleft" >
+							备注：
+						</div>
+						<div class="loginright">
+							<input type="text" class="inputText" name="note">
+						</div>
+					</div>
+		 		</div>
+ 				<input type="submit" class="yubtn" value="确认提现">
+		 	</div>
+			 </form>
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<script type="text/javascript" >
+		//验证表单
+		$(function(){
+			$.Tipmsg.r=null;
+			$("#add").Validform({
+				tiptype:function(msg){
+					layer.msg(msg);
+				},
+				tipSweep:true,
+				ajaxPost:true,
+				callback:function(data){
+					if(data.status=="y"){
+						layer.msg('申请成功');
+						setTimeout(function(){
+							window.history.back();
+						},2000)
+					} else {
+						layer.msg(data.info);
+					}
+				}
+			});
+		})
+
+		//选择银行显示姓名和开户行
+		function select_type(type){
+			if(type!=1){
+				$('#bank_name').hide();
+			} else {
+				$('#bank_name').show();
+			}
+		}
+	</script>
+</body>
+</html>

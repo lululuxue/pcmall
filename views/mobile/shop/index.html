@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+</head>
+<body style="background:#fff;">
+<!-- content start -->
+<section class="wrap">
+    <!-- start -->
+    <div class="cardTopbox">
+        <div class="cartImgbox">
+            <img src="<{$member_shop_data.logo}>">
+        </div>
+        <div class="accTitle">
+            <{$member_shop_data.shop_name}>
+        </div>
+        <div class="cartTopbtn">
+            <a href="JavaScript:void(0);" class="cart_a ">
+                <div class="cartTopbtnL" onclick="favorite_add(<{$member_shop_data.m_id}>);">
+                    <p id="favorite"><{if $member_shop_data.favorite==1}>已<{/if}>关注</p>
+                </div>
+            </a>
+            <a href="JavaScript:void(0);" class="cart_a ">
+                <div class="cartTopbtnL">
+                    <p>好评</p>
+                    <p><{$member_shop_data.level}></p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="cardListbox">
+        <div class="cardwrap">
+            <div class="addListbox">
+                <div class="flexbox">
+                    <div style="color: #343434;font-size: 0.26rem;margin-right:0.2rem;">
+                        所在城市
+                    </div>
+                    <div class="addListR " style="color:#c5c5ca;font-size:0.26rem;">
+                        <{get_area_name([$member_shop_data.prov,$member_shop_data.city])}>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end -->
+    <div class="cardListbox">
+        <div class="cardwrap">
+            <div class="addListbox">
+                <div class="flexbox">
+                    <div style="color: #343434;font-size: 0.26rem;margin-right:0.2rem;">
+                        商家商品
+                    </div>
+                    <div class="addListR  flexbox">
+                        <{foreach $res_data.goods_list as $key}>
+                        <div class="cardImgbox">
+                            <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$key.id}>")}>"><img src="<{$key.image}>"></a>
+                        </div>
+                        <{/foreach}>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="infosub">
+    <input type="button" value="关注TA" class="infosubbtn" onclick="favorite_add(<{$member_shop_data.m_id}>);">
+</div>
+<div class="infosub">
+    <input type="button" value="分享名片" class="infosubbtn" style="background:#2b9163;">
+</div>
+<script type="text/javascript" src="/public/js/jquery.js" ></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/views/mobile/conf_js/shop.js"></script>
+<{if get_client() == 'weixin'}>
+<{include file="mobile/wechat_share.html"}>
+<script language="JavaScript">
+    wx.ready(function(){
+        var share_title  = "<{$member_shop_data.shop_name}>";
+        var share_desc   = "<{config_item('website_title')}>";
+        var share_link   = "<{site_url("/<{get_web_type()}>/shop?shop_id=<{$member_shop_data.m_id}>")}>";
+        var share_imgurl = "<{config_item('base_url')}><{$member_shop_data.logo}>";
+        wx_share(share_title, share_desc, share_link, share_imgurl);
+    });
+</script>
+<{/if}>
+</body>
+</html>
+
+
+
+

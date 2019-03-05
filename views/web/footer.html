@@ -1,0 +1,78 @@
+<!-- foot -->
+<div class="footwrap">
+	<div class="footerwrap">
+		<div class="wrapbox clear">
+			<{assign cat_list ym_list('article_cat',[], 4, 1, 'sortnum asc,id asc')}>
+			<{foreach $cat_list as $val=>$key}>
+			<dl class="footlistbox">
+				<dt><a href="javascript:void(0)"><span class="footunderline"><{$key.name}></span></a></dt>
+				<{assign a_list ym_list('article',['where'=>['cat_id'=>$key.id]], 4, 1, 'id asc')}>
+				<{foreach $a_list as $v=>$k}>
+				<dd><a href="<{site_url("/article/view?id=<{$k.id}>")}>"><{$k.title}></a></dd>
+				<{/foreach}>
+			</dl>
+			<{/foreach}>
+			<dl class="footlistbox">
+				<dt><a href="javascript:void(0)"><span class="footunderline">联系我们</span></a></dt>
+				<dd>
+					<div class="footLeft">
+						<img src="/views/web/skin/images/icon04.png">
+					</div>
+					<div class="footRight">
+						<p>联系电话：<span style="font-size:18px;">400-8888888</span></p>
+						(7*24小时客服电话)
+					</div>
+				</dd>
+				<dd>
+					<div class="footLeft">
+						<img src="/views/web/skin/images/icon05.png">
+					</div>
+					<div class="footRight">
+						<p>在线客服</p>
+						(服务时段：8:00 - 24:00)
+					</div>
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<div class="footbox">
+		<div class="wrapbox">
+			<div class="footboxleft">
+				<{get_copyright()}>
+			</div>
+			<div class="footboxright">
+				<div class="footboximg">
+					<!--<img src="">-->
+				</div>
+				手机版
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="/public/js/jquery-qrcode.min.js"></script>
+<script language="JavaScript">
+	$(function(){
+        $('.footboximg').qrcode({
+            render: "canvas",
+            size: 52,
+            text: window.location.protocol + "//" + document.domain + "/mobile"
+        });
+		//购物车基本信息展示
+		$.ajax({
+			type:"POST",
+			url: "/api/cart/cart_count",
+			data: "",
+			dataType:"json",
+			success: function(data){
+				if (data.status=='y') {
+					if (data.result.sku_count>0) {
+						$('#my_cart_count').text(data.result.sku_count);
+						$('#my_cart_count').show();
+					} else {
+						$('#my_cart_count').hide();
+					}
+				}
+			}
+		});
+	})
+</script>

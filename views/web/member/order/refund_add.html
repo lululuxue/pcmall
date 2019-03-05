@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><{config_item('website_title')}></title>
+    <meta content="<{config_item('website_keywords')}>" name="Keywords">
+    <meta content="<{config_item('website_desc')}>" name="description"/>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script type="text/javascript" src="/public/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/validform.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox clear">
+        <div class="scrapnav">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+        </div>
+        <div class="userbox clear">
+            <div class="useraside">
+                <{include file="web/member/menu.html"}>
+            </div>
+            <div class="usercontent">
+                <div class="usertitle">
+                    退换货办理
+                </div>
+                <div class="addressbox">
+                    退款详情
+                </div>
+                <form name="refund" id="refund" method="post" action="<{site_url('/api/member/order/refund')}>">
+                    <input type="hidden" name="order_sku_id" value="<{$order_sku_data.id}>">
+                    <table class="return-table">
+                    <tr>
+                        <td class="returnleft">
+                            订单号
+                        </td>
+                        <td class="returnright"><{$order_data.order_no}></td>
+                    </tr>
+                    <tr>
+                        <td class="returnleft">退款商品：</td>
+                        <td style="color:#0269c8;" class="returnright">
+                            <a target="_blank" href="<{site_url("/goods/product/<{$order_sku_data.goods_id}>")}>">
+                                <p><{$order_sku_data.goods_name}></p>
+                                <p><{foreach $order_sku_data.sku_value as $sku}>
+                                    <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                                    <{/foreach}>
+                                    ¥<{$order_sku_data.sku_sell_price_real}>×<{$order_sku_data.sku_num}>件
+                                </p>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="returnleft">退款原因：</td>
+                        <td class="returnright">
+                            <textarea style="margin-top: 10px;" id="refundshow" placeholder="请填写您的退款理由" name="desc" datatype="*" nullmsg="理由必须填写"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="returnleft"></td>
+                        <td class="returnright">
+                            <div class="returnbtnbox">
+                                <input type="submit" value="提交退款" class="usersavebtn">
+                            </div>
+                            <div class="returnbtnbox">
+                                <input type="reset" value="重置" class="usersavebtn">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+<script type="text/javascript">
+    //验证表单
+    $(function () {
+        $.Tipmsg.r = null;
+        $("#refund").Validform({
+            tiptype: function (msg) {
+                layer.msg(msg);
+            },
+            tipSweep: true,
+            ajaxPost: true,
+            callback: function (data) {
+                if (data.status == "y") {
+                    setTimeout(function () {
+                        layer.msg('申请成功');
+                        window.location.reload();
+                    }, 1000);
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

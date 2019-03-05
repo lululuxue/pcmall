@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body style="background:#fff;">
+<!-- content start -->
+<section class="wrap">
+    <!-- start -->
+    <div class="accTopbox">
+        <div class="accTitle">
+            账户金额
+        </div>
+        <div class="accMoney">
+            ￥<{$member_user_data.balance}>
+        </div>
+        <a href="<{site_url("/<{get_web_type()}>/member/balance/online_recharge")}>">
+            <div class="accbtnbox">
+                充值
+            </div>
+        </a>
+        <a href="<{site_url("/<{get_web_type()}>/member/balance/withdraw")}>">
+            <div class="accbtnbox">
+                提现
+            </div>
+        </a>
+    </div>
+    <!-- end -->
+    <!-- start -->
+    <div class="accListbox">
+        <div class="paystyle">
+            <div class="conwrap" style="font-size:0.26rem;">
+                账户明细
+            </div>
+        </div>
+        <!-- start -->
+        <{foreach $list as $key}>
+        <div class="accList">
+            <div class="infobox flexbox" style="padding:0.2rem 0;">
+                <div class="Detailsleft">
+                    <p><{$event_name[$key.event]}></p>
+                    <p><{date('Y-m-d',$key.addtime)}></p>
+                </div>
+                <div class="Detailsright">
+                    ¥ <{$key.amount}>
+                </div>
+            </div>
+        </div>
+        <{/foreach}>
+    </div>
+    <{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+</section>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+</body>
+</html>
+
+
+
+

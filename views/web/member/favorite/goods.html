@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/public/js/laypage/laypage.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox clear">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+		 	<div class="userbox clear">
+		 		<div class="useraside">
+					<{include file="web/member/menu.html"}>
+		 		</div>
+		 		<div class="usercontent">
+		 			<div class="usertitle">
+						商品收藏
+		 			</div>
+ 					<table class="collect-table" id="dpsc_list">
+		 				<tr>
+		 					<th class="cart-tablethleft">商品信息</th>
+		 					<th>市场价</th>
+		 					<th>销售价</th>
+		 					<th>操作</th>
+		 				</tr>
+						<{foreach $list as $key}>
+		 				<tr id="favorite_list_<{$key.id}>">
+		 					<td class="cart-tableleft">
+								<div class="cart_tableimg">
+									<img src="<{$key.image}>" alt="" width="83" height="77">
+								</div>
+								<p><{$key.name}></p>
+								
+		 					</td>
+		 					<td>￥<{$key.market_price}></td>
+		 					<td>￥<{$key.sell_price}></td>
+		 					<td>
+		 						<input type="button" value="立即购买" style="cursor: pointer;" class="collect_tablebtn collectbtnstyle" onclick="window.location.href='<{site_url("/goods/product/<{$key.goods_id}>")}>'">
+		 						<input type="button" value="取消收藏" style="cursor: pointer;" class="collect_tablebtn" onclick="delete_id(<{$key.id}>);">
+		 					</td>
+		 				</tr>
+						<{/foreach}>
+		 			</table>
+					<!--分页-->
+					<{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+		 		</div>
+		 	</div>
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<script language="JavaScript">
+		//全选
+		$(function () {
+			$('#checkbox_all').click(function () {
+				if ($('#checkbox_all').prop('checked') == true) {
+					$('#dpsc_list [name="f_id[]"]').prop('checked', true);
+				} else {
+					$('#dpsc_list [name="f_id[]"]').prop('checked', false);
+				}
+			})
+
+		})
+		//选择商品判断是否全部选择
+		function check_f() {
+			var total_shop_num = $('#dpsc_list [name="f_id[]"]').length;//总数
+			var checked_shop_num = $('#dpsc_list [name="f_id[]"]:checked').length;//选中的总数
+
+			if (checked_shop_num >= total_shop_num) {
+				$('#checkbox_all').prop('checked', true);
+			} else {
+				$('#checkbox_all').prop('checked', false);
+			}
+		}
+		//单个取消收藏
+		function delete_id(id) {
+			$.ajax({
+				type: "POST",
+				url: "<{site_url('/api/member/goods_favorite/delete_favorite')}>",
+				data: {'id': id},
+				dataType: "json",
+				success: function (data) {
+					if (data.status == 'y') {
+						$('#favorite_list_' + id).remove();
+					}
+				}
+			});
+		}
+		//批量取消收藏
+		function delete_all() {
+			var id = new Array();
+			$('#dpsc_list [name="f_id[]"]:checked').each(function () {
+				var f_id = $(this).val();
+				id.push(f_id);
+			})
+			$.ajax({
+				type: "POST",
+				url: "<{site_url('/api/member/goods_favorite/delete_favorite')}>",
+				data: {'id': id},
+				dataType: "json",
+				success: function (data) {
+					if (data.status == 'y') {
+						$.each(id, function (index, content) {
+							$('#favorite_list_' + content).remove();
+						});
+
+					}
+				}
+			});
+		}
+	</script>
+</body>
+</html>

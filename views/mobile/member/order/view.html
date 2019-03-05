@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body>
+<!-- content start -->
+<section class="wrap">
+    <!-- 地址 start -->
+    <div class="addressbox flexbox">
+        <div class="addressL">
+            <img src="/views/mobile/skin/images/icon18.png">
+        </div>
+        <div class="addressR">
+            <p>收货人：<{$order_data.full_name}> <span class="addressTel"><{$order_data.tel}></span></p>
+            <div class="addressMbox flexbox">
+                <div class="addressML">
+                    <p>收货地址：<{get_area_name([$order_data.prov,$order_data.city,$order_data.area])}><{$order_data.address}></p>
+                </div>
+                <div class="addressMR">
+                    <img src="/views/mobile/skin/images/icon19.png">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- 商品列表 start -->
+    <div class="billbox">
+        <div class="sellerbox flexbox">
+            <div class="sellerimg">
+                <img src="<{$order_data.shop_data.logo}>">
+            </div>
+            <div class="sellerN">
+                <{$order_data.shop_data.shop_name}>
+            </div>
+        </div>
+        <div class="goodslist">
+            <{foreach $order_sku as $key}>
+            <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$key.goods_id}>")}>" class="billwrap">
+                <div class="billL">
+                    <img src="<{$key.sku_image}>">
+                </div>
+                <div class="billR">
+                    <p class="billT"><{$key.goods_name}></p>
+                    <p class="billD">
+                        <{foreach $key.sku_value as $sku}>
+                        <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                        <{/foreach}>
+                    </p>
+                    <div class="flexbox">
+                        <div class="billPrice">
+                            ￥<{$key.sku_sell_price_real}>
+                        </div>
+                        <{if is_refund($order_data)}>
+                        <div class="cartNavR">
+                            <input type="submit" value="<{if $key.is_refund==0}>申请退款<{elseif $key.is_refund==1}>退款中<{elseif $key.is_refund==2}>退款完成<{/if}>" class="inputsub" onclick="window.location.href='<{site_url("/<{get_web_type()}>/member/order/refund/<{$key.id}>")}>';return false;">
+                        </div>
+                        <{/if}>
+                    </div>
+                </div>
+            </a>
+            <{/foreach}>
+        </div>
+        <{if $order_data.promotion_price>0 || $order_data.coupons_price>0}>
+        <!-- 优惠券 -->
+        <section class="deliverybox">
+            <a class="deliverystyle flexbox" href="javascript:;">
+                <div class="primarybox">
+                    <p class="primary_label">优惠金额</p>
+                </div>
+                <div class="primary_labelRR">优惠活动￥<{$order_data.promotion_price}> 优惠券￥<{$order_data.coupons_price}></div>
+            </a>
+        </section>
+        <{/if}>
+        <!-- 配送方式 -->
+        <section class="deliverybox">
+            <a class="deliverystyle flexbox" href="javascript:;">
+                <div class="primarybox">
+                    <p class="primary_label">配送方式</p>
+                </div>
+                <div class="primary_labelRR"><{$order_data.delivery.name}><{if $order_data.delivery_price_real==0}>包邮<{else}>￥<{$order_data.delivery_price_real}><{/if}></div>
+            </a>
+        </section>
+        <!-- 配送时间 -->
+        <section class="deliverybox">
+            <a class="flexbox" href="javascript:;">
+                <div class="primarybox">
+                    <p class="primary_label">配送时间</p>
+                </div>
+                <div class="primary_labelRR flexbox">
+                    <{$order_data.delivery_time}>
+                </div>
+            </a>
+        </section>
+        <div class="billbtnbox">
+            <{if is_delete($order_data)}>
+            <a class="billbtnL" href="javascript:void(0)" onclick="order_delete('<{$order_data.id}>', 'view');">删除订单</a>
+            <{/if}>
+            <{if is_pay($order_data)}>
+            <a class="billbtnL" href="javascript:void(0)" onclick="order_cancel('<{$order_data.id}>');">取消订单</a>
+            <a class="billbtnR" href="javascript:void(0)" onclick="select_payment('<{$order_data.id}>','<{$order_data.payment_id}>');">更换支付方式</a>
+            <a class="billbtnR" href="<{site_url("/api/pay/do_pay?client=web&order_no=<{$order_data.order_no}>")}>">去支付</a>
+            <{/if}>
+            <{if is_confirm($order_data)}>
+            <a class="billbtnL" href="<{site_url("/<{get_web_type()}>/member/order/delivery_status/<{$order_data.id}>")}>">查看物流</a>
+            <a class="billbtnR" href="javascript:void(0)" onclick="order_confirm('<{$order_data.id}>');">确认收货</a>
+            <{/if}>
+            <{if is_comment($order_data)}>
+            <a class="billbtnR" href="<{site_url("/<{get_web_type()}>/member/order/comment/<{$order_data.id}>")}>">去评价</a>
+            <{/if}>
+        </div>
+    </div>
+    <!-- 订单物流信息 -->
+    <section class="billbox">
+        <ul class="processlist">
+            <li>订单编号:<{$order_data.order_no}></li>
+            <{if $order_data.addtime!=''}>
+            <li>创建时间:<{date('Y-m-d H:i:s',$order_data.addtime)}></li>
+            <{/if}>
+            <{if $order_data.paytime!=''}>
+            <li>支付时间:<{date('Y-m-d H:i:s',$order_data.paytime)}></li>
+            <{/if}>
+            <{if $order_data.sendtime!=''}>
+            <li>发货时间:<{date('Y-m-d H:i:s',$order_data.sendtime)}></li>
+            <{/if}>
+            <{if $order_data.completetime!=''}>
+            <li>完成时间:<{date('Y-m-d H:i:s',$order_data.completetime)}></li>
+            <{/if}>
+        </ul>
+
+    </section>
+</section>
+<!--content end  -->
+<script src="/public/js/jquery.js"></script>
+<script src="/public/js/layer/layer.js"></script>
+<script src="/views/mobile/conf_js/order.js"></script>
+<script src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+</body>
+</html>
+
+
+
+

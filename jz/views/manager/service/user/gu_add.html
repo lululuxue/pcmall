@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/manager/service/user/gu_save')}>" method="post" class="form form-horizontal" id="add">
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>客户名称：</label>
+			<div class="formControls col-5">
+                <span><{$user_data.name}></span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>固定类型：</label>
+			<div class="formControls col-3">
+                <span class="select-box" style="width:150px">
+                    <select name="normal_id" class="select" value="1" onchange="change_day(this.value)">
+                        <option value="1">周几</option>
+                        <option value="2">隔天</option>
+                        <option value="3">每月几号</option>
+                    </select>
+			    </span>
+            </div>
+             <label class="form-label col-2"><span class="c-red">*</span>固定值：</label>
+             <div class="formControls col-3">
+                <span class="select-box" style="width:100px">
+                    <select id='week' name="value" class="select">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">5</option>
+                        <option value="5">6</option>
+                        <option value="6">7</option>
+                        <option value="7">8</option>
+                    </select>
+                    <select id='day' name="value" class="select Nodisplay">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">5</option>
+                        <option value="5">6</option>
+                        <option value="6">7</option>
+                        <option value="7">8</option>
+                        <option value="8">9</option>
+                        <option value="9">3</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                    </select>
+			    </span>
+			</div>
+		</div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>服务时间：</label>
+            <div class="formControls col-3">
+                <input type="text" class="input-text laydate-icon" value="" name="dealtime" onclick="laydate({min:laydate.now(),istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" datatype="*" nullmsg="请选择服务时间" style="padding-right:0;height:auto;">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>服务项目：</label>
+            <div class="formControls col-3">
+               <span class="select-box" style="width:150px">
+                    <select name="service_id" class="select">
+                      <!--分类模板-->
+					<{function name=type level=0}>
+					<{foreach $data as $key}>
+						<option value="<{$key.id}>"><{section name=loop loop=$level}>├<{/section}><{$key.name}></option>
+					<{call name=type data=$key.down level=$level+1}>
+					<{/foreach}>
+					<{/function}>
+                        <!--调用模板函数-->
+					<{call name=type data=$cat_list}>
+                    </select>
+			    </span>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>工作人员：</label>
+            <div class="formControls col-1" style="min-width:100px;">
+                <label style='width:auto' class="form-label col-1">男</label>
+                <input type="text" style='width:50%;' class="input-text" value="0" name="gender1" datatype="*0-50" nullmsg="请输入人数">
+            </div>
+            <div class="formControls col-1" style="min-width:100px;">
+                <label style='width:auto;' class="form-label col-1">女</label>
+                <input type="text" style='width:50%;' class="input-text" value="0" name="gender2" datatype="*0-50" nullmsg="请输入人数">
+            </div>
+            <div class="formControls col-1" style="min-width:150px;">
+                <label style='width:auto' class="form-label col-1">男女不限</label>
+                <input type="text" style='width:50%;' class="input-text" value="0" name="gender0" datatype="*0-50" nullmsg="请输入人数">
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red"></span>指定人员：</label>
+            <div class="formControls col-2">
+                <input type="text" class="input-text" value="" name="point_people" >
+            </div>
+        </div>
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red"></span>备注：</label>
+            <div class="formControls col-2">
+                <input type="text" class="input-text" value="" name="note" >
+            </div>
+        </div>
+
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="<{$item.id}>">
+                <input type="hidden" name="m_id" value="<{$user_data.Id}>">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        formObj.init(<{ch_json_encode($item)}>);
+    })
+
+    function change_day(value){
+        if(value && value > 1){
+            $("#week").addClass('Nodisplay');
+            $("#day").removeClass('Nodisplay');
+        }else{
+            $("#week").removeClass('Nodisplay');
+            $("#day").addClass('Nodisplay');
+        }
+
+    }
+
+</script>
+</body>
+</html>

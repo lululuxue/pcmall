@@ -1,0 +1,37 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="pd-20">
+	<div id="tab-system" class="HuiTab">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+			<tr class="text-c">
+				<th colspan="2">快递公司</th>
+			</tr>
+			</thead>
+			<{foreach $list as $key}>
+			<tr class="text-l">
+				<td width="150"><{$key.name}></td>
+				<td><a target="_blank" href="<{site_url("/manager/order/order/print_express/")}>?express_id=<{$key.id}>&order_id=<{$order_id}>">打印</a></td>
+			</tr>
+			<{/foreach}>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/icheck/jquery.icheck.min.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css" type="text/css">
+</head>
+<body>
+<!-- content start -->
+<section class="wrap">
+    <!-- 导航条 -->
+    <div class="pronavbox">
+        <div class="pronav">
+            <a href="<{site_url("/<{get_web_type()}>/member/order")}>" class="pronav_a <{if $search_where.status==''}>pronav_active<{/if}>">
+                <p class="billnavT">全部订单</p>
+            </a>
+            <a href="<{site_url("/<{get_web_type()}>/member/order?status=1")}>" class="pronav_a <{if $search_where.status=='1'}>pronav_active<{/if}>">
+                <p class="billnavT">待付款</p>
+            </a>
+            <a href="<{site_url("/<{get_web_type()}>/member/order?status=2")}>" class="pronav_a <{if $search_where.status=='2'}>pronav_active<{/if}>">
+                <p class="billnavT">待发货</p>
+            </a>
+            <a href="<{site_url("/<{get_web_type()}>/member/order?status=3")}>" class="pronav_a <{if $search_where.status=='3'}>pronav_active<{/if}>">
+                <p class="billnavT">待收货</p>
+            </a>
+            <!--<a href="<{site_url("/<{get_web_type()}>/member/order?status=4")}>" class="pronav_a <{if $search_where.status=='4'}>pronav_active<{/if}>"><p class="billnavT">已完成</p></a>-->
+        </div>
+    </div>
+    <!--订单列表 start-->
+    <{foreach $list as $key}>
+    <section class="sellerwrap">
+        <div class="sellerbox flexbox">
+            <div class="sellerimg">
+                <img src="<{$key.logo}>">
+            </div>
+            <div class="sellerN">
+                <{$key.shop_name}>
+            </div>
+            <div class="sellerS">
+                <{get_order_status_text($key)}>
+            </div>
+        </div>
+        <{foreach $key.order_sku as $k}>
+        <div class="goodsListbox" onclick="window.location.href='<{site_url("/<{get_web_type()}>/member/order/view/<{$key.id}>")}>'">
+            <div class="goodsListC">
+                <img src="<{$k.sku_image}>">
+            </div>
+            <div class="goodsListR">
+                <p class="goodsT">
+                    <{$k.goods_name}>
+                </p>
+                <div class="proDwrap flexbox">
+                    <p class="proDD">
+                        <!--规格属性-->
+                        <{foreach $k.sku_value as $sku}>
+                        <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                        <{/foreach}>
+                    </p>
+                    <div class="proDNum">¥<{$k.sku_sell_price_real}>×<{$k.sku_num}></div>
+                </div>
+            </div>
+        </div>
+        <{/foreach}>
+        <div class="totalbox">
+            共计<{count($key.order_sku)}>件商品 金额：<span class="fontcolor">¥<{$key.order_price}></span>
+        </div>
+        <div class="billbtnbox">
+            <{if is_delete($key)}>
+            <a class="billbtnL" href="javascript:void(0)" onclick="order_delete('<{$key.id}>');">删除订单</a>
+            <{/if}>
+            <{if is_pay($key)}>
+            <a class="billbtnL" href="javascript:void(0)" onclick="order_cancel('<{$key.id}>');">取消订单</a>
+            <a class="billbtnR" href="javascript:void(0)" onclick="select_payment('<{$key.id}>','<{$key.payment_id}>');">更换支付方式</a>
+            <a class="billbtnR" href="<{site_url("/api/pay/do_pay?client=<{get_web_type()}>&order_no=<{$key.order_no}>")}>">去支付</a>
+            <{/if}>
+            <{if is_confirm($key)}>
+            <a class="billbtnL" href="<{site_url("/<{get_web_type()}>/member/order/delivery_status/<{$key.id}>")}>">查看物流</a>
+            <a class="billbtnR" href="javascript:void(0)" onclick="order_confirm('<{$key.id}>');">确认收货</a>
+            <{/if}>
+            <{if is_comment($key)}>
+            <a class="billbtnR" href="<{site_url("/<{get_web_type()}>/member/order/comment/<{$key.id}>")}>">去评价</a>
+            <{/if}>
+        </div>
+    </section>
+    <{/foreach}>
+    <!--订单列表 end-->
+    <!--分页-->
+    <{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+</section>
+<!--content end  -->
+<script src="/public/js/jquery.js"></script>
+<script src="/public/js/layer/layer.js"></script>
+<script src="/public/js/laypage/laypage.js"></script>
+<script src="/views/mobile/conf_js/order.js"></script>
+<script src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+</body>
+</html>
+
+
+
+

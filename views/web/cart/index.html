@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="<{config_item('website_keywords')}>" name="Keywords">
+    <meta content="<{config_item('website_desc')}>" name="description"/>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/jcarousel.connected-carousels.css">
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css"/>
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script type="text/javascript" src="/public/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/artTemplate.js"></script>
+    <script type="text/javascript" src="/views/web/conf_js/cart.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox">
+        <div class="scrapnav">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="javascript:void(0)">我的购物车</a>
+        </div>
+        <form id="cart" enctype="multipart/form-data" action="<{site_url("/cart/confirm")}>" method="get">
+        <div class="contenwrap" style="margin-bottom:20px;">
+            <div class="cartTitlebox">
+                <div class="cartTitleleft">
+                    <img src="/views/web/skin/images/icon13.png" width="27" height="26">
+                    我的购物车
+                </div>
+                <div class="breadcrumb">
+                    <a href="<{site_url("/cart")}>" class="active">查看购物车</a>
+                    <a href="javascript:void(0)">填写核对订单信息</a>
+                    <a href="javascript:void(0)">成功提交订单</a>
+                </div>
+            </div>
+            <div class="cartitemwrap" id="cart_list">
+                <!--购物车模板start-->
+                <script type='text/html' id='cart_list_Template'>
+                    {{each result.list as shop_list}}
+                    <table class="cart-table" id="shop_{{shop_list.shop_data.m_id}}">
+                        <tr>
+                            <th class="cart-tablecheck">
+                                <input type="checkbox" id="checkbox_shop_{{shop_list.shop_data.m_id}}" onclick="check_shop_all(this,{{shop_list.shop_data.m_id}})" class="checkstyle">
+                            </th>
+                            <th class="cart-tablethleft">
+                                店铺：{{shop_list.shop_data.shop_name}}
+                            </th>
+                            <th>市场价</th>
+                            <th>销售价</th>
+                            <th>数量</th>
+                            <th>操作</th>
+                        </tr>
+                        <!-- 单个商品 start -->
+                        {{each shop_list.sku_list as sku}}
+                        <tr id="cart_sku_{{sku.id}}">
+                            <td class="cart-tablecheck">
+                                <input type="checkbox" name="sku_id[]" value="{{sku.id}}" shop_id="{{shop_list.shop_data.m_id}}" onclick="check_sku({{shop_list.shop_data.m_id}})" class="checkstyle" id="checkbox_sku_{{sku.id}}">
+                            </td>
+                            <td class="cart-tableleft">
+                                <div class="cart_tableimg">
+                                    <a href="<{site_url("/goods/product/{{sku.goods_id}}")}>" class="goodsList_a"><img src="{{sku.image}}"></a>
+                                </div>
+                                <p>{{sku.name}}</p>
+                                <!--商品规格start-->
+                                {{each sku.value as spec}}
+                                <!--商品规格文字-->
+                                {{if spec.type==1}}
+                                <p>{{spec.name}}:{{spec.value}}</p>
+                                {{/if}}
+                                <!--商品规格图片-->
+                                {{if spec.type==2}}
+                                <p>{{spec.name}}:{{spec.note}}</p>
+                                {{/if}}
+                                {{/each}}
+                                <!--商品规格end-->
+                            </td>
+                            <td>
+                                ¥<label id="all_sku_price">{{sku.market_price}}</label>
+                            </td>
+                            <td>
+                                <input type="hidden" name="sku_price" value="{{sku.sell_price}}">
+                                ¥<label id="all_sku_price">{{sku.sell_price}}</label>
+                            </td>
+                            <td>
+                                <input type="button" value="-" onclick='cart_reduce({{sku.id}});return false;'>
+                                <input value="{{sku.num}}" onblur='cart_update_sku_num({{sku.id}});' onclick="return false;" type="text" name="sku_num" class="cart_tabletext"/>
+                                <input value="{{sku.store_nums}}" type="hidden" name="store_nums" placeholder="库存"/>
+                                <input value="{{sku.minimum}}" type="hidden" name="minimum" placeholder="最小起订量"/>
+                                <input type="button" value="+" onclick='cart_increase({{sku.id}});return false;'>
+                            </td>
+                            <td>
+                                <input type="button" value="删除" class="cart_tablebtn" onclick="cart_delete({{sku.id}},{{shop_list.shop_data.m_id}});return false;">
+                            </td>
+                        </tr>
+                        {{/each}}
+                        <!-- 单个商品 end -->
+                        <!-- 优惠活动 -->
+                        {{if shop_list.promotion_data}}
+                        <tr>
+                            <td style="text-align: left;" class="cart-tableleft" colspan="6">
+                                可享优惠：¥{{shop_list.promotion_price}}（{{shop_list.promotion_data.name}}）
+                            </td>
+                        </tr>
+                        {{/if}}
+                    </table>
+                    {{/each}}
+                </script>
+                <!--购物车模板end-->
+            </div>
+            <table class="cart-table">
+                <tr style="background:#eaeaea;">
+                    <td class="cart-tablecheck">
+                        <input type="checkbox" id="checkbox_all" onclick="check_all(this)" class="checkstyle" />
+                    </td>
+                    <td class="cart-tableleft" >
+                        <p style="margin-left:10px; cursor:pointer;" onclick="cart_delete_batch();">批量删除</p>
+                    </td>
+                    <td colspan="2" style="text-align:right;">
+                    </td>
+                    <td colspan="2">
+                        商品金额总计 <span class="cart-tablecolor">￥<b id='sum_price'>0</b></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="cart-tablecheck">
+                        <img src="/views/web/skin/images/icon16.png" width="12" height="16">
+                    </td>
+                    <td class="cart-tableleft" >
+                        <p style="margin-left:10px;" onclick="cart_clear();">清空购物车</p>
+                    </td>
+                    <td colspan="2" style="text-align:right;">
+                        <input type="button"  value="继续购物" class="cart_tablebutton" style="background:#00a0e8;cursor: pointer" onclick="window.history.back()">
+                    </td>
+                    <td colspan="2">
+                        <input type="button"  value="去结算" class="cart_tablebutton"  style="background:#d0161b;cursor: pointer" onclick="check_confirm();">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </form>
+        <div class="yuwrap">
+            <div class="cartpro_titlebox clear">
+                <div class="cartpro_title">
+                    热门产品推荐
+                </div>
+            </div>
+            <ul class="cartproitem clear">
+                <{assign goods_list ym_goods_list(['is_hot'=>1], 5, 1)}>
+                <{foreach $goods_list as $v=>$k}>
+                <li>
+                    <a href="<{site_url("/goods/product/<{$k.id}>")}>">
+                    <div class="cartproimg">
+                        <img src="<{$k.image}>" width="240" height="240">
+                    </div>
+                    <p class="cartproname"><{$k.name}></p>
+                    <div class="cartproprice clear">
+                        <div class="cartpropriceleft">
+                            销售价：<span class="cartpropricecolor">￥<{$k.sell_price}></span>
+                        </div>
+                    </div>
+                    <div class="cartprobtnbox">
+                        <input type="button" value="加入购物车" class="cartprobtn">
+                    </div>
+                    </a>
+                </li>
+                <{/foreach}>
+            </ul>
+        </div>
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+<script>
+    //购物车商品详细展示start
+    $(function(){
+        $.ajax({
+            type:"POST",
+            url: "<{site_url('/api/cart/cart_list')}>",
+            data: '',
+            dataType:"json",
+            success: function(data){
+                if (data.status=='y') {
+                    if(data.result.sku_count < 1 ){
+                        $('.cartnonebox').show();
+                    };
+                    var html = template('cart_list_Template',data);
+                    $('#cart_list').html(html);
+                    //$("#sum_price").text(data.result.all_sell_price);//总价
+                }else{
+                    $('.cartnonebox').show();
+                }
+            }
+        });
+    })
+    //购物车商品详细展示end
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/manager/system/delivery/save')}>" method="post" class="form form-horizontal" id="add">
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>配送方式名称：</label>
+			<div class="formControls col-5">
+				<input type="text" class="input-text" value="" name="name" datatype="*" nullmsg="请输入配送方式名称！">
+			</div>
+		</div>
+        <div class="row cl">
+            <label class="form-label col-2"><span class="c-red">*</span>类型：</label>
+            <div class="formControls col-5 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" id="type-0" name="type" value="0" checked>
+                    <label for="type-0">先收款后发货</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" id="type-1" name="type" value="1">
+                    <label for="type-1">货到付款</label>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-2"><span class="c-red">*</span>重量设置：</label>
+            <div class="formControls col-8">
+                首重重量&nbsp;<span class="select-box" style="width: 120px">
+				<select name="first_weight" class="select">
+                    <option label="500克" value="500">500克</option>
+                    <option label="1公斤" value="1000" selected="selected">1公斤</option>
+                    <option label="2公斤" value="2000">2公斤</option>
+                    <option label="5公斤" value="5000">5公斤</option>
+                    <option label="10公斤" value="10000">10公斤</option>
+                    <option label="15公斤" value="15000">15公斤</option>
+                    <option label="20公斤" value="20000">20公斤</option>
+                    <option label="30公斤" value="30000">30公斤</option>
+                    <option label="40公斤" value="40000">40公斤</option>
+                    <option label="50公斤" value="50000">50公斤</option>
+                </select>
+				</span>
+                首重费用&nbsp;<input type="text" class="input-text" value="" name="first_price" datatype="n" nullmsg="请输入首重费用！" errormsg="首重费用只能是数字" style="width: 80px">
+                &nbsp;&nbsp;续重重量&nbsp;<span class="select-box" style="width: 120px">
+				<select name="second_weight" class="select">
+                    <option label="500克" value="500">500克</option>
+                    <option label="1公斤" value="1000" selected="selected">1公斤</option>
+                    <option label="2公斤" value="2000">2公斤</option>
+                    <option label="5公斤" value="5000">5公斤</option>
+                    <option label="10公斤" value="10000">10公斤</option>
+                    <option label="15公斤" value="15000">15公斤</option>
+                    <option label="20公斤" value="20000">20公斤</option>
+                    <option label="30公斤" value="30000">30公斤</option>
+                    <option label="40公斤" value="40000">40公斤</option>
+                    <option label="50公斤" value="50000">50公斤</option>
+                </select>
+				</span>
+                续重费用&nbsp;<input type="text" class="input-text" value="" name="second_price" datatype="n" nullmsg="请输入续重费用！" errormsg="续重费用只能是数字" style="width: 80px">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-2"></label>
+            <div class="formControls col-8">
+                根据重量来计算运费，当物品不足《首重重量》时，按照《首重费用》计算，超过部分按照《续重重量》和《续重费用》乘积来计算
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-2"><span class="c-red">*</span>设置地区运费：</label>
+            <div class="formControls col-5 skin-minimal">
+                <div class="radio-box" onclick="$('#open_default').hide();$('#area_list').hide();$('#add_area_list').hide();">
+                    <input type="radio" id="price_type-0" name="price_type" value="0" checked>
+                    <label for="price_type-0">统一地区运费</label>
+                </div>
+                <div class="radio-box" onclick="$('#open_default').show();$('#area_list').show();$('#add_area_list').show();">
+                    <input type="radio" id="price_type-1" name="price_type" value="1">
+                    <label for="price_type-1">指定地区运费</label>
+                </div>
+            </div>
+        </div>
+        <div class="row cl" id="open_default" style="display: none;">
+            <label class="form-label col-2"></label>
+            <div class="formControls col-8 skin-minimal">
+                <div class="radio-box">
+                    <input type="checkbox" id="open_default-0" name="open_default" value="1">
+                    <label for="open_default-0">其他地区默认运费</label>&nbsp;&nbsp;&nbsp;注意：如果不开启此项，那么未设置的地区将无法送达！
+                </div>
+            </div>
+        </div>
+        <div id="area_list" style="display: none;">
+
+        </div>
+        <!--规格列表模板-->
+        <script type='text/html' id='area_listTemplate'>
+            <div class="row cl">
+                <label class="form-label col-2"><span class="c-red">*</span>支持的配送地区：</label>
+                <div class="formControls col-8">
+                    <input type='hidden' name='area_groupid[]' value='{{area_groupid}}' />
+                    <span class="select-box" style="width: 150px;">
+                    <select name="prov" class="select">
+                        <option value="">请选择</option>
+                        <{foreach $area_list as $val=>$key}>
+                        <option value="<{$val}>"><{$key}></option>
+                        <{/foreach}>
+                    </select>
+                    </span>
+                    <button class="btn btn-primary radius" type="button" onclick="add_prov(this);"><i class="Hui-iconfont">&#xe600;</i> 添加</button>
+                    首重费用&nbsp;<input type="text" class="input-text" value="{{firstprice}}" name="firstprice[]" datatype="n" nullmsg="请输入首重费用！" errormsg="首重费用只能是数字" style="width: 80px">
+                    续重费用&nbsp;<input type="text" class="input-text" value="{{secondprice}}" name="secondprice[]" datatype="n" nullmsg="请输入续重费用！" errormsg="续重费用只能是数字" style="width: 80px">&nbsp;&nbsp;<i class="Hui-iconfont" onclick="$(this).parent().parent().remove();">&#xe6a6;</i><br>
+                    <textarea name="area_name" cols="" rows="" class="textarea" style="margin-top: 10px; width: 500px;" placeholder="已经选择地区">{{areaname}}</textarea>
+                </div>
+            </div>
+        </script>
+        <div class="row cl" id="add_area_list" style="display: none;">
+            <label class="form-label col-2"></label>
+            <div class="formControls col-2">
+                <button class="btn btn-primary radius" type="button" onclick="add_area_list();"><i class="Hui-iconfont">&#xe600;</i> 添加地区</button>
+            </div>
+        </div>
+		<div class="row cl">
+			<label class="form-label col-2">排序值：</label>
+			<div class="formControls col-2">
+				<input type="text" class="input-text" value="99" name="sortnum" datatype="n" nullmsg="请输入排序值！" errormsg="排序值只能是数字">
+			</div>
+		</div>
+        <div class="row cl">
+            <label class="form-label col-2"><span class="c-red">*</span>是否启用：</label>
+            <div class="formControls col-5 skin-minimal">
+                <div class="radio-box">
+                    <input type="radio" id="status-0" name="status" value="0" checked>
+                    <label for="status-0">是</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" id="status-2" name="status" value="2">
+                    <label for="status-2">否</label>
+                </div>
+                <div class="radio-box">
+                    <input type="radio" id="status-1" name="status" value="1">
+                    <label for="status-1">删除</label>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-2"><span class="c-red">*</span>简介：</label>
+            <div class="formControls col-6">
+                <textarea name="desc" cols="" rows="" class="textarea"  placeholder="简介" datatype="empty|*1-100" dragonfly="true" nullmsg="简介不能为空！" onKeyUp="textarealength(this,100)"></textarea>
+                <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+            </div>
+        </div>
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        formObj.init(<{ch_json_encode($item)}>);
+
+        <{if $item.price_type==1}>
+            $('#open_default').show();$('#area_list').show();$('#add_area_list').show();
+        <{/if}>
+    })
+
+    //添加地域项
+    function add_area_list()
+    {
+        var areaHtml = template('area_listTemplate',{});
+        $('#area_list').append(areaHtml);
+    }
+
+    //添加省份
+    function add_prov(_self)
+    {
+        var parentObj = $(_self).parent();
+        var selectObj    = parentObj.find('select');
+
+        //当前选中的地区ID
+        var area_group_id = parentObj.find('input[name="area_groupid[]"]').val();
+        //当前选中的地区NAME
+        var area_group_name = parentObj.find('textarea[name="area_name"]').val();
+        //填写areaId
+        if(area_group_id == '')
+        {
+            parentObj.find('input[name="area_groupid[]"]').val(";" + selectObj.val() + ";");
+        }
+        else if(area_group_id.indexOf(";" + selectObj.val() + ";") == -1)
+        {
+            parentObj.find('input[name="area_groupid[]"]').val(area_group_id + selectObj.val() + ";");
+        }
+        else
+        {
+            alert('省份已经添加，不要重复添加');
+            return;
+        }
+
+        //添加areaName
+        area_group_name = area_group_name == '' ? selectObj.find('option:selected').text() : area_group_name + "," + selectObj.find('option:selected').text();
+        parentObj.find('textarea[name="area_name"]').val(area_group_name);
+    }
+
+    //获取省份名称
+    function get_prov_name(prov_id)
+    {
+        var prov_list = <{ch_json_encode($area_list)}>;//省份列表
+        return prov_list[prov_id];
+    }
+
+    <{if $item.area_groupid!=''}>
+    //具有指定省份设置
+    var area_groupid = <{ch_json_encode($item.area_groupid)}>;
+    var firstprice   = <{ch_json_encode($item.firstprice)}>;
+    var secondprice  = <{ch_json_encode($item.secondprice)}>;
+
+    for(var index in area_groupid)
+    {
+        var areaname = [];
+        var idArray  = area_groupid[index].split(';');
+        for(var i in idArray)
+        {
+            if(idArray[i])
+            {
+                areaname.push(get_prov_name(idArray[i]));
+            }
+        }
+        var areaHtml = template('area_listTemplate',{"area_groupid":area_groupid[index],"areaname":areaname.join(','),"firstprice":firstprice[index],"secondprice":secondprice[index]});
+        $('#area_list').append(areaHtml);
+    }
+    <{/if}>
+</script>
+</body>
+</html>

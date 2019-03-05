@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body >
+<form name="comment" id="comment" method="post" action="<{site_url('/api/member/order/comment')}>">
+    <input type="hidden" name="order_id" value="<{$order_data.id}>">
+<!-- content start -->
+<section class="wrap">
+    <!-- start -->
+    <{foreach $order_sku as $val=>$key}>
+    <div class="bordercells">
+        <div class="goodslist">
+            <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$key.goods_id}>")}>" class="billwrap">
+                <div class="billL">
+                    <img src="<{$key.sku_image}>">
+                </div>
+                <div class="billR">
+                    <p class="billT"><{$key.goods_name}></p>
+                    <p class="billD">
+                        <{foreach $key.sku_value as $sku}>
+                        <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                        <{/foreach}>
+                    </p>
+                    <div class="flexbox">
+                        <div class="billPrice  flexbox">
+                            <label for="radio{{shop_list.shop_data.m_id}}{{i}}1">
+                                <div class="radiowrap">
+                                    <div class="radiobox">
+                                        <input class="inputradio" type="radio" name="comment_level[<{$key.id}>]" value="1" id="radio{{shop_list.shop_data.m_id}}{{i}}1" checked>
+                                        <span></span>
+                                    </div>
+                                    <div class="deliveryD">
+                                        好评
+                                    </div>
+                                </div>
+                            </label>
+                            <label for="radio{{shop_list.shop_data.m_id}}{{i}}2">
+                                <div class="radiowrap">
+                                    <div class="radiobox">
+                                        <input class="inputradio" type="radio" name="comment_level[<{$key.id}>]" value="2" id="radio{{shop_list.shop_data.m_id}}{{i}}2">
+                                        <span></span>
+                                    </div>
+                                    <div class="deliveryD">
+                                        中评
+                                    </div>
+                                </div>
+                            </label>
+                            <label for="radio{{shop_list.shop_data.m_id}}{{i}}3">
+                                <div class="radiowrap">
+                                    <div class="radiobox">
+                                        <input class="inputradio" type="radio" name="comment_level[<{$key.id}>]" value="3" id="radio{{shop_list.shop_data.m_id}}{{i}}3">
+                                        <span></span>
+                                    </div>
+                                    <div class="deliveryD">
+                                        差评
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <!-- 退款说明 -->
+        <div class="commentshow">
+            <p class="refundTitle">
+                评价
+            </p>
+            <textarea name="desc[<{$key.id}>]" datatype="*" nullmsg="点评一下吧" placeholder="亲！请评价您买到的宝贝" ></textarea>
+        </div>
+    </div>
+    <{/foreach}>
+    <div class="refundbtn">
+        <input type="submit" value="提交申请" class="refundsub">
+    </div>
+</section>
+<!--content end  -->
+</form>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script type="text/javascript" >
+    //验证表单
+    $(function(){
+        $.Tipmsg.r=null;
+        $("#comment").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    setTimeout(function(){
+                        layer.msg('评价成功');
+                        window.history.back();
+                    },1000);
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>
+
+
+
+

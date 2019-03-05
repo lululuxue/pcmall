@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body>
+<form action="<{site_url("/<{get_web_type()}>/cart/commit")}>" method="post" id="commit">
+    <input type="hidden" name="sku_id" value="<{$sku_id}>">
+    <input type="hidden" name="buy_type" value="<{$buy_type}>">
+    <input type="hidden" name="buy_num" value="<{$buy_num}>">
+    <input type="hidden" name="address_id" value="<{$address_data.id}>">
+    <!-- content start -->
+    <section class="wrap">
+        <!-- 地址 start -->
+        <div class="addressbox flexbox" onclick="window.location.href='<{$address_data.select_url}>'">
+            <div class="addressL">
+                <img src="/views/mobile/skin/images/icon18.png">
+            </div>
+            <div class="addressR">
+                <p>收货人：<{$address_data.full_name}> <span class="addressTel"><{$address_data.tel}></span></p>
+                <div class="addressMbox flexbox">
+                    <div class="addressML">
+                        <p>收货地址：<{get_area_name([$address_data.prov,$address_data.city,$address_data.area])}><{$address_data.address}></p>
+                    </div>
+                    <div class="addressMR">
+                        <img src="/views/mobile/skin/images/icon19.png">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="shop_list"></div>
+        <!-- 店铺列表 start -->
+        <script type='text/html' id='shop_list_Template'>
+            {{each result.list as shop_list}}
+            <div class="billbox shop_view">
+                <div class="sellerbox flexbox">
+                    <div class="sellerimg">
+                        <img src="{{shop_list.shop_data.logo}}">
+                    </div>
+                    <div class="sellerN">
+                        {{shop_list.shop_data.shop_name}}
+                    </div>
+                </div>
+                <div class="goodslist">
+                    <!--店铺商品列表 start-->
+                    {{each shop_list.sku_list as sku}}
+                    <a href="<{site_url("/<{get_web_type()}>/goods/product/{{sku.goods_id}}")}>" class="billwrap">
+                        <div class="billL">
+                            <img src="{{sku.image}}">
+                        </div>
+                        <div class="billR">
+                            <p class="billT">{{sku.name}}</p>
+                            <p class="billD">
+                                <!--商品规格start-->
+                                {{each sku.value as spec}}
+                                    <!--商品规格文字-->
+                                    {{if spec.type==1}}
+                                    {{spec.name}}:{{spec.value}}
+                                    {{/if}}
+                                    <!--商品规格图片-->
+                                    {{if spec.type==2}}
+                                    {{spec.name}}:{{spec.note}}
+                                    {{/if}}
+                                {{/each}}
+                                <!--商品规格end-->
+                            </p>
+                            <div class="billP">
+                                ¥{{sku.sell_price}}×{{sku.num}}
+                            </div>
+                        </div>
+                    </a>
+                    {{/each}}
+                    <!--店铺商品列表 end-->
+                </div>
+                {{if shop_list.promotion_data}}
+                <!-- 优惠活动 -->
+                <section class="deliverybox">
+                    <a class="deliverystyle flexbox" href="javascript:;">
+                        <div class="primarybox">
+                            <p class="primary_label">优惠活动</p>
+                        </div>
+                        <div class="primary_labelP">
+                            <input type="hidden" name="promotion_price[]" value="{{shop_list.promotion_price}}">
+                            {{shop_list.promotion_data.name}} ¥{{shop_list.promotion_price}}
+                        </div>
+                    </a>
+                </section>
+                {{/if}}
+                {{if shop_list.coupons_list}}
+                <!-- 优惠券方式 -->
+                <section class="deliverybox">
+                    <a class="deliverystyle flexbox" href="javascript:;" onclick="select_coupons({{shop_list.shop_data.m_id}})">
+                        <div class="primarybox">
+                            <p class="primary_label">优惠券</p>
+                        </div>
+                        <div class="primary_labelR" id="coupons_text_{{shop_list.shop_data.m_id}}">
+                            {{each shop_list.coupons_list as coupons i}}
+                            {{if i==0}}
+                            {{coupons.name}}¥{{coupons.amount}}
+                            {{/if}}
+                            {{/each}}
+                        </div>
+                    </a>
+                    <div class="masker" id="coupons_list_{{shop_list.shop_data.m_id}}">
+                        <div class="maskerbox">
+                            <div class="conwrap">
+                                <!-- 优惠券 -->
+                                <div class="deliveryT">
+                                    优惠券
+                                </div>
+                                {{each shop_list.coupons_list as coupons i}}
+                                <label for="coupons_radio{{shop_list.shop_data.m_id}}{{i}}">
+                                    <div class="sellerbox flexbox">
+                                        <div class="sellerN">
+                                            {{coupons.name}} ¥{{coupons.amount}}
+                                        </div>
+                                        <div class="radioDbox">
+                                            <input data-coupons_amount="coupons_amount" class="inputradio" {{if i==0}}checked{{/if}} type="radio" name="coupons_id[{{shop_list.shop_data.m_id}}]" value="{{coupons.id}}" id="coupons_radio{{shop_list.shop_data.m_id}}{{i}}" couponsamount="{{coupons.amount}}" couponsname="{{coupons.name}}">
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                </label>
+                                {{/each}}
+                                <label for="coupons_radio{{shop_list.shop_data.m_id}}no">
+                                    <div class="sellerbox flexbox">
+                                        <div class="sellerN">
+                                            不使用优惠券
+                                        </div>
+                                        <div class="radioDbox">
+                                            <input data-coupons_amount="coupons_amount" class="inputradio" type="radio" name="coupons_id[{{shop_list.shop_data.m_id}}]" value="" id="coupons_radio{{shop_list.shop_data.m_id}}no" couponsamount="0" couponsname="不使用优惠券">
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                </label>
+                                <!-- 优惠券 -->
+                            </div>
+                            <div class="btnbox">
+                                <div class="btnboxL" onclick="hide_select_coupons({{shop_list.shop_data.m_id}});">
+                                    取消
+                                </div>
+                                <div class="btnboxR" onclick="confirm_select_coupons({{shop_list.shop_data.m_id}});">
+                                    <input type="button" class="surebtn" value="确定" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {{/if}}
+                <!-- 配送方式 -->
+                <section class="deliverybox">
+                    <a class="deliverystyle flexbox" href="javascript:;" onclick="select_delivery({{shop_list.shop_data.m_id}})">
+                        <div class="primarybox">
+                            <p class="primary_label">配送方式</p>
+                        </div>
+                        <div class="primary_labelR" id="delivery_text_{{shop_list.shop_data.m_id}}">
+                            {{each shop_list.delivery_list as delivery i}}
+                            {{if i==0}}
+                            {{delivery.name}}{{if delivery.price==0}}包邮{{else}}运费 ¥{{delivery.price}}{{/if}}
+                            {{/if}}
+                            {{/each}}
+                        </div>
+                    </a>
+                    <div class="masker" id="delivery_list_{{shop_list.shop_data.m_id}}">
+                        <div class="maskerbox">
+                            <div class="conwrap">
+                                <!-- 配送方式 -->
+                                <div class="deliveryT">
+                                    配送方式
+                                </div>
+                                {{if shop_list.delivery_list}}
+                                {{each shop_list.delivery_list as delivery i}}
+                                <label for="delivery_radio{{shop_list.shop_data.m_id}}{{i}}">
+                                    <div class="sellerbox flexbox">
+                                        <div class="sellerN">
+                                            {{delivery.name}} {{if delivery.price==0}}包邮{{else}}运费 ¥{{delivery.price}}{{/if}}
+                                        </div>
+                                        <div class="radioDbox">
+                                            <input data-delivery_price="delivery_price" class="inputradio" {{if i==0}}checked{{/if}} type="radio" name="delivery_id[{{shop_list.shop_data.m_id}}]" value="{{delivery.id}}" id="delivery_radio{{shop_list.shop_data.m_id}}{{i}}" deliveryprice="{{delivery.price}}" deliveryname="{{delivery.name}}">
+                                            <span></span>
+                                        </div>
+                                    </div>
+                                </label>
+                                {{/each}}
+                                {{else}}
+                                <input data-coupons_amount="delivery_price" class="inputradio" checked type="radio" name="delivery_id[{{shop_list.shop_data.m_id}}]" value="" deliveryprice="0" deliveryname="0">
+                                {{/if}}
+                                <!-- 配送方式 -->
+                            </div>
+                            <div class="btnbox">
+                                <div class="btnboxL" onclick="hide_select_delivery({{shop_list.shop_data.m_id}});">
+                                    取消
+                                </div>
+                                <div class="btnboxR" onclick="confirm_select_delivery({{shop_list.shop_data.m_id}});">
+                                    <input type="button" class="surebtn" value="确定" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- 配送时间 -->
+                <section class="deliverybox">
+                    <a class="flexbox" href="javascript:;">
+                        <div class="primarybox">
+                            <p class="primary_label">配送时间</p>
+                        </div>
+                        <div class="primary_labelRR flexbox">
+                            <label for="delivery_time{{shop_list.shop_data.m_id}}1">
+                                <div class="radiowrap">
+                                    <div class="radiobox">
+                                        <input type="radio" class="inputradio" name="delivery_time[{{shop_list.shop_data.m_id}}]" value="任意" checked id="delivery_time{{shop_list.shop_data.m_id}}1">
+                                        <span></span>
+                                    </div>
+                                    <div class="deliveryD">
+                                        任意
+                                    </div>
+                                </div>
+                            </label>
+                            <label for="delivery_time{{shop_list.shop_data.m_id}}2">
+                                <div class="radiowrap flexbox">
+                                    <div class="radiobox">
+                                        <input type="radio" class="inputradio" name="delivery_time[{{shop_list.shop_data.m_id}}]" value="周一到周五" id="delivery_time{{shop_list.shop_data.m_id}}2">
+                                        <span></span>
+                                    </div>
+                                    <div class="deliveryD">
+                                        周一到周五
+                                    </div>
+                                </div>
+                            </label>
+                            <label for="delivery_time{{shop_list.shop_data.m_id}}3">
+                                <div class="radiowrap flexbox">
+                                    <div class="radiobox">
+                                        <input type="radio" class="inputradio" name="delivery_time[{{shop_list.shop_data.m_id}}]" value="周末" id="delivery_time{{shop_list.shop_data.m_id}}3">
+                                        <span></span>
+                                    </div>
+                                    <div class="deliveryD">
+                                        周末
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </a>
+                </section>
+                <!-- 备注 -->
+                <section class="deliverybox">
+                    <a class="flexbox" href="javascript:;">
+                        <!-- <div class="primarybox"> -->
+                        <p class="primary_label" style="margin-right:0.1rem;">备注：</p>
+                        <!-- </div> -->
+                        <div class="primary_labelRight">
+                            <input type="text" class="inputT" name="m_desc[{{shop_list.shop_data.m_id}}]" placeholder="选填，可填写你与卖家达成一致的要求">
+                        </div>
+                    </a>
+                </section>
+                <!--  总价-->
+                <div class="totalbox">
+                    <input type="hidden" class="shop_sell_price" name="shop_sell_price[{{shop_list.shop_data.m_id}}]" value="{{shop_list.all_sell_price}}">
+                    <p class="fontcolor">共计{{shop_list.all_count_sku}}件商品 金额：<span class="shop_all_price">￥0</span></p>
+                </div>
+            </div>
+        {{/each}}
+        </script>
+        <!-- 店铺列表 end -->
+        <!-- 支付方式 -->
+        <div class="paystyle">
+            <div class="sellerbox flexbox">
+                <div class="sellerN">
+                    支付方式
+                </div>
+            </div>
+            <div id="payment_list">
+
+            </div>
+            <!--支付方式start-->
+            <script type='text/html' id='payment_list_Template'>
+                {{each result as payment_list i}}
+                <label for="payment_{{payment_list.id}}">
+                    <div class="sellerbox flexbox">
+                        <div class="paymentimg">
+                            <img src="{{payment_list.logo}}">
+                        </div>
+                        <div class="sellerN">
+                            <!--{{payment_list.name}}-->
+                        </div>
+                        <div class="radiobox">
+                            <input {{if i==0}}checked{{/if}} class="inputradio" type="radio" value="{{payment_list.id}}" name="payment_id" id="payment_{{payment_list.id}}"/>
+                            <span></span>
+                        </div>
+                    </div>
+                </label>
+                {{/each}}
+            </script>
+        </div>
+
+    </section>
+    <!--content end  -->
+    <!-- footer start -->
+    <footer>
+        <div class="blank"></div>
+        <div class="billfoot">
+            合计：<span class="fontcolor" id="order_all_price">￥0</span>
+            <div class="submitbox">
+                <input type="submit" value="确认" class="paysub">
+            </div>
+        </div>
+    </footer>
+    <!-- footer end -->
+</form>
+<script type="text/javascript" src="/public/js/jquery.js" ></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/views/mobile/conf_js/cart.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script>
+    $(function(){
+        //商品详细展示start
+        var html = template('shop_list_Template',<{ch_json_encode($shop_list)}>);
+        $('#shop_list').html(html);
+        //商品详细展示end
+        //支付方式展示start
+        $.ajax({
+            type:"POST",
+            url: "<{site_url('/api/payment')}>",
+            data: '',
+            dataType:"json",
+            success: function(data){
+                if (data.status=='y') {
+                    var html = template('payment_list_Template',data);
+                    $('#payment_list').html(html);
+                    sum_order_price();
+                }
+            }
+        });
+        //支付方式展示end
+    })
+
+</script>
+</body>
+</html>
+
+
+
+

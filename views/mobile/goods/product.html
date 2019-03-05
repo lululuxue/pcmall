@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/swiper.min.css">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+    <style>
+        .proT{margin-left:0.3rem}
+        .area{margin-top:0.2rem}
+        .area .area-L{width:33%;float:left;border-left:1px solid #d9d9d9}
+        .area .area-L:first-child{border-left:none}
+        .area .area-L span{display:block;text-align:center;line-height:0.35rem;color:#999;font-size:0.20rem}
+        .area .area-L .price-color{color:#DDA065;font-size:0.23rem;font-weight: bold}
+        .detail{width:90%;margin:auto}
+        .detail .area-L{margin-top:0.2rem;border-top:1px solid #d9d9d9;padding-top:0.3rem}
+        .detail .area-L span{display:block;line-height:0.40rem;color:#999;font-size:0.20rem;width:50%;float:left;}
+        .detail .area-L span label{margin-left:0.1rem;color:#666;font-size:0.20rem;}
+        .line-gray{height:0.05rem;background: #eeeeee}
+        .proInfowrap{width:90%;margin:auto}
+        .proInfoshowbox .detail-notice span{background: #eee;padding:0.1rem 0.2rem;margin-right:0.2rem;font-size:0.2rem;color:#DDA065}
+        .listR,.listL{padding-top:0.2rem}
+        .listR .listT{font-size:0.3rem;line-height:0.4rem}
+        .listR .P-T{padding-top:0.1rem}
+        .listR .P-M{font-size:0.22rem;color:#d9d9d9;}
+        .listR .P-L{font-size:0.27rem;color:#DDA065;}
+        .listR .P-L span{font-size:0.18rem;color:#d9d9d9;}
+        .listbox{width:90%;margin:auto;}
+    </style>
+</head>
+<body style="background:#fff;">
+<div class="homeimg">
+    <a href="<{site_url("/<{get_web_type()}>/welcome")}>"><img src="/views/mobile/skin/images/home.png"></a>
+</div>
+<!-- banner start -->
+<section class="banner">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <{foreach $goods_data.image_list as $key}>
+            <div class="swiper-slide">
+                <img src="/public/images/AA.jpg" width="100%" />
+            </div>
+            <div class="swiper-slide">
+                <img src="/public/images/BB.png" width="100%" />
+            </div>
+            <{/foreach}>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+</section>
+<!-- banner end -->
+<section class="content">
+    <div class="proDbox">
+        <p class="proT">碧桂园城市花园 107㎡ 321</p>
+    </div>
+    <div class="area">
+        <div class="area-L">
+            <span>售价</span>
+            <span class="price-color">360万</span>
+        </div>
+        <div class="area-L">
+            <span>户型</span>
+            <span class="price-color">2室2厅1卫</span>
+        </div>
+        <div class="area-L">
+            <span>面积</span>
+            <span class="price-color">100㎡</span>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+    <div class="detail">
+        <div class="area-L">
+            <span>单价:<label>28776元/平</label></span>
+            <span>挂牌:<label>2018.7.2</label></span>
+            <span>朝向:<label>南</label></span>
+            <span>楼层:<label>4F/10F</label></span>
+            <span>装修:<label>精致装修</label></span>
+            <span>电梯:<label>有</label></span>
+            <span>用途:<label>普通住宅</label></span>
+            <span>楼龄:<label>20年</label></span>
+            <span style="width:100%">首付预算:<label>首付59万,月供7522元</label></span>
+            <span style="width:100%">交通信息:<label>地铁5号线小北站</label></span>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="line-gray"></div>
+    <div class="proInfowrap">
+        <div class="proInfoTbox">
+            房源介绍
+        </div>
+        <div class="proInfoshowbox">
+            <div class="detail-notice"><span>刚需首选</span><span>单价低</span><span>月供无压力</span></div>
+            <div class="proInfoshow" style="display:block;">
+                厦门华玺，2015年海尔地产、海投房产联合首发巨制之作。于厦门世界级湾区马銮湾，划界15万㎡新版图，以国际顶级标准，融湾海优质环境资源，汇新城核心多元配套，筑建厦门湾海宜居典范。
+            </div>
+        </div>
+    </div>
+    <div class="line-gray"></div>
+    <div class="listbox">
+        <!-- single list -->
+        <div class="proInfoTbox">
+            附近推荐
+        </div>
+        <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$key.id}>")}>" class="listwrap">
+            <div class="listL">
+                <img src="/public/images/loading.gif" data-echo="/public/images/BB.png">
+            </div>
+            <div class="listR">
+                <p class="listT P-T">碧桂园城市花园 107㎡ 321</p>
+                <p class="listT P-M">2室2厅1卫/100㎡/南</p>
+                <p class="listT P-L">320万<span>32000元/平</span></p>
+            </div>
+        </a>
+        <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$key.id}>")}>" class="listwrap">
+        <div class="listL">
+            <img src="/public/images/loading.gif" data-echo="/public/images/BB.png">
+        </div>
+        <div class="listR">
+            <p class="listT P-T">碧桂园城市花园 107㎡ 321</p>
+            <p class="listT P-M">2室2厅1卫/100㎡/南</p>
+            <p class="listT P-L">320万<span>32000元/平</span></p>
+        </div>
+        </a>
+        <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$key.id}>")}>" class="listwrap">
+        <div class="listL">
+            <img src="/public/images/loading.gif" data-echo="/public/images/BB.png">
+        </div>
+        <div class="listR">
+            <p class="listT P-T">碧桂园城市花园 107㎡ 321</p>
+            <p class="listT P-M">2室2厅1卫/100㎡/南</p>
+            <p class="listT P-L">320万<span>32000元/平</span></p>
+        </div>
+        </a>
+        <!-- single list end-->
+    </div>
+</section>
+<!-- footer start -->
+<footer>
+    <div class="blank"></div>
+    <div class="tabnav flexbox">
+        <div class="tabnavR">
+            <a href="javascript:;" class="tabnav_aRL" id="add_cart">
+                预约看房
+            </a>
+            <a href="javascript:;" class="tabnav_aRR" id="buy_cart">
+                联系经纪人
+            </a>
+        </div>
+    </div>
+</footer>
+<script type="text/javascript" src="/public/js/jquery.js" ></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/public/js/echo.min.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" src="/views/mobile/conf_js/product.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/swiper.min.js"></script>
+<script language="JavaScript">
+    //图片延迟加载
+    Echo.init({
+        offset: 500,
+        throttle: 0
+    });
+
+    //客户端类型product.js里面必须用到
+    var client = '<{get_web_type()}>';
+    //SKU信息
+    var sku_list = <{ch_json_encode($goods_data.sku_list)}>;
+
+    //评论
+    /*$(function(){
+        comment_list(<{$goods_data.id}>);
+    })*/
+
+</script>
+<script>
+    //图片滑动
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        paginationClickable: true,
+        autoplay: 2000,
+        spaceBetween: 0,
+    });
+
+    //联系经纪人
+    $('#buy_cart').on('click', function () {
+        window.location.href="/mobile/member/favorite/brand";
+    });
+    //预约看房
+    $('#add_cart').on('click', function () {
+        window.location.href="/mobile/member/address";
+    });
+
+
+</script>
+<{if get_client() == 'weixin'}>
+<{include file="mobile/wechat_share.html"}>
+<script language="JavaScript">
+    wx.ready(function(){
+        var share_title  = "<{$goods_data.name}>";
+        var share_desc   = "<{config_item('website_title')}>";
+        var share_link   = "<{site_url("/<{get_web_type()}>/goods/product/<{$goods_data.id}>?flag_user=<{get_m_id()}>")}>";
+        var share_imgurl = "<{config_item('base_url')}><{$goods_data.image}>";
+        wx_share(share_title, share_desc, share_link, share_imgurl);
+    });
+</script>
+<{/if}>
+</body>
+</html>
+
+
+
+

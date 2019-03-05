@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body>
+<form name="refund" id="refund" method="post" action="<{site_url('/api/member/order/refund')}>">
+    <input type="hidden" name="order_sku_id" value="<{$order_sku_data.id}>">
+    <!-- content start -->
+    <section class="wrap">
+        <!-- start -->
+        <div class="bordercells">
+            <div class="goodslist">
+                <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$order_sku_data.goods_id}>")}>" class="billwrap">
+                <div class="billL">
+                    <img src="<{$order_sku_data.sku_image}>">
+                </div>
+                <div class="billR">
+                    <p class="billT"><{$order_sku_data.goods_name}></p>
+                    <p class="billD">
+                        <{foreach $order_sku_data.sku_value as $sku}>
+                        <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                        <{/foreach}>
+                    </p>
+                    <div class="flexbox">
+                        <div class="billPrice">
+                            ¥<{$order_sku_data.sku_sell_price_real}>×<{$order_sku_data.sku_num}>
+                        </div>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <!-- 退款说明 -->
+            <div class="refundshow">
+                  <p class="refundT">
+                    退款理由
+                </p>
+                <div class="refundselectbox">
+                    <select name="prov" class="refundselect"  id="reason" onchange="changevalue()">
+                        <option>请选择退款原因</option>
+                        <option>收到商品破损</option>
+                        <option>商品错发/漏发</option>
+                        <option>商品需要维修</option>
+                        <option>收到商品与描述不符</option>
+                        <option>未按约定时间发货</option>
+                    </select>
+                </div>
+              
+                <textarea id="refundshow" placeholder="请填写您的退款理由" name="desc" datatype="*" nullmsg="理由必须填写"></textarea>
+            </div>
+        </div>
+        <div class="refundbtn">
+            <input type="submit" value="提交申请" class="refundsub">
+        </div>
+    </section>
+    <!--content end  -->
+</form>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script type="text/javascript">
+    //验证表单
+    $(function () {
+        $.Tipmsg.r = null;
+        $("#refund").Validform({
+            tiptype: function (msg) {
+                layer.msg(msg);
+            },
+            tipSweep: true,
+            ajaxPost: true,
+            callback: function (data) {
+                if (data.status == "y") {
+                    setTimeout(function () {
+                        layer.msg('申请成功');
+                        window.location.reload();
+                    }, 1000);
+                }
+            }
+        });
+        // 获取select选中值
+      
+    })
+
+  // 获取退款理由
+     function changevalue(){
+             var refundcontent = $('#reason option:selected').text();
+        $('#refundshow').html(refundcontent);
+}
+</script>
+</body>
+</html>
+
+
+
+

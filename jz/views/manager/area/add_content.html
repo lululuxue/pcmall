@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}.left-title{float: left;height: 32px;line-height: 31px;margin-right: 10px;}</style>
+<body>
+<nav class="breadcrumb">
+    录入 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20">
+	<form action="<{site_url('/manager/area/area/submit_work')}>" method="post" class="form form-horizontal" id="add">
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">工单信息</label>
+        </div>
+		<div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">流水号：</label>
+                <div class="formControls col-3">
+                    <span><{$info.id}></span>
+                    <{$a}>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工作人员：</label>
+                <div class="formControls col-3">
+                    <span><{$info.work_people}></span>
+                </div>
+            </div>
+		</div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">社区名字：</label>
+                <div class="formControls col-3">
+                    <span><{$info.area_name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">宣传日期：</label>
+                <div class="formControls col-3">
+                    <span><{$info.worktime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+
+        </div>
+        <{foreach $info.array_people as $key => $val}>
+        <div class="row cl">
+            <label class="form-label col-3" style="padding:0"><{$val}>的宣传内容：</label>
+            <div class="formControls col-1">
+                <input type="text" class="input-text" value="" name="content[][<{$key}>]" datatype="*">
+            </div>
+            <span class="left-title">栋</span>
+            <div class="formControls col-1">
+                <input type="text" class="input-text" value="" name="content1[][<{$key}>]" datatype="*">
+            </div>
+            <span class="left-title">单元</span>
+            <div class="formControls col-1">
+                <input type="text" class="input-text" value="" name="content2[][<{$key}>]" datatype="*">
+            </div>
+            <span class="left-title people-add" data-value="<{$key}>" style="cursor:pointer;color:#0066cc">增加</span>
+        </div>
+        <{/foreach}>
+        <{foreach $info.array_people as $val}>
+        <div class="row cl">
+            <label class="form-label col-3" style="padding:0"><{$val}>的工资金额：</label>
+            <div class="formControls col-1">
+                <input type="text" class="input-text" value="" name="salary[]" datatype="*">
+            </div>
+        </div>
+        <{/foreach}>
+
+        <input type="hidden" name="broadcast_order_id" value="<{$info.id}>"/>
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit">录入</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+
+
+    //单击添加
+    $(".people-add").click(function(){
+        var title = $(this).data('value');
+        var str =  '<div class="row cl"><label class="form-label col-3" style="padding:0"></label>';
+            str += '<div class="formControls col-1"><input type="text" class="input-text" name="content[]['+title+']"></div>';
+            str += ' <span class="left-title">栋</span>';
+            str += '<div class="formControls col-1"><input type="text" class="input-text" name="content1[]['+title+']"></div>';
+            str += ' <span class="left-title">单元</span>';
+            str += '<div class="formControls col-1"><input type="text" class="input-text"  name="content2[]['+title+']"></div>';
+            str += '<span onclick="del_div(this)" class="left-title people-del" style="cursor:pointer;color:#ff0010">删除</span></div>';
+        $(this).parent().after(str);
+    });
+    //单击删除
+    function del_div(thi){
+        $(thi).parent().remove();
+    }
+    $(function(){console.log('<{$info}>')
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    //layer_close();
+                    window.history.go(-1);
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        //formObj.init(<{ch_json_encode($item)}>);
+    })
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/style.css" rel="stylesheet" type="text/css">
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <div class="top_header">
+        <div class="top_left">
+            <span><a href="<{site_url('/manager/welcome/main')}>" target="main"><{config_item('manager_title')}></a></span>
+        </div>
+        <div class="top_menu">
+            <{if $admin_data.role_id==0 || stripos($admin_data.role, 'goods')!== false}>
+            <a href="<{site_url('/manager/welcome/menu/goods')}>" target="left"><i class="Hui-iconfont">&#xe620;</i> 商品</a>&nbsp&nbsp
+            <{/if}>
+            <{if $admin_data.role_id==0 || stripos($admin_data.role, 'member')!== false}>
+            <a href="<{site_url('/manager/welcome/menu/member')}>" target="left"><i class="Hui-iconfont">&#xe60d;</i> 会员</a>&nbsp&nbsp
+            <{/if}>
+            <{if $admin_data.role_id==0 || stripos($admin_data.role, 'order')!== false}>
+            <a href="<{site_url('/manager/welcome/menu/order')}>" target="left"><i class="Hui-iconfont">&#xe673;</i> 订单</a>&nbsp&nbsp
+            <{/if}>
+            <{if $admin_data.role_id==0 || stripos($admin_data.role, 'tool')!== false}>
+            <a href="<{site_url('/manager/welcome/menu/tool')}>" target="left"><i class="Hui-iconfont">&#xe63c;</i> 工具</a>&nbsp&nbsp
+            <{/if}>
+            <{if $admin_data.role_id==0 || stripos($admin_data.role, 'market')!== false}>
+            <a href="<{site_url('/manager/welcome/menu/market')}>" target="left"><i class="Hui-iconfont">&#xe6bb;</i> 营销</a>&nbsp&nbsp
+            <{/if}>
+            <{if $admin_data.role_id==0 || stripos($admin_data.role, 'report')!== false}>
+            <a href="<{site_url('/manager/welcome/menu/report')}>" target="left"><i class="Hui-iconfont">&#xe61e;</i> 统计</a>&nbsp&nbsp
+            <{/if}>
+            <{if $admin_data.role_id==0 || stripos($admin_data.role, 'system')!== false}>
+            <a href="<{site_url('/manager/welcome/menu/system')}>" target="left"><i class="Hui-iconfont">&#xe61d;</i> 系统</a>
+            <{/if}>
+        </div>
+        <div class="top_right"><span>欢迎<{$admin_data.username}> <a href="<{site_url('/manager/login/loginout')}>">退出</a></span></div>
+        <div class="clear"></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><{config_item('website_title')}></title>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css"/>
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script type="text/javascript" src="/public/js/validform.js"></script>
+    <script type="text/javascript" src="/public/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox">
+        <div class="scrapnav">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">会员中心</a>><a href="javascript:void(0)">登录</a>
+        </div>
+        <div class="contenwrap">
+            <div class="publictitle">
+                登录
+            </div>
+            <div class="loginbox clear">
+                <form name="login" id="login" method="post" action="<{site_url('/api/user/login/user_login')}>">
+                    <div class="loginboxleft">
+                        <div class="loginboxleft_box clear">
+                            <div class="loginleft">
+                                手机：
+                            </div>
+                            <div class="loginright">
+                                <input type="text" name="username" class="inputText" placeholder="手机" datatype="m" nullmsg="请输入手机号码" errormsg="手机格式不正确">
+                            </div>
+                        </div>
+                        <div class="loginboxleft_box clear">
+                            <div class="loginleft">
+                                密码：
+                            </div>
+                            <div class="loginright">
+                                <input type="password" name="password" class="inputText" placeholder="请输入密码" datatype="*" nullmsg="请输入密码">
+                            </div>
+                        </div>
+                        <div class="loginboxleft_box clear">
+                            <div class="loginleft">
+                            </div>
+                            <div class="loginright">
+                                <input type="submit" class="inputText login_btn" value="登录">
+                            </div>
+                        </div>
+                        <div class="loginboxleft_box forget">
+                            <a href="<{site_url("/welcome/find_password?redirect_url=<{urlencode($redirect_url)}>")}>">忘记密码?</a>
+                        </div>
+                    </div>
+                </form>
+                <div class="loginboxright">
+                    <div class="loginboxright_img">
+                        <img src="/views/web/skin/images/loginright.png">
+                    </div>
+                    <p>您还不是会员吗？</p>
+                    <p> 现在免费<a href="<{site_url("/welcome/reg?redirect_url=<{urlencode($redirect_url)}>")}>">注册会员</a>，不出家门就能享受更多优惠哦~！</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+<script type="text/javascript" >
+    //验证表单
+    $(function(){
+        $.Tipmsg.r=null;
+        $("#login").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    window.location.href="<{$redirect_url}>";
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

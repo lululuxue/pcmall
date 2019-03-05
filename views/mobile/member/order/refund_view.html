@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body>
+<!-- content start -->
+<section class="wrap">
+    <!-- start -->
+    <div class="bordercells">
+        <div class="goodslist">
+            <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$order_sku_data.goods_id}>")}>" class="billwrap flexbox">
+                <div class="billL">
+                    <img src="<{$order_sku_data.sku_image}>">
+                </div>
+                <div class="billR">
+                    <p class="billT"><{$order_sku_data.goods_name}></p>
+                    <p class="billD">
+                        <{foreach $order_sku_data.sku_value as $sku}>
+                        <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                        <{/foreach}>
+                    </p>
+                </div>
+            </a>
+        </div>
+        <div class="refundshow">
+            <p class="refundT">
+                退款说明
+            </p>
+            <div class="refundbox">
+                <{$refund_doc_data.note}>
+            </div>
+            <p class="refundT">退款流程</p>
+            <div class="procedurebox">
+                <ul>
+                    <{foreach $doc_log_list as $key}>
+                    <li><{date('Y-m-d H:i:s', $key.addtime)}> <{if $key.admin_user!=''}>管理员:<{/if}><{$key.desc}></li>
+                    <{/foreach}>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 退款说明 -->
+    <form name="refund" id="refund" method="post" action="<{site_url('/api/member/order/refund_doc_log')}>">
+        <input type="hidden" name="refund_doc_id" value="<{$refund_doc_data.id}>">
+        <div class="bordercells">
+            <div class="refundshow">
+                <p class="refundTitle">
+                    补充资料
+                </p>
+                <textarea id="refundshow" placeholder="请填写您的补充资料" name="desc" datatype="*" nullmsg="补充资料必须填写"></textarea>
+            </div>
+        </div>
+        <div class="infosub">
+            <input type="submit" value="提交申请" class="infosubbtn">
+        </div>
+    </form>
+</section>
+<!--content end  -->
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script type="text/javascript">
+    //验证表单
+    $(function () {
+        $.Tipmsg.r = null;
+        $("#refund").Validform({
+            tiptype: function (msg) {
+                layer.msg(msg);
+            },
+            tipSweep: true,
+            ajaxPost: true,
+            callback: function (data) {
+                if (data.status == "y") {
+                    setTimeout(function () {
+                        layer.msg('提交成功');
+                        window.location.reload();
+                    }, 1000);
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,158 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="breadcrumb">
+	工资审核记录 <a class="btn btn-success radius r mr-20" style="line-height:1.6em" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20" style="padding-top: 0px;">
+	<div class="text-c pt-20" style="text-align:left;">
+		<form action="<{site_url('/manager/check/check/salary_check/')}>" method="post" class="form form-horizontal" id="search" name="search">
+			<span class="select-box" style="width:100px">
+				<select name="company" class="select">
+					<option value="">重庆公司</option>
+
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="shop" class="select" onchange="sub_shop_all(this.value)">
+					<option value="">--请选择总店--</option>
+					<{foreach $shop_list as $v}>
+					<option value="<{$v.name}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="sub_shop" class="select">
+
+				</select>
+			</span>
+			<span class="select-box" style="width:100px">
+				<select name="department_id" class="select">
+					<option value="">--请选择部门--</option>
+					<{foreach $department_list as $v}>
+					<option value="<{$v.id}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:100px">
+				<select name="job_id" class="select">
+					<option value="">--请选择职位--</option>
+					<{foreach $job_list as $v}>
+					<option value="<{$v.id}>"><{$v.job_name}></option>
+					<{/foreach}>
+				</select>
+			</span><span class="select-box" style="width:100px">
+				<select name="status" class="select">
+					<option value="">--审核状态--</option>
+					<option value="0">--未审核--</option>
+					<option value="1">--分公司审核--</option>
+					<option value="2">--总公司审核--</option>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<input type="text" class="input-text laydate-icon" value="" name="date" onclick="laydate({istime: true, format: 'YYYY-MM'})" readonly="" placeholder="请选择服务开始时间" style="padding:0;height:auto;border:none">
+			</span>
+			<input type="text" name="name" placeholder="请输入查询内容" style="width:150px" class="input-text">
+			<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		</form>
+	</div>
+	<div class="mt-20">
+		<form action="<{site_url('/manager/check/check/salary_check_verify/')}>" method="post" class="form form-horizontal" id="search" name="search">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+			<tr class="text-c">
+				<th rowspan="2">姓名</th>
+				<th rowspan="2">职位</th>
+				<th rowspan="2">基本工资</th>
+				<th colspan="2">出勤时间</th>
+				<th colspan="2">保洁工时</th>
+				<th colspan="2">加班时间</th>
+				<th rowspan="2">卡提成</th>
+				<th rowspan="2">保养提成</th>
+				<th rowspan="2">承包费</th>
+				<th rowspan="2">其他（+）</th>
+				<th rowspan="2">应发工资</th>
+				<th rowspan="2">其他（-）</th>
+				<th rowspan="2">实发工资</th>
+				<th rowspan="2">所属公司</th>
+			</tr>
+			<tr class="text-c">
+				<th>天数</th>
+				<th>金额</th>
+				<th>家政卡工时</th>
+				<th>非家政卡工时</th>
+				<th>时间</th>
+				<th>金额</th>
+			</tr>
+
+			</thead>
+			<tbody>
+			<{foreach $list as $key}>
+			<tr class="text-c">
+				<td><{$key.name}></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.job_name}>" name="job_name[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.basic_salary}>" name="basic_salary[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.work_day}>" name="work_day[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.work_money}>" name="work_money[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.work_money}>" name="card_hour[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.no_card_hour}>" name="no_card_hour[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.over_time}>" name="over_time[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.over_money}>" name="over_money[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.card_percentage}>" name="card_percentage[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.protect_percentage}>" name="protect_percentage[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.contract}>" name="contract[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.add_money}>" name="add_money[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.total_money}>" name="total_money[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.reduce_money}>" name="reduce_money[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value="<{$key.real_money}>" name="real_money[]"></td>
+				<td class="text-l"><input type="text" class="input-text" value=""  name="sub_shop[]"></td>
+				<input type="hidden" class="input-text" value="<{$search_where.date}>" name="date[]">
+				<input type="hidden" class="input-text" value="<{$key.position_id}>" name="position_id[]">
+				<input type="hidden" class="input-text" value="<{$key.job_id}>" name="job_id[]">
+			</tr>
+
+			<{/foreach}>
+			</tbody>
+		</table>
+
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit">审核</button>
+			</div>
+		</div>
+		</form>
+	</div>
+</div>
+<!--分页-->
+
+<{page_view('page',$page_count,search_array_to_link($search_where))}>
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script language="JavaScript">
+	$(function(){
+		//表单回填
+		var formObj = new Form();
+		formObj.init(<{ch_json_encode($search_where)}>);
+        sub_shop_all('<{$search_where.shop}>','<{$search_where.sub_shop}>')
+	})
+
+</script>
+</body>
+</html>

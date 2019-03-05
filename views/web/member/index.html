@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox clear">
+		 	<div class="scrapnav">
+		 		您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+		 	<div class="userbox clear">
+		 		<div class="useraside">
+					<{include file="web/member/menu.html"}>
+		 		</div>
+		 		<div class="usercontent" >
+		 			<div class="usercentertitle">
+		 				您好，<{$member_data.username}>欢迎回来！
+		 				<span style="float:right;">上次登录时间 <{date('Y-m-d H:i:s',$member_user_data.endtime)}></span>
+		 			</div>
+		 			<div class="usercenterbox">
+		 				<div class="usercenterboxtitle">
+		 					用户信息
+		 				</div>
+		 				<div class="usercenterinfo clear">
+		 					<div class="usercenterinfoleft" id="userphoto">
+		 						<div class="usercenterphoto"><img src="<{$member_data.headimgurl}>"></div>
+								<span style="line-height: 20px;">修改图像</span>
+		 					</div>
+		 					<div class="usercenterinforight ">
+		 						<ul class="usercenteritem clear">
+		 							<li>你的账户目前总积分：<span class="redfont"><{$member_user_data.point}></span><a href="<{site_url("/member/point/index")}>">&nbsp;查看积分历史</a></li>
+		 							<li>现金账户：<span class="redfont">￥<{format_price($member_user_data.balance)}></span></li>
+		 						</ul>
+		 						<ul class="usercenterstatus clear">
+		 							<li><a href="<{site_url("/member/order?status=1")}>">待付款订单：(<span class="redfont"><{$wait.wait_pay}></span>)</a></li>
+		 							<li><a href="<{site_url("/member/order?status=3")}>">待确认订单：(<span class="redfont"><{$wait.wait_sign}></span>)</a></li>
+		 						</ul>
+		 					</div>
+		 				</div>
+		 				<div class="usercenterboxtitle">
+		 					我的订单
+		 				</div>
+		 				<table class="bill-tablebox accout-table">
+							<tr>
+								<th>订单编号</th>
+								<th>下单日期</th>
+								<th>收货人</th>
+								<th>总金额</th>
+								<th>订单状态</th>
+
+							</tr>
+							<{foreach $list as $key}>
+							<tr>
+								<td class="bill-tableleft" ><{$key.order_no}></td>
+								<td><{date('Y-m-d H:i',$key.addtime)}></td>
+								<td ><{$key.full_name}></td>
+								<td ><{$key.order_price}></td>
+								<td class="redfont">
+									<a href="<{site_url("/member/order/view/<{$key.id}>")}>"><{get_order_status_text($key)}></a>
+								</td>
+							</tr>
+							<{/foreach}>
+		 			</table>
+		 			</div>
+		 		</div>
+		 	</div>
+		 	
+		 	
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	</div>
+	<{plupload('userphoto',['width'=>300,'height'=>300])}>
+	<script type="text/javascript" >
+		//添加图片展示
+		function show_plupload(pic_data){
+			if(pic_data.url!='') {
+				$.ajax({
+					type:"POST",
+						url: "<{site_url("/member/welcome/headimgurl_save")}>",
+						data: "headimgurl="+pic_data.url,
+						dataType:"json",
+						success: function(data){
+							if (data.status=='y') {
+							$("#userphoto img").attr('src',pic_data.url);
+						} else {
+							layer.msg(data.info);
+						}
+					}
+				});
+			}
+		}
+	</script>
+</body>
+</html>

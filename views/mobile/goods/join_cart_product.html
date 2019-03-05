@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/swiper.min.css">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body style="background:#fff;">
+<div class="masker maskershow">
+    <div class="maskerbox">
+        <div class="conwrap">
+            <a href="javascript:;" class="maskerclose">
+                <img src="/views/mobile/skin/images/icon16.png">
+            </a>
+            <div class="maskerwrap">
+                <div class="maskerimg">
+                    <img id="sku_image" src="<{$goods_data.image}>">
+                </div>
+                <div class="prodesbox">
+                    <p class="proprice" id="sell_price">
+                        <{if min($goods_data.max_min_sell_price)!=max($goods_data.max_min_sell_price)}>
+                        ￥<{min($goods_data.max_min_sell_price)}>-￥<{max($goods_data.max_min_sell_price)}>
+                        <!--市场价：￥<{min($goods_data.max_min_market_price)}>-￥<{max($goods_data.max_min_market_price)}>-->
+                        <{else}>
+                        ￥<{min($goods_data.max_min_sell_price)}>
+                        <!--市场价：￥<{$goods_data.market_price}>-->
+                        <{/if}>
+                    </p>
+                    <p class="proremaining">库存<span id="store_nums" style="font-size: 0.22rem;"><{$goods_data.store_nums}></span>件</p>
+                </div>
+            </div>
+            <!-- 规格参数 -->
+            <div class="parameterbox">
+                <{foreach $goods_data.spec_select_list as $key}>
+                <div class="parameterwrap goods_attr">
+                    <p class="parameterT"><{$key.name}></p>
+                    <div class="parameteritems">
+                        <{foreach $key.value as $k}>
+                        <{if $key.type==1}>
+                        <a href="javascript:;" class="parameter_a goods_sku" val="<{$k}>"><{$k}></a>
+                        <{elseif $key.type==2}>
+                        <a href="javascript:;" class="parameter_a goods_sku" style="padding:0;" val="<{$k}>" onclick="set_sku_image('<{$k}>')"><img src="<{$k}>"></a>
+                        <{/if}>
+                        <{/foreach}>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <{/foreach}>
+                <!--已经选择的商品skuid-->
+                <input type="hidden" id="sku_id" value="<{if $goods_data.spec_select_list==''}><{$goods_data.one_sku_data.sku_id}><{/if}>">
+            </div>
+            <!-- 规格参数 -->
+            <!-- 购买 -->
+            <div class="buybox flexbox">
+                <div class="buynumbox">
+                    购买数量
+                </div>
+                <div class="buybtnbox flexbox">
+                    <div class="buybtn" onclick="update_num(-1);">
+                        <img src="/views/mobile/skin/images/reducebtn.png">
+                    </div>
+                    <div class="buynum">
+                        <input type="text" class="buynuminput" id="buy_num" onblur="check_sku_num();" value="1" maxlength="5">
+                    </div>
+                    <div class="buybtn" onclick="update_num(1);"><img src="/views/mobile/skin/images/addbtn.png"></div>
+                </div>
+            </div>
+        </div>
+        <div class="btnbox">
+            <input type="submit" class="inputbtn" id="add_cart_button" onclick="add_cart('<{$url}>', '<{$id}>');" value="确定">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js" ></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" src="/views/mobile/conf_js/product.js"></script>
+<script language="JavaScript">
+    //客户端类型product.js里面必须用到
+    var client = '<{get_web_type()}>';
+    //SKU信息
+    var sku_list = <{ch_json_encode($goods_data.sku_list)}>;
+
+    // 遮罩层隐藏
+    $('.maskerclose').on('click', function () {
+        parent.layer.closeAll('iframe');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<title><{config_item('website_title')}></title>
+	<link rel="stylesheet" href="/views/mobile/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js" ></script>
+	<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+</head>
+<body>
+<div class="wrap">
+	<!-- header start -->
+<header class="topbar ">
+    <div class="conwrap flexbox">
+        <div class="topbarL">
+            <a class="topbar_a" href="javascript:history.go(-1)">
+                <img src="/views/mobile/skin/images/left_arrow.png"/>
+            </a>
+        </div>
+        <div class="topbarM">详情</div>
+        <div class="topbarR"></div>
+    </div>
+</header>
+<!-- header end -->
+	<section class="wrap">
+		<div class="newsbox">
+			<h2><{$article_data.title}></h2>
+			<div class="borderbox">
+				<p class="newsshowTime"><{date('Y-m-d',$article_data.addtime)}></p>
+			</div>
+			<div class="newscontent">
+				<{$article_data.desc}>
+			</div>
+			
+		</div>
+	</section>	
+</div>
+<{include file="mobile/footer.html"}>
+</body>
+</html>

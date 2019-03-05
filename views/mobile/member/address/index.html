@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/css/style.css" />
+	<title><{config_item('website_title')}></title>
+	<style>
+		.left-img{position:absolute;top:0.5rem;right:0.2rem;width:0.2rem;height:auto;}
+		.flexbox-X input{border:none;text-align:right;}
+		.flexbox-X{position:relative;text-align:right;}
+		.add_new{border-bottom:1px solid #eee}
+		.add_new.list-L{border-bottom: none}
+		.add_new.list-L .flexbox{border-bottom:1px solid #eee}
+		.infosubbtn{background:#F29D39;border-radius:0.3rem }
+		.chose-time span{float:right;line-height:0.3rem;margin:0.3rem auto;background: #eee;padding:0.1rem 0.4rem;color:#666;margin-right:0.2rem}
+		.chose-time span.active{background:#F29D39;color:#fff }
+		.addcells:after{border-bottom:none}
+	</style>
+</head>
+<body style="background: #fff">
+<header class="topbar" style="background:#fff;">
+	<div class="conwrap flexbox">
+		<div class="topbarL">
+			<a class="topbar_a" href="javascript:history.go(-1)">
+				<img src="/views/mobile/skin/images/left_arrow.png"/>
+			</a>
+		</div>
+		<div class="topbarM">预约看房</div>
+		<div class="topbarR" id="selectbtn"></div>
+	</div>
+</header>
+<div class="wrap">
+	<!--地址添加模板start-->
+		<input type="hidden" name="id" value="{{id}}">
+		<div class="addcells">
+			<div class="addListbox">
+				<!--start  -->
+				<div class="add_new  flexbox">
+					<div class="addListL">
+						预约楼盘：
+					</div>
+					<div class="addListR flexbox-X">
+						碧桂园城市花园 107㎡ 321
+					</div>
+				</div>
+				<!-- end -->
+				<!--start  -->
+				<div class="add_new  flexbox list-L">
+					<div class="addListL">
+						预约时间：
+					</div>
+					<div class="addListR flexbox-X">
+						&nbsp;<img class="left-img" src="/views/mobile/skin/images/icon19.png"/>
+					</div>
+				</div>
+				<div class="add_new  flexbox">
+					<div class="addListL">
+						&nbsp;
+					</div>
+					<div class="addListR flexbox-X chose-time">
+						<span>上午</span>
+						<span>下午</span>
+					</div>
+				</div>
+				<div class="add_new  flexbox">
+					<div class="addListL">
+						称呼：
+					</div>
+					<div class="addListR flexbox-X">
+						<input type="tel" class="addinputText" placeholder="请输入称呼" name="name" datatype="*" nullmsg="不能为空" value="">
+					</div>
+				</div>
+				<div class="add_new  flexbox">
+					<div class="addListL">
+						性别
+					</div>
+					<div class="addListR flexbox-X chose-time">
+						<span>男士</span>
+						<span>女士</span>
+					</div>
+				</div>
+				<div class="add_new  flexbox">
+					<div class="addListL">
+						联系方式：
+					</div>
+					<div class="addListR flexbox-X">
+						<input type="tel" class="addinputText" placeholder="请输入手机号码" name="tel" datatype="m" nullmsg="电话不能为空" errormsg="手机号码格式错误" value="">
+					</div>
+				</div>
+				<div class="add_new  flexbox">
+					<div class="addListL">
+						备注：
+					</div>
+					<div class="addListR flexbox-X">
+						<input type="tel" class="addinputText" name="remark" placeholder="请输入备注" value="">
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="infosub">
+			<input type="submit" value="提 交"  class="infosubbtn">
+		</div>
+
+	</div>
+<!--地址添加模板end-->
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<{include file="mobile/footer.html"}>
+<script language="JavaScript">
+	$(function() {
+        //验证表单
+        $.Tipmsg.r = null;
+        $("#edit").Validform({
+            tiptype: function (msg) {
+                layer.msg(msg);
+            },
+            tipSweep: true,
+            ajaxPost: true,
+            callback: function (data) {
+                if (data.status == "y") {
+                    window.location.reload();
+                }
+            }
+        });
+    })
+   $(".chose-time span").click(function(){
+        $(".chose-time span").removeClass('active');
+        $(this).addClass('active');
+    });
+
+</script>
+</body>
+</html>

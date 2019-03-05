@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/css/style.css" />
+	<title><{config_item('website_title')}></title>
+</head>
+<body>
+<div class="wrap">
+	<div class="accListbox">
+		<div class="paystyle">
+			<div class="conwrap" style="font-size:0.26rem;">
+				兑换优惠券
+			</div>
+		</div>
+	</div>
+	<!-- end -->
+<form class="form form-horizontal" name="add" id="add" method="post" action="<{site_url('/api/member/coupons/exchange_save')}>">
+	<div class="bordercells">
+		<div class="addListbox">
+			<div class="add_new  flexbox">
+				<div class="addListL" style="text-align:right;">
+					优惠券密码：
+				</div>
+				<div class="addListR flexbox">
+					<input type="text" class="addinputText" name="password" datatype="*" nullmsg="优惠券密码不能为空">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="infosub">
+		<input type="submit" value="确认兑换"  class="infosubbtn">
+	</div>
+</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<{include file="mobile/footer.html"}>
+<script type="text/javascript" >
+	//验证表单
+	$(function(){
+		$.Tipmsg.r=null;
+		$("#add").Validform({
+			tiptype:function(msg){
+				layer.msg(msg);
+			},
+			tipSweep:true,
+			ajaxPost:true,
+			callback:function(data){
+				if(data.status=="y"){
+					layer.msg('兑换成功');
+					setTimeout(function(){
+						window.history.back();
+					},2000)
+				} else {
+					layer.msg(data.info);
+				}
+			}
+		});
+	})
+</script>
+</body>
+</html>

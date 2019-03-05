@@ -1,0 +1,112 @@
+<script language="JavaScript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script language="JavaScript">
+	wx.config({
+		debug: false, // 开启调试模式
+		appId: '<{$js_sdk.appid}>', // 必填，公众号的唯一标识
+		timestamp: <{$js_sdk.timestamp}>, // 必填，生成签名的时间戳
+        nonceStr: '<{$js_sdk.noncestr}>', // 必填，生成签名的随机串
+		signature: '<{$js_sdk.signature}>',// 必填，签名，见附录1
+		jsApiList: [
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'onVoicePlayEnd',
+            'uploadVoice',
+            'downloadVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'translateVoice',
+            'getNetworkType',
+            'openLocation',
+            'getLocation',
+            'hideOptionMenu',
+            'showOptionMenu',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+            'closeWindow',
+            'scanQRCode',
+            'chooseWXPay',
+            'openProductSpecificView',
+            'addCard',
+            'chooseCard',
+            'openCard'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	});
+
+    function wx_share(share_title, share_desc, share_link_url, share_imgurl)
+    {
+        share_link = share_link_url+'?&flag_user=<{$m_id}>';
+        wx.hideMenuItems({
+            menuList: ['menuItem:exposeArticle','menuItem:setFont','menuItem:dayMode','menuItem:nightMode','menuItem:share:appMessage','menuItem:share:timeline','menuItem:share:qq','menuItem:share:weiboApp','menuItem:share:facebook','menuItem:share:QZone','menuItem:editTag','menuItem:delete','menuItem:copyUrl','menuItem:originPage','menuItem:readMode','menuItem:openWithQQBrowser','menuItem:openWithSafari','menuItem:share:email','menuItem:share:brand'] //要隐藏的菜单项，所有menu项见附录3//刷新开启menuItem:refresh//查看公众号开启menuItem:profile//收藏开启menuItem:favorite
+        });
+        //wx.showOptionMenu();
+        wx.showMenuItems({
+            menuList: ['menuItem:share:appMessage','menuItem:share:timeline','menuItem:share:qq','menuItem:share:weiboApp','menuItem:share:facebook','menuItem:share:QZone'] // 要显示的菜单项，所有menu项见附录3
+        });
+        wx.onMenuShareAppMessage({
+            title: share_title,
+            desc: share_desc,
+            link: share_link,
+            imgUrl: share_imgurl,
+            success: function (res) {
+            },
+            cancel: function (res) {
+            }
+        });
+        //分享到朋友圈
+        wx.onMenuShareTimeline({
+            title: share_title,
+            desc: share_desc,
+            link: share_link,
+            imgUrl: share_imgurl,
+            success: function (res) {
+            },
+            cancel: function (res) {
+            }
+        });
+        //分享到qq
+        wx.onMenuShareQQ({
+            title: share_title,
+            desc: share_desc,
+            link: share_link,
+            imgUrl: share_imgurl,
+            success: function () {
+            },
+            cancel: function () {
+            }
+        })
+        //分享到微博
+        wx.onMenuShareWeibo({
+            title: share_title,
+            desc: share_desc,
+            link: share_link,
+            imgUrl: share_imgurl,
+            success: function () {
+            },
+            cancel: function () {
+            }
+        });
+        //分享到qq空间
+        wx.onMenuShareQZone({
+            title: share_title,
+            desc: share_desc,
+            link: share_link,
+            imgUrl: share_imgurl,
+            success: function () {
+            },
+            cancel: function () {
+            }
+        });
+    }
+</script>

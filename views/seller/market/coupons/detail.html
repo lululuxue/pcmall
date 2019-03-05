@@ -1,0 +1,153 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{$shop_data.shop_name}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="pd-20" style="padding-top: 0px;">
+	<div class="text-c pt-20">
+		<form action="<{site_url('/seller/market/coupons/detail/')}>?cou_id=<{$search_where.cou_id}>&m_id=<{$search_where.m_id}>" method="post" class="form form-horizontal" id="search" name="search">
+			<span class="select-box" style="width:150px">
+				<select name="status" class="select">
+					<option value="">使用状态</option>
+					<option value="0">未使用</option>
+					<option value="1">已使用</option>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="is_send" class="select">
+					<option value="">是否发放</option>
+					<option value="0">未发放</option>
+					<option value="1">已发放</option>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="is_close" class="select">
+					<option value="">是否禁用</option>
+					<option value="0">未禁用</option>
+					<option value="1">已禁用</option>
+				</select>
+			</span>
+			<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+			<button onclick="window.location.href='<{search_array_to_link($search_where)}>&export=1'" class="btn btn-primary" type="button"><i class="Hui-iconfont">&#xe640;</i> 导出</button>
+		</form>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a href="javascript:;" class="btn btn-primary radius" onclick="data_del(this,'<{site_url('/seller/market/coupons/detail_send/')}>')"><i class="Hui-iconfont">&#xe644;</i> 发放</a>
+		<a href="javascript:;" class="btn btn-primary radius" onclick="data_del(this,'<{site_url('/seller/market/coupons/detail_update_is_close/')}>?is_close=1')"><i class="Hui-iconfont">&#xe60e;</i> 禁用</a>
+		<a href="javascript:;" class="btn btn-primary radius" onclick="data_del(this,'<{site_url('/seller/market/coupons/detail_update_is_close/')}>?is_close=0')"><i class="Hui-iconfont">&#xe605;</i> 启用</a>
+		<a href="javascript:;" onclick="data_del(this,'<{site_url('/seller/market/coupons/detail_delete/')}>')" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe60b;</i> 批量删除</a>
+	</span></div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="40"><input name="" type="checkbox" value=""></th>
+					<th width="50">ID</th>
+					<th>活动名称</th>
+					<th width="80">密码</th>
+					<th width="80">优惠券金额</th>
+					<th width="80">绑定用户</th>
+					<th width="80">是否使用</th>
+					<th width="80">是否发放</th>
+					<th width="80">是否禁用</th>
+					<th width="80">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+			<{foreach $list as $key}>
+				<tr class="text-c">
+					<td><input name="id[]" type="checkbox" value="<{$key.id}>"></td>
+					<td><{$key.id}></td>
+					<td class="text-l"><{$key.name}></td>
+					<td class="text-l"><{$key.password}></td>
+					<td class="text-l">￥<{$key.amount}></td>
+					<td class="text-c">
+						<{if $key.m_id==0}>
+						<span class="label label-danger radius" onClick="detail_set_user(<{$key.id}>)">立即绑定</span>
+						<{elseif $key.m_id>0}>
+						<span class="label label-success radius">已绑定</span>
+						<{/if}>
+					</td>
+					<td class="text-c">
+						<{if $key.status==0}>
+						<span class="label label-warning radius">未使用</span>
+						<{elseif $key.status==1}>
+						<span class="label label-success radius">已使用</span>
+						<{/if}>
+					</td>
+					<td class="text-c">
+						<{if $key.is_send==0}>
+						<span class="label label-warning radius">未发放</span>
+						<{elseif $key.is_send==1}>
+						<span class="label label-success radius">已发放</span>
+						<{/if}>
+					</td>
+					<td class="text-c">
+						<{if $key.is_close==0}>
+						<span class="label label-success radius">未禁用</span>
+						<{elseif $key.is_close==1}>
+						<span class="label label-warning radius">已禁用</span>
+						<{/if}>
+					</td>
+					<td class="f-14 td-manage">
+						<a style="text-decoration:none" class="ml-5" onClick="data_del(this,'<{site_url('/seller/market/coupons/detail_delete/')}>','<{$key.id}>')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a>
+					</td>
+				</tr>
+			<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--分页-->
+<{page_view('page',$page_count,search_array_to_link($search_where))}>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script language="JavaScript">
+	//发放给指定用户
+	function detail_set_user(id){
+		layer.prompt({
+			title: '输入用户名',
+			formType: 0 //prompt风格，支持0-2
+		}, function(note){
+			//提交请求
+			$.ajax({
+				type:"POST",
+				url: "/seller/market/coupons/detail_set_user/"+id,
+				data: "username="+note,
+				dataType:"json",
+				success: function(data){
+					if (data.status=='y') {
+						layer.msg('绑定完成');
+						setTimeout(function(){
+							window.location.reload();
+						},1000)
+					} else {
+						layer.msg(data.info);
+					}
+				}
+			});
+		});
+	}
+
+
+	$(function(){
+		//表单回填
+		var formObj = new Form();
+		formObj.init(<{ch_json_encode($search_where)}>);
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><{config_item('website_title')}></title>
+    <meta content="<{config_item('website_keywords')}>" name="Keywords">
+    <meta content="<{config_item('website_desc')}>" name="description"/>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/layer/layer.js"></script>
+    <script src="/views/web/conf_js/order.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox clear">
+        <div class="scrapnav">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+        </div>
+        <div class="userbox clear">
+            <div class="useraside">
+                <{include file="web/member/menu.html"}>
+            </div>
+            <div class="usercontent" style="height:auto;">
+                <div class="usertitle">
+                    订单详情
+                </div>
+                <div class="billshowtopbox">
+                    <div class="billshowtop">
+                        <{if $order_data.addtime!=''}>
+                        创建时间:<{date('Y-m-d H:i:s',$order_data.addtime)}>
+                        <{/if}>
+                        <{if $order_data.paytime!=''}>
+                        <br>支付时间:<{date('Y-m-d H:i:s',$order_data.paytime)}>
+                        <{/if}>
+                        <{if $order_data.sendtime!=''}>
+                        <br>发货时间:<{date('Y-m-d H:i:s',$order_data.sendtime)}>
+                        <{/if}>
+                        <{if $order_data.completetime!=''}>
+                        <br>完成时间:<{date('Y-m-d H:i:s',$order_data.completetime)}>
+                        <{/if}>
+                    </div>
+                    <ul class="billshowcontent clear">
+                        <li>订单号：<{$order_data.order_no}></li>
+                        <li>状态：<span style="color:#f27520;"><{get_order_status_text($order_data)}></span></li>
+                    </ul>
+                    <div class="billshowbtnbox clear">
+                        <{if is_delete($order_data)}>
+                        <input type="button" class="billshowbtn" value="删除订单" style="background:#ff9f32;" onclick="order_delete('<{$order_data.id}>');">
+                        <{/if}>
+                        <{if is_pay($order_data)}>
+                        <input type="button" class="billshowbtn" value="取消订单" style="background:#ff9f32;" onclick="order_cancel('<{$order_data.id}>');">
+                        <input type="button" class="billshowbtn" value="更换支付方式" style="background:#87bb17;" onclick="select_payment('<{$order_data.id}>','<{$order_data.payment_id}>');">
+                        <input type="button" class="billshowbtn" value="立即付款" style="background:#87bb17;" onclick="window.location.href='<{site_url("/api/pay/do_pay?client=&order_no=<{$order_data.order_no}>")}>'">
+                        <{/if}>
+                        <{if is_confirm($order_data)}>
+                        <input type="button" class="billshowbtn" value="查看物流" style="background:#ff9f32;" onclick="window.location.href='<{site_url("/member/order/delivery_status/<{$order_data.id}>")}>'">
+                        <input type="button" class="billshowbtn" value="确认收货" style="background:#87bb17;" onclick="order_confirm('<{$order_data.id}>');">
+                        <{/if}>
+                        <{if is_comment($order_data)}>
+                        <input type="button" class="billshowbtn" value="去评价" style="background:#ff9f32;" onclick="window.location.href='<{site_url("/member/order/comment/<{$key.id}>")}>'">
+                        <{/if}>
+                    </div>
+                </div>
+                <div class="addressbox">
+                    收件人信息
+                </div>
+                <table class="receiveinfo">
+                    <tr>
+                        <td class="receiveinfoleft">收货人：</td>
+                        <td style="text-align: left;">
+                            <{$order_data.full_name}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="receiveinfoleft">地址：</td>
+                        <td style="text-align: left;">
+                            <{get_area_name([$order_data.prov,$order_data.city,$order_data.area])}><{$order_data.address}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="receiveinfoleft">手机号码：</td>
+                        <td style="text-align: left;">
+                            <{$order_data.tel}>
+                        </td>
+                    </tr>
+                </table>
+                <div class="addressbox">
+                    支付及配送方式
+                </div>
+                <table class="receiveinfo">
+                    <tr>
+                        <td class="receiveinfoleft">配送方式：</td>
+                        <td style="text-align: left;">
+                            <{$order_data.delivery.name}> ￥<{format_price($order_data.delivery_price_real)}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="receiveinfoleft">配送时间：</td>
+                        <td style="text-align: left;">
+                            <{$order_data.delivery_time}>
+                        </td>
+                    </tr>
+                </table>
+                <div class="addressbox">
+                    商品清单
+                </div>
+                <table class="bill-tablebox">
+                    <tr>
+                        <th class="cart-tablecheck">商品信息</th>
+                        <th width="100">邮费</th>
+                        <th width="100">商品数量</th>
+                        <th width="100">退换货</th>
+                    </tr>
+                    <{foreach $order_sku as $key}>
+                    <tr>
+                        <td class="bill-tableleft" style="text-align:left;">
+                            <div class="cart_tableimg">
+                                <a target="_blank" href="<{site_url("/goods/product/<{$key.goods_id}>")}>"><img src="<{$key.sku_image}>" width="83" height="83"></a>
+                            </div>
+                            <p><{$key.goods_name}></p>
+                            <p>
+                                <!--规格属性-->
+                                <{foreach $key.sku_value as $sku}>
+                                <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                                <{/foreach}>
+                                <{$key.sku_num}>件
+                            </p>
+                        </td>
+                        <td style="color:#cc1a1a;">￥<{$key.sku_sell_price_real}></td>
+                        <td><{$key.sku_num}></td>
+                        <td>
+                            <a class="billstatus" href="<{site_url("/member/order/refund/<{$key.id}>")}>">
+                            <{if $key.is_refund==0}>
+                            申请退款
+                            <{elseif $key.is_refund==1}>
+                            退款中
+                            <{elseif $key.is_refund==2}>
+                            退款完成
+                            <{/if}>
+                            </a>
+                        </td>
+                    </tr>
+                    <{/foreach}>
+                </table>
+                <div class="accountbox">
+                    订单支付金额：<span style="font-size:24px;font-weight:bold;color:#cc1818;">￥<{$order_data.order_price}></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+</body>
+</html>

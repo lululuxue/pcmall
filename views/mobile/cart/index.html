@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body>
+<div class="cartnonebox ">
+    <div class="cartnone">
+        <div class="cartnoneimg ">
+            <img src="/views/mobile/skin/images/icon35.png" >
+        </div>
+        <p style="font-size: 0.3rem;">您的购物车为空</p>
+    </div>
+</div>
+<form id="cart" enctype="multipart/form-data" action="<{site_url("/<{get_web_type()}>/cart/confirm")}>" method="get">
+    <!-- shop start -->
+    <div id="cart_list">
+        <!--购物车模板start-->
+        <script type='text/html' id='cart_list_Template'>
+            {{each result.list as shop_list}}
+            <section class="bordercells" id="shop_{{shop_list.shop_data.m_id}}">
+                <!--  商店名-->
+                <label for="checkbox_shop_{{shop_list.shop_data.m_id}}">
+                    <div class="shopNamebox  flexbox">
+                        <div class="checkbox">
+                            <input type="checkbox" id="checkbox_shop_{{shop_list.shop_data.m_id}}" onclick="check_shop_all(this,{{shop_list.shop_data.m_id}})" class="inputcheck">
+                            <span></span>
+                         </div>
+                        <div class="shopName">
+                            <p>{{shop_list.shop_data.shop_name}}</p>
+                        </div>
+                    </div>
+                </label>
+                <!--  商店名-->
+                <!-- 商品列表 -->
+                <div class="goodsListwrap">
+                    <!-- 单个商品 start -->
+                    {{each shop_list.sku_list as sku}}
+                    <div class="goodsListbox " id="cart_sku_{{sku.id}}">
+                        <label for="checkbox_sku_{{sku.id}}">
+                            <div class="goodsListL flexbox">
+                                <div class="checkbox">
+                                    <input type="checkbox" name="sku_id[]" value="{{sku.id}}" shop_id="{{shop_list.shop_data.m_id}}" onclick="check_sku({{shop_list.shop_data.m_id}})" class="inputcheck" id="checkbox_sku_{{sku.id}}">
+                                    <span></span>
+                                </div>
+                            </div>
+                        </label>
+                        <a href="<{site_url("/<{get_web_type()}>/goods/product/{{sku.goods_id}}")}>" class="goodsList_a">
+                        <div class="goodsListM">
+                            <img src="{{sku.image}}">
+                        </div>
+                         
+                        <div class="goodsListR">
+                            <div class="deletebtn">
+                                <img src="/views/mobile/skin/images/icon17.png" onclick="cart_delete({{sku.id}},{{shop_list.shop_data.m_id}});return false;">
+                            </div>
+                            <div class="goodsDbox">
+                                <p class="goodsT">
+                                    {{sku.name}}
+                                </p>
+                                <!--商品规格start-->
+                                {{each sku.value as spec}}
+                                <!--商品规格文字-->
+                                {{if spec.type==1}}
+                                <p class="proD">{{spec.name}}:{{spec.value}}</p>
+                                {{/if}}
+                                <!--商品规格图片-->
+                                {{if spec.type==2}}
+                                <p class="proD">{{spec.name}}:{{spec.note}}</p>
+                                {{/if}}
+                                {{/each}}
+                                <!--商品规格end-->
+                            </div>
+                            <div class="goodsnum flexbox">
+                                <input type="hidden" name="sku_price" value="{{sku.sell_price}}">
+                                <p class="goodsP">¥<label id="all_sku_price" style="font-size:0.26rem;">{{sku.sell_price}}</label></p>
+                                <div class="buybtnbox flexbox">
+                                    <div class="buybtn" onclick='cart_reduce({{sku.id}});return false;'>
+                                        <img src="/views/mobile/skin/images/reducebtn.png">
+                                    </div>
+                                    <div class="buynum">
+                                        <input value="{{sku.num}}" onblur='cart_update_sku_num({{sku.id}});' onclick="return false;" type="text" name="sku_num" class="buynuminput"/>
+                                        <input value="{{sku.store_nums}}" type="hidden" name="store_nums" placeholder="库存"/>
+                                        <input value="{{sku.minimum}}" type="hidden" name="minimum" placeholder="最小起订量"/>
+                                    </div>
+                                    <div class="buybtn" onclick='cart_increase({{sku.id}});return false;'>
+                                        <img src="/views/mobile/skin/images/addbtn.png">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       </a>
+                    </div>
+                    {{/each}}
+                    <!-- 单个商品 end -->
+                </div>
+                <!-- 优惠活动 -->
+                {{if shop_list.promotion_data}}
+                <div class="shopNamebox goodsP">可享优惠：¥{{shop_list.promotion_price}}（{{shop_list.promotion_data.name}}）</div>
+                {{/if}}
+            </section>
+            {{/each}}
+        </script>
+        <!--购物车模板end-->
+    </div>
+    <!-- shop end -->
+    <!-- 购物车导航  start-->
+    <div class="blank"></div>
+    <div class="cartNav">
+        <label for="checkbox_all">
+            <div class="cartNavL">
+                <div class="checkbox">
+                    <input type="checkbox" id="checkbox_all" onclick="check_all(this)" class="inputcheck" />
+                    <span></span>
+                </div>
+                全选
+            </div>
+        </label>
+        <div class="cartNavM">
+            ￥<b id='sum_price' style="font-size:0.26rem;">0</b>
+        </div>
+        <div class="cartNavR">
+            <input type="button" value="立即结算" class="inputsub" onclick="check_confirm();">
+        </div>
+    </div>
+    <!-- 购物车导航  end-->
+</form>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/views/mobile/conf_js/cart.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script>
+    //购物车商品详细展示start
+    $(function(){
+        $.ajax({
+            type:"POST",
+            url: "<{site_url('/api/cart/cart_list')}>",
+            data: '',
+            dataType:"json",
+            success: function(data){
+                if (data.status=='y') {
+                        if(data.result.sku_count < 1 ){
+                            $('.cartnonebox').show();
+                        };
+                    var html = template('cart_list_Template',data);
+                    $('#cart_list').html(html);
+                    //$("#sum_price").text(data.result.all_sell_price);//总价
+                }else{
+                    $('.cartnonebox').show();
+                }
+            }
+        });
+    })
+    //购物车商品详细展示end
+</script>
+</body>
+</html>
+
+
+
+

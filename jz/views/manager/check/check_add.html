@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/manager/work/work/save')}>" method="post" class="form form-horizontal" id="add">
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">工单信息</label>
+        </div>
+		<div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">流水号：</label>
+                <div class="formControls col-3">
+                    <span><{$info.id}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">服务时间：</label>
+                <div class="formControls col-3">
+                    <span><{$info.dealtime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+		</div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客户姓名：</label>
+                <div class="formControls col-3">
+                    <span><{$info.full_name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">服务项目：</label>
+                <div class="formControls col-3">
+                    <span><{$info.name}></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">会员卡号：</label>
+                <div class="formControls col-3">
+                    <span><{$info.card_no}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">剩余金额：</label>
+                <div class="formControls col-3">
+                    <span><{$info.count}></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">有效期：</label>
+                <div class="formControls col-3">
+                    <span><{$info.endtime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">保养券剩余金额：</label>
+                <div class="formControls col-3">
+                    <span><{$info.care_count}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">钟点工折扣：</label>
+                <div class="formControls col-3">
+                    <span><{$info.people_discount}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">保养券折扣：</label>
+                <div class="formControls col-3">
+                    <span><{$info.care_discount}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">应收金额：</label>
+                <div class="formControls col-3">
+                    <span><{$info.price_real}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">实收金额：</label>
+                <div class="formControls col-3">
+                    <span><{$info.promotion_price}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工作人员：</label>
+                <div class="formControls col-3">
+                    <span><{$info.real_people}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">收费备注：</label>
+                <div class="formControls col-3">
+                    <span><{$info.fee_note}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">派工备注：</label>
+                <div class="formControls col-3">
+                    <span><{$info.work_note}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">本次约单备注：</label>
+                <div class="formControls col-3">
+                    <span><{$info.note}></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">提成信息</label>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">员工提成：</label>
+                <div class="formControls col-3">
+                    <span><{$info.percentage}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客服提成：</label>
+                <div class="formControls col-3">
+                    <span><{$info.percentage}></span>
+                </div>
+            </div>
+        </div>
+        <{if $info.status < 5}>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">折卡金额：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="<{$info.card_consume}>" datatype="*" name="card_consume"  >
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">保养券金额：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="<{$info.care_consume}>" datatype="*" name="care_consume"  >
+                </div>
+            </div>
+        </div>
+        <input type="hidden" class="input-text" value="<{$info.count}>" name="count">
+        <input type="hidden" class="input-text" value="<{$info.card_id}>" name="card_id">
+        <input type="hidden" class="input-text" value="<{$info.care_count}>" name="care_count">
+        <{else}>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">折卡金额：</label>
+                <div class="formControls col-3">
+                    <span><{$info.card_consume}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">保养券金额：</label>
+                <div class="formControls col-3">
+                    <span><{$info.care_consume}></span>
+                </div>
+            </div>
+        </div>
+        <{/if}>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">结算时间：</label>
+                <div class="formControls col-3">
+                   <span><{$info.checktime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row cl">
+            <div class="col-10 col-offset-2">
+                <button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit">确定</button>
+            </div>
+        </div>
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">考勤信息</label>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">考勤人员：</label>
+                <div class="formControls col-3">
+                    <input type="text" name="check_people" class="input-text" value="<{$info.check_people}>" >
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">考勤备注：</label>
+                <div class="formControls col-5">
+                    <textarea  style="height:50px;" class="input-text" name="check_note"><{$info.check_note}></textarea>
+                </div>
+            </div>
+        </div>
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="<{$info.id}>">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit">部分考勤保存</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                   // window.history.go(-1);
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        //formObj.init(<{ch_json_encode($item)}>);
+    })
+
+
+</script>
+</body>
+</html>

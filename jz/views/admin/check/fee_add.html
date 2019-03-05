@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}</style>
+<body>
+<div class="pd-20">
+    <form action="<{site_url('/admin/work/pay_save')}>" method="post" class="form form-horizontal" id="add">
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">流水号：</label>
+                <div class="formControls col-4">
+                    <span><{$info.order_no}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">派工员工号：</label>
+                <div class="formControls col-4">
+                    <span><{$info.job_no}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客户姓名：</label>
+                <div class="formControls col-4">
+                    <span><{$info.full_name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">缴费人：</label>
+                <div class="formControls col-4">
+                    <span><{$info.fee_people}></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">服务项目：</label>
+                <div class="formControls col-4">
+                    <span><{$info.name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">卡号：</label>
+                <div class="formControls col-4">
+                    <span><{$info.card_no}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客服提成：</label>
+                <div class="formControls col-4">
+                    <span><{$info.percentage}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">卡号有效期：</label>
+                <div class="formControls col-4">
+                    <span><{$info.endtime}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2" style="padding-right:0">员工提成：</label>
+                <div class="formControls col-4">
+                    <span class="col-2"><{$info.real_people}></span>
+                    <label class="form-label col-2" style="padding-right:0">金额：</label>
+                    <div class="formControls col-2" style="padding-right:0">
+                        <input type="text" class="input-text" value="<{$info.people_add}>" name="people_add">
+                    </div>
+                    <label class="form-label col-3" style="padding-right:0">业务量：</label>
+                    <div class="formControls col-2" style="padding-right:0">
+                        <input type="text" class="input-text" value="<{$info.people_amount}>" name="people_amount" >
+                    </div>
+                </div>
+
+
+            </div>
+            <{if $info.status < 5 }>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">应收金额：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.promotion_price}>" name="promotion_price" datatype="*" nullmsg="金额错误" >
+                </div>
+            </div>
+            <{else}>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">应收金额：</label>
+                <div class="formControls col-4">
+                    <span><{$info.promotion_price}></span>
+                </div>
+            </div>
+            <{/if}>
+
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">卡余额</label>
+                <div class="formControls col-4">
+                    <span><{$info.total_count}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">帮扶人员：</label>
+                <div class="formControls col-4">
+                    <span><{$info.help_people}></span>
+                    <label class="form-label col-3" style="padding-right:0">业务量：</label>
+                    <div class="formControls col-2" style="padding-right:0">
+                        <input type="text" class="input-text" value="<{$info.help_amount}>" datatype="*" name="help_amount" nullmsg="姓名错误" >
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">派工员：</label>
+                <div class="formControls col-4">
+                    <span><{$info.admin_name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">派工时间：</label>
+                <div class="formControls col-4">
+                    <span><{$info.worktime}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">支付方式：</label>
+                <div class="formControls col-4">
+                   <span class="select-box" style="width:150px">
+                        <select name="pay_id" class="select">
+                            <option value="1">余额支付</option>
+                            <option value="2">现金支付</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">本次约单备注：</label>
+                <div class="formControls col-4">
+                    <span><{$info.note}></span>
+                </div>
+            </div>
+            <{if $info.status < 5 }>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">实收金额：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.price_real}>" name="price_real" datatype="*" nullmsg="金额错误" >
+                </div>
+            </div>
+            <{else}>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">实收金额：</label>
+                <div class="formControls col-4">
+                    <span><{$info.price_real}></span>
+                </div>
+            </div>
+            <{/if}>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">派工备注：</label>
+                <div class="formControls col-4">
+                    <span><{$info.work_note}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">收费备注：</label>
+                <div class="formControls col-3">
+                    <textarea  style="height:50px;" class="input-text" value="" name="fee_note"><{$info.fee_note}></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="<{$info.id}>">
+                <input type="hidden" class="input-text" value="<{$info.card_id}>" name="card_id">
+                <input type="hidden" class="input-text" value="<{$info.total_count}>" name="total_count">
+                <{if $info.status < 5 }>
+                <button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 支付</button>
+                <{/if}>
+                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        //formObj.init(<{ch_json_encode($item)}>);
+    })
+
+
+</script>
+</body>
+</html>

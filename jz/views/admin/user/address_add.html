@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>
+    .Nodisplay{display:none}
+    .city-picker-selector .selector-item{float:left;border:1px solid #ddd;height:28px;line-height:28px;margin-right:10px;width:100px;}
+    .city-picker-selector .selector-item a{padding-left:8px;}
+    .city-picker-selector .selector-item .selector-list{z-index: 10000;position: absolute;background: #fff;border: 1px solid #ddd;width:100px;margin-left:-1px;}
+    .city-picker-selector .selector-item .selector-list ul li{padding-left:8px;height:30px;line-height:30px;}
+    .city-picker-selector .selector-item .selector-list ul .active{background: #3bb4f2;color:#fff}
+    #address{border:1px solid #ddd;margin-top:10px;width:326px;height:28px;padding-left:10px }
+</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/admin/user/save_address')}>" method="post" class="form form-horizontal" id="add">
+		<div class="row cl">
+			<label class="form-label col-3"><span class="c-red">*</span>客户名称：</label>
+			<div class="formControls col-5">
+                <input type="text" style='width:50%;' class="input-text" placeholder="客户名称" value="" name="full_name" datatype="*" nullmsg="请填写客户名称">
+			</div>
+		</div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>联系电话：</label>
+            <div class="formControls col-5">
+                <input type="text" style='width:50%;' class="input-text" placeholder="联系电话" value="" name="tel" datatype="m" nullmsg="请填写联系电话">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>服务面积：</label>
+            <div class="formControls col-5">
+                <input type="text" style='width:50%;' class="input-text" placeholder="服务面积" value="" name="scale" datatype="*" nullmsg="请填写服务面积">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>详细地址：</label>
+
+            <div class="formControls col-3">
+                <div class="center-div" style="margin-right:-20px;width:350px;" id="editAddressForm">
+                    <!--地址-->
+                    <div class="city-picker-selector" id="city-picker-selector">
+                    </div>
+                    <div class="clear"></div>
+                    <textarea id="address" placeholder="详细地址" class="input-text" value="" name="address" datatype="*1-50" nullmsg="地址不能为空"></textarea>
+                </div>
+                <input type="hidden" class="input-text" value="" name="province" >
+                <input type="hidden" class="input-text" value="" name="city" >
+                <input type="hidden" class="input-text" value="" name="area" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red">*</span>设为默认地址：</label>
+            <div class="formControls col-3 skin-minimal">
+                <div class="radio-box">
+                    <input type="checkbox"  name="is_default" value="1">
+                </div>
+            </div>
+        </div>
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="<{$item.id}>">
+                <input type="hidden" name="m_id" value="<{$m_id}>">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script type="text/javascript" src="/public/js/citydata.js"></script>
+<script type="text/javascript" src="/public/js/cityPicker-1.0.0.js?v=1"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                if($('.province a').html()){
+                    layer.msg('请输入省份');
+                }
+                if($('.city a').html()){
+                    layer.msg('请输入城市');
+                }
+                if($('.district a').html()){
+                    layer.msg('请输入地区');
+                }
+                $('input[name=province]').val($('.province a').html());
+                $('input[name=city]').val($('.city a').html());
+                $('input[name=area]').val($('.district a').html());
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+            console.log(data)
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+
+        var selector = $('#city-picker-selector').cityPicker({
+            dataJson: cityData,
+            renderMode: true,
+            search: false,
+            linkage: false
+        });
+    })
+
+
+
+</script>
+</body>
+</html>

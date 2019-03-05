@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}.left-title{float: left;height: 32px;line-height: 31px;margin-right: 10px;}
+    .form-horizontal .form-label{padding-right:50px;}.formControls{margin-left:-40px;}
+</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/manager/finance/finance/add_finance_submit')}>" method="post" class="form form-horizontal" id="add">
+		<div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>开支项目：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="" name="name" datatype="*1-50" nullmsg="开支项目不能为空">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>开支金额：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="" name="amount" datatype="*1-50" nullmsg="开支金额不能为空">
+                </div>
+            </div>
+
+		</div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>开支公司：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="" name="company" datatype="*1-50" nullmsg="开支公司不能为空">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>开支人：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="" name="people" datatype="*1-50" nullmsg="开支人不能为空">
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>开支时间：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text laydate-icon" value="" name="time" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" datatype="*" nullmsg="请选择开支时间" style="padding-right:0;height:auto;">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>开支事由：</label>
+                <div class="formControls col-4">
+                    <textarea style="height:50px;" class="input-text" name="reason" datatype="*" nullmsg="开支事由不能为空"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2">备注：</label>
+                <div class="formControls col-4">
+                    <textarea style="height:50px;" class="input-text" name="note"></textarea>
+                </div>
+            </div>
+
+        </div>
+		<div class="row cl">
+			<div class="col-10 col-offset-5">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit">新增</button>
+                <button onClick="layer_close()" class="btn radius" type="submit">关闭</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+
+    $(function(){console.log('<{$info}>')
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                   // window.history.go(-1);
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        //formObj.init(<{ch_json_encode($item)}>);
+    })
+
+
+</script>
+</body>
+</html>

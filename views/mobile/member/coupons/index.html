@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body style="background:#fff;">
+<!-- content start -->
+<section class="wrap">
+    <!-- start -->
+    <div class="accTopbox">
+        <a href="<{site_url("/<{get_web_type()}>/member/coupons/exchange")}>">
+            <div class="accbtnbox">
+                兑换
+            </div>
+        </a>
+    </div>
+    <!-- end -->
+    <!-- start -->
+    <div class="accListbox">
+        <div class="paystyle">
+            <div class="conwrap" style="font-size:0.26rem;">
+                优惠券列表
+            </div>
+        </div>
+        <!-- start -->
+        <{foreach $list as $key}>
+        <div class="accList">
+            <div class="infobox flexbox" style="padding:0.2rem 0; height: auto;">
+                <div class="Detailsleft">
+                    <p style="font-weight: bold;"><{$key.name}></p>
+                    <p>使用时间：<{date('Y-m-d',$key.start_time)}>-<{date('Y-m-d',$key.end_time)}></p>
+                    <p>条件：满<{$key.amount}>可用 店铺：<{$key.shop_name}></p>
+                </div>
+                <div class="Detailsright">
+                    ¥ <{$key.use_price}>
+                </div>
+            </div>
+        </div>
+        <{/foreach}>
+    </div>
+    <{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+</section>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+</body>
+</html>
+
+
+
+

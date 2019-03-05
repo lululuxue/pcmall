@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+	<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox clear">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+		 	<div class="userbox clear">
+		 		<div class="useraside">
+					<{include file="web/member/menu.html"}>
+		 		</div>
+		 		<div class="usercontent">
+		 			<div class="usertitle">
+		 				物流查看
+		 			</div>
+		 			<div class="addressbox">
+ 						物流状态
+ 					</div>
+						<table class="return-table">
+							<tr>
+								<td class="returnleft">物流公司：</td>
+								<td class="returnright" id="express_company">查询中...</td>
+							</tr>
+							<tr>
+								<td class="returnleft">物流单号：</td>
+								<td class="returnright" id="delivery_code">查询中...</td>
+							</tr>
+							<tbody id="delivery_status">
+							<!--物流模板start-->
+							<script type='text/html' id='delivery_status_Template'>
+								{{each result.status_list}}
+								<tr>
+									<td class="returnleft"></td>
+									<td class="returnright">{{$value.AcceptTime}} {{$value.AcceptStation}}</td>
+								</tr>
+								{{/each}}
+							</script>
+							<!--物流模板end-->
+							</tbody>
+						</table>
+		 		</div>
+		 	</div>
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<script>
+		//物流跟踪start
+		$(function(){
+			$.ajax({
+				type:"POST",
+				url: "<{site_url('/api/member/order/delivery_status')}>",
+				data: 'id=<{$order_id}>',
+				dataType:"json",
+				success: function(data){
+					if (data.status=='y') {
+						var html = template('delivery_status_Template',data);
+						$('#delivery_status').html(html);
+						$('#express_company').html('物流公司：'+data.result.express_company.name);
+						$('#delivery_code').html('物流单号：'+data.result.order_delivery_doc.delivery_code);
+					}
+				}
+			});
+		})
+		//物流跟踪end
+	</script>
+</body>
+</html>

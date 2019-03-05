@@ -1,0 +1,84 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><{config_item('manager_title')}></title>
+    <link rel="stylesheet" href="/public/express_templet/css/bootstrap.min.css">
+    <script language="JavaScript" src="/public/express_templet/SystemEvent.js"></script>
+    <script language="JavaScript" src="/public/express_templet/editorjs/elementProperty.js"></script>
+    <script language="JavaScript" src="/public/express_templet/editorjs/elementNode.js"></script>
+    <script language="JavaScript" src="/public/express_templet/editorjs/Canvas.1.0.1.js"></script>
+    <script language="JavaScript" src="/public/express_templet/editorjs/TemplateEdit.js"></script>
+    <script language="JavaScript" src="/public/express_templet/editorjs/DataSource.js"></script>
+    <script language="JavaScript" src="/public/express_templet/editorjs/Tools.js"></script>
+    <script language="JavaScript" src="/public/express_templet/editorjs/PublicData.js"></script>
+    <script language="JavaScript" src="/public/js/jquery.js"></script>
+    <script language="JavaScript" src="/public/express_templet/dropdown.js"></script>
+    <script language="JavaScript" src="/public/express_templet/tooltip.js"></script>
+    <script language="javascript" src="/public/express_templet/jquery.jqprint-0.3.js"></script>
+    <script language="JavaScript" src="/public/express_templet/jquery.PrintArea.js"></script>
+    <script language="JavaScript" src="/public/express_templet/transition.js"></script>
+    <script language="JavaScript" src="/public/express_templet/collapse.js"></script>
+    <script language="JavaScript" src="/public/express_templet/modal.js"></script>
+    <script language="JavaScript" src="/public/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/ajaxfileupload.js"></script>
+    <link href="/public/express_templet/css/ruler.css" rel="stylesheet" type="text/css"/>
+    <link href="/public/express_templet/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="/public/express_templet/html5shiv.min.js"></script>
+    <script src="/public/express_templet/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+</BODY>
+<script language="JavaScript">
+    var template = new TemplateEdit({
+        jdatasource: {
+            "json": {
+                "买家信息": ["姓名", "电话", "收货地址", "送货时间", "城市"],
+                "卖家信息": ["联系人", "电话", "联系地址", "城市"],
+                "订单明细": ["订单号", "订单价格"]
+            }
+        },
+        <{if $item.config==''}>
+        jTemplates: [{
+            "title": "<{$item.name}>",
+            "backgroundImage": "url('')",
+            "printpc": 10,
+            "container": {"left": 160, "top": 57, "right": 1600, "bottom": 557, "width": 1440, "height": 500},
+        }]
+        <{else}>
+        jTemplates: <{$item.config}>
+        <{/if}>
+    });
+    window.onresize = function () {
+        template.ResetPosition();
+    }
+
+    var upload_url = '<{config_item('upload_url')}>';//图片上传地址
+    var user_type = '<{$user_type}>';//用户类型
+    //保存配置
+    function save_config(json_data) {
+        $.ajax({
+            type:"POST",
+            url: '<{site_url("/manager/system/express_company/tmp_save/")}>',
+            data: 'config='+json_data+'&id=<{$item.id}>',
+            dataType:"json",
+            success: function(data){
+                if (data.status == 'y') {
+                    layer.msg('保存成功');
+                    setTimeout(function(){
+                        window.location.reload();
+                    }, 1000)
+                } else {
+                    layer.msg('保存失败');
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>	

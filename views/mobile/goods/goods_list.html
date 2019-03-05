@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+    <style>
+        .area{width:100%;position:absolute;background: #fff;border:1px solid #c8c8c8;border-top:none;top:0.45rem;right:0;z-index:9999999;}
+        .display-show{display:block}
+        .no-display{display:none}
+        .area .selecta{width:100%}
+        .selecta {height: 0.7rem;line-height:0.7rem;display:block;text-align:center;}
+        .selecta.current {color: #ff5f1e;}
+        .area input{width:90%}
+        .listR,.listL{padding-top:0.2rem}
+        .listR .listT{font-size:0.3rem;line-height:0.4rem}
+        .listR .P-T{padding-top:0.1rem}
+        .listR .P-M{font-size:0.22rem;color:#d9d9d9;}
+        .listR .P-L{font-size:0.27rem;color:#DDA065;}
+        .listR .P-L span{font-size:0.18rem;color:#d9d9d9;}
+    </style>
+</head>
+<body style="background:#fff;">
+<!-- header start -->
+<header class="topbar ">
+    <div class="conwrap flexbox">
+        <{if !empty($keyword)}>
+        <div class="topbarL"><{$keyword}></div>
+        <{else}>
+        <div class="topbarL"><{$goods_category_data.name}></div>
+        <{/if}>
+        <div class="topbarL">
+           <span style="background: #E0F8D8;color:#739E67;padding:0.05rem 0.1rem;font-size:0.18rem;">电视认证真房源</span>
+        </div>
+    </div>
+</header>
+<!-- header end -->
+<!-- content start -->
+<section class="whitewrap">
+    <div class="conwrap" style='width:100%'>
+        <!-- 排序 -->
+        <div class="pronav" style='overflow: visible;padding-bottom: 5px;
+    border-bottom: 1px solid #c8c8c8;border-radius:0'>
+            <div href="#" class="pronav_a" id="selectbtn1">
+                <p class="pronavT" >区域</p>
+                <div class="area no-display">
+                    <span class="selecta">
+                            全部
+                    </span>
+                    <span class="selecta">
+                            天河区
+                    </span>
+                    <span class="selecta">
+                            黄埔区
+                    </span>
+                    <span class="selecta">
+                            越秀区
+                    </span>
+                    <span class="selecta">
+                            佛山
+                    </span>
+                    <span class="selecta">
+                            清远
+                    </span>
+                </div>
+            </div>
+            <div href="#" class="pronav_a" id="selectbtn2">
+                <p class="pronavT ">价格</p>
+                <div class="area no-display">
+                    <span class="selecta">
+                            全部
+                    </span>
+                    <span class="selecta">
+                            200万以内
+                    </span>
+                    <span class="selecta">
+                            201-500万
+                    </span>
+                    <span class="selecta">
+                            501-800万
+                    </span>
+                    <span class="selecta">
+                            801万以上
+                    </span>
+                    <input type="text" placeholder="自定义输入" value=""/>
+
+                </div>
+            </div>
+            <div href="#" class="pronav_a" id="selectbtn3">
+                <p class="pronavT ">户型</p>
+                <div class="area no-display">
+                    <span class="selecta">
+                            全部
+                    </span>
+                    <span class="selecta">
+                            1-2房
+                    </span>
+                    <span class="selecta">
+                            3房
+                    </span>
+                    <span class="selecta">
+                            4房
+                    </span>
+                    <span class="selecta">
+                            公寓
+                    </span>
+                    <span class="selecta">
+                            其他
+                    </span>
+                </div>
+            </div>
+            <div href="#" class="pronav_a">
+                <p class="pronavT" id="selectbtn">多选</p>
+            </div>
+        </div>
+        <div class="listbox" style='margin:0 auto;width:94%;'>
+            <!-- single list -->
+            <{foreach $res_data.goods_list as $key}>
+            <a href="<{site_url("/<{get_web_type()}>/goods/product/<{$key.id}>")}>" class="listwrap">
+            <div class="listL">
+                <img src="/public/images/loading.gif" data-echo="/public/images/BB.png">
+            </div>
+            <div class="listR">
+                <p class="listT P-T">碧桂园城市花园 107㎡ 321</p>
+                <p class="listT P-M">2室2厅1卫/100㎡/南</p>
+                <p class="listT P-L">320万<span>32000元/平</span></p>
+            </div>
+            </a>
+            <{/foreach}>
+            <!-- single list end-->
+        </div>
+        <!--分页-->
+        <{page_view('pages_bar',$res_data.page_count,search_array_to_link($search_where),0,false,false)}>
+    </div>
+</section>
+<!--content end  -->
+<!-- mask start -->
+<div class="mask">
+    <div class="maskbox">
+        <section>
+            <!-- 品牌start -->
+            <!--
+            <{if !empty($res_data.brand_list)}>
+            <section class="selectwrap">
+                <a href="javascript:;" class="selectT select_activeT">
+                    品牌
+                </a>
+                <div class="selectitembox" style="display:block;">
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist <{if $search_where.brand_id==''}>current<{/if}>" data-key="" data-value="">
+                            全部
+                        </div>
+                    </a>
+                    <{foreach $res_data.brand_list as $key}>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist <{if $search_where.brand_id==$key.id}>current<{/if}>" data-key="brand_id" data-value="<{$key.id}>">
+                            <{$key.name}>
+                        </div>
+                    </a>
+                    <{/foreach}>
+                    <div class="clear"></div>
+                </div>
+            </section>
+            <{/if}>
+            -->
+            <!-- 品牌end -->
+            <!-- 筛选属性start -->
+            <!--
+            <{foreach $res_data.attr_list as $val=>$key}>
+            <section class="selectwrap">
+                <a href="javascript:;" class="selectT">
+                    <{$key.name}>
+                </a>
+                <div class="selectitembox">
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist <{if $search_where.attr[$key.id]==''}>current<{/if}>" data-key="attr[<{$key.id}>]" data-value="">
+                            全部
+                        </div>
+                    </a>
+                    <{foreach $key.value as $k}>
+                    <a href="javascript:;" class="select_a ">
+                        <div class="selectlist <{if $search_where.attr[$key.id]==$k}>current<{/if}>" data-key="attr[<{$key.id}>]" data-value="<{$k}>">
+                            <{$k}>
+                        </div>
+                    </a>
+                    <{/foreach}>
+                    <div class="clear"></div>
+                </div>
+            </section>
+            <{/foreach}>
+            -->
+            <!-- 筛选属性end -->
+            <!-- end -->
+            <section class="selectwrap">
+                <a href="javascript:;" class="selectT select_activeT">
+                    面积（平方）
+                </a>
+                <div class="selectitembox" style="display:block;">
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="" data-value="">
+                            全部
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            50以下
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            50-70
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            70-90
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            90-110
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            110-130
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            130-150
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            150-200
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            200-300
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            300以上
+                        </div>
+                    </a>
+
+                    <div class="clear"></div>
+                </div>
+            </section>
+            <section class="selectwrap">
+                <a href="javascript:;" class="selectT select_activeT">
+                    楼层
+                </a>
+                <div class="selectitembox" style="display:block;">
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="" data-value="">
+                            全部
+                        </div>
+                    </a>
+
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist " data-key="brand_id" data-value="<{$key.id}>">
+                           6层以下
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist " data-key="brand_id" data-value="<{$key.id}>">
+                            6-12
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist " data-key="brand_id" data-value="<{$key.id}>">
+                            12层以上
+                        </div>
+                    </a>
+                    <div class="clear"></div>
+                </div>
+            </section>
+            <section class="selectwrap">
+                <a href="javascript:;" class="selectT select_activeT">
+                    装修
+                </a>
+                <div class="selectitembox" style="display:block;">
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="" data-value="">
+                            全部
+                        </div>
+                    </a>
+
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            毛坯
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            简单装修
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            精装修
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            豪华装修
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            其他
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="select_a">
+                        <div class="selectlist" data-key="brand_id" data-value="<{$key.id}>">
+                            中等装修
+                        </div>
+                    </a>
+
+                    <div class="clear"></div>
+                </div>
+            </section>
+            <!-- 价格区间 -->
+
+            <!-- 价格区间 -->
+            <!-- end -->
+            <!-- 坚决内容被遮挡 -->
+            <div class="blank"></div>
+        </section>
+        <!-- 按钮 start -->
+        <div class="twobtn">
+            <div class="btnLL"></div>
+            <div class="btnL">
+                取消
+            </div>
+            <div class="btnR" onclick="search_goods_list();">
+                完成
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- mask end -->
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/swiper.min.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" src="/public/js/echo.min.js"></script>
+<{include file="mobile/footer.html"}>
+<script>
+    //图片延迟加载
+    Echo.init({
+        offset: 500,
+        throttle: 0
+    });
+
+    //列表页加入购物车
+    function list_join_cart(goods_id){
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['100%', '100%'],
+            shade: 0.8,
+            closeBtn: 0,
+            shadeClose: true,
+            offset: 'rb', //右下角弹出
+            content: '/<{get_web_type()}>/goods/join_cart_product/'+goods_id+'?url='+window.location.href
+        });
+    }
+
+    //组合筛选条件合成连接
+    function search_goods_list(){
+    /*
+        var url = '?cat_id=<{$search_where.cat_id}>';
+        $('.selectitembox .current').each(function(){
+            url = url+'&'+$(this).attr('data-key')+'='+$(this).attr('data-value');
+        })
+
+        min_price = $('[name="min_price"]').val();
+        max_price = $('[name="max_price"]').val();
+        url = url+'&min_price='+min_price+'&max_price='+max_price;
+
+        url = '/<{get_web_type()}>/goods/goods_list'+url;
+        window.location.href=url;
+        */
+    }
+
+    $(function () {
+        // 筛选遮罩层展示
+        $('#selectbtn').on('click', function () {
+            $('.mask').addClass('show');
+        });
+        // 筛选遮罩层隐藏
+        $('.btnL,.btnR').on('click', function () {
+            $('.mask').removeClass('show');
+        });
+        // 筛选类别切换
+        $('.selectwrap a').on('click', function () {
+            if ($(this).hasClass("selectT")) {
+                $(this).removeClass("selectT").addClass("select_activeT");
+            } else if ($(this).hasClass("select_activeT")) {
+                $(this).removeClass("select_activeT").addClass("selectT");
+            }
+            $(this).parent().find(".selectitembox").slideToggle();
+        });
+        // 筛选切换
+        $('.selectlist').on('click', function () {
+            $(this).parent().parent().find('.selectlist').removeClass('current');
+            $(this).addClass('current');
+        });
+
+        $('.listImg').on('click', function () {
+            return false;
+        });
+    });
+
+    $(function () {
+        // 筛选遮罩层展示
+        $('.pronav .pronavT').on('click', function () {
+            $('.pronav .area').removeClass('display-show');
+            $('.pronav .area').addClass('no-display');
+            $(this).next().removeClass('no-display');
+            $(this).next().addClass('display-show');
+        })
+
+        $('.selecta').on('click', function () {
+            $(this).parent().find('.selecta').removeClass('current');
+            $(this).addClass('current');
+            $(this).parent().addClass('no-display');
+            $(this).parent().parent().find('.pronavT').html($(this).html());
+        });
+
+    });
+
+    window.onload = function (ev) {
+        //获取当前
+        url = window.location.search;
+        var goods_id = url.split('/')[1];
+        if(goods_id){
+           list_join_cart(goods_id);
+        }
+    };
+
+</script>
+<{if get_client() == 'weixin'}>
+<{include file="mobile/wechat_share.html"}>
+<script language="JavaScript">
+    wx.ready(function(){
+        var share_title  = "<{config_item('website_title')}>";
+        var share_desc   = "";
+        var share_link   = "<{site_url("/<{get_web_type()}>?flag_user=<{get_m_id()}>")}>";
+        var share_imgurl = "<{config_item('base_url')}><{config_item('website_logo')}>";
+        wx_share(share_title, share_desc, share_link, share_imgurl);
+    });
+</script>
+<{/if}>
+</body>
+</html>
+
+
+
+

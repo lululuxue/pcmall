@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><{config_item('website_title')}></title>
+    <meta content="<{config_item('website_keywords')}>" name="Keywords">
+    <meta content="<{config_item('website_desc')}>" name="description"/>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script type="text/javascript" src="/public/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/validform.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox clear">
+        <div class="scrapnav">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+        </div>
+        <div class="userbox clear">
+            <div class="useraside">
+                <{include file="web/member/menu.html"}>
+            </div>
+            <div class="usercontent">
+                <div class="usertitle">
+                    商品评价
+                </div>
+                <form name="comment" id="comment" method="post" action="<{site_url('/api/member/order/comment')}>">
+                    <input type="hidden" name="order_id" value="<{$order_data.id}>">
+                    <table class="return-table">
+                        <tr>
+                            <td class="returnleft">订单号</td>
+                            <td class="returnright"><{$order_data.order_no}></td>
+                        </tr>
+                        <{foreach $order_sku as $val=>$key}>
+                        <tr>
+                            <td class="returnleft">评价商品：</td>
+                            <td class="returnright">
+                                <a target="_blank" href="<{site_url("/goods/product/<{$key.goods_id}>")}>" class="billwrap">
+                                <p><img src="<{$key.sku_image}>" width="50" height="50" style="border: 1px solid #ccc;"></p>
+                                <p><{$key.goods_name}></p>
+                                <p>
+                                    <{foreach $key.sku_value as $sku}>
+                                    <{$sku.name}>:<{if $sku.type==1}><{$sku.value}><{else}><{$sku.note}><{/if}>
+                                    <{/foreach}>
+                                </p>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="returnleft">评价</td>
+                            <td class="returnright">
+                                <input type="radio" name="comment_level[<{$key.id}>]" value="1" checked>&nbsp;好评
+                                <input type="radio" name="comment_level[<{$key.id}>]" value="2">&nbsp;中评
+                                <input type="radio" name="comment_level[<{$key.id}>]" value="3">&nbsp;差评
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="returnleft">说点说明吧</td>
+                            <td class="returnright">
+                                <textarea style="height: 80px;" name="desc[<{$key.id}>]" datatype="*" nullmsg="点评一下吧" placeholder="亲！请评价您买到的宝贝" ></textarea>
+                            </td>
+                        </tr>
+                        <{/foreach}>
+                        <tr>
+                            <td class="returnleft"></td>
+                            <td class="returnright">
+                                <div class="returnbtnbox">
+                                    <input type="submit" value="提交" class="usersavebtn">
+                                </div>
+                                <div class="returnbtnbox">
+                                    <input type="reset" value="重置" class="usersavebtn">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+<script type="text/javascript" >
+    //验证表单
+    $(function(){
+        $.Tipmsg.r=null;
+        $("#comment").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    setTimeout(function(){
+                        layer.msg('评价成功');
+                        window.history.back();
+                    },1000);
+                }
+            }
+        });
+    })
+</script>
+</body>
+</html>

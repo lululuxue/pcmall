@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/css/style.css" />
+	<title><{config_item('website_title')}></title>
+</head>
+<body style="background:#fff;">
+<div class="wrap" style="overflow:hidden;">
+	<form name="login" id="login" method="post" action="<{site_url('/api/user/login/user_login')}>">
+		<div class="bordercells">
+			<!-- 账户 -->
+			<div class="infobox flexbox">
+				<div class="infochar">
+					账户
+				</div>
+				<div class="inputTextwrap">
+					<input type="tel" name="username" class="inputText" placeholder="手机" datatype="m" nullmsg="请输入手机号码" errormsg="手机格式不正确">
+				</div>
+			</div>
+			<div class="infobox flexbox">
+				<div class="infochar">
+					密码
+				</div>
+				<div class="inputTextwrap">
+					<input type="password" name="password" class="inputText" placeholder="请输入密码" datatype="*" nullmsg="请输入密码">
+				</div>
+			</div>
+		</div>
+		<div class="infosub">
+			<input type="submit" value="登 录"  class="infosubbtn">
+		</div>
+		<!-- 注册 -->
+		<div class="btnwrap">
+			<a href="<{site_url("/<{get_web_type()}>/welcome/reg?redirect_url=<{urlencode($redirect_url)}>")}>">
+				<div class="btnleft">
+					免费注册
+				</div>
+			</a>
+			<a href="<{site_url("/<{get_web_type()}>/welcome/find_password?redirect_url=<{urlencode($redirect_url)}>")}>">
+				<div class="btnright">
+					忘记密码
+				</div>
+			</a>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" >
+	//验证表单
+	$(function(){
+		$.Tipmsg.r=null;
+		$("#login").Validform({
+			tiptype:function(msg){
+				layer.msg(msg);
+			},
+			tipSweep:true,
+			ajaxPost:true,
+			callback:function(data){
+				if(data.status=="y"){
+					window.location.href="<{$redirect_url}>";
+				}
+			}
+		});
+	})
+</script>
+</body>
+</html>

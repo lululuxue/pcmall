@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/public/js/validform.js"></script>
+	<script type="text/javascript" src="/public/js/form.js"></script>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox clear">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+		 	<div class="userbox clear">
+		 		<div class="useraside">
+					<{include file="web/member/menu.html"}>
+		 		</div>
+				<form name="info" id="info" method="post" action="<{site_url("/member/welcome/info_act")}>" class="paddbottom">
+		 		<div class="usercontent">
+		 			<div class="usertitle">
+		 				个人资料
+		 			</div>
+		 			<div class="information clear">
+		 				<div class="informationleft">
+		 					<table class="infortable">
+		 						<tr>
+		 							<td class="infortableleft">
+		 								昵称：
+		 							</td>
+		 							<td >
+										<input type="text" class="infortableright" name="full_name" datatype="*" nullmsg="昵称不能为空">
+		 							</td>
+		 						</tr>
+		 						<tr>
+		 							<td class="infortableleft">
+		 								性别：
+		 							</td>
+		 							<td >
+		 								<label for="male">
+				 							<div class="radiobox" style="width:auto;height:auto;">
+				 								<input type="radio" class="inputradio" name="sex" id="male" value="1" checked>
+				 								<span></span>	
+				 							</div>
+				 							男
+				 						</label>
+				 						<label for="female">
+				 							<div class="radiobox" style="width:auto;height:auto;">
+				 								<input type="radio" class="inputradio" name="sex" id="female" value="2">
+				 								<span></span>	
+				 							</div>
+				 							女
+				 						</label>
+		 							</td>
+		 						</tr>
+		 						<tr>
+		 							<td class="infortableleft">
+		 								所在地区：
+		 							</td>
+		 							<td >
+										<select name="prov" class="select" onchange="area_list('city',this.value);">
+										</select>
+										<select name="city" class="select" onchange="area_list('area',this.value);">
+											<option>请选择市</option>
+										</select>
+										<select name="area" class="select">
+											<option>请选择区</option>
+										</select>
+		 							</td>
+		 						</tr>
+		 						
+		 						<tr>
+		 							<td class="infortableleft">
+		 								手机号码：
+		 							</td>
+		 							<td >
+		 								<input type="text" class="infortableright" name="tel" datatype="m" nullmsg="电话不能为空" errormsg="手机号码格式错误">
+		 							</td>
+		 						</tr>
+		 					</table>
+		 					<div class="usersavebox">
+		 						<input type="submit" value="保存基本信息" class="usersavebtn">
+		 					</div>
+		 				</div>
+		 				<div class="informationright">
+		 					<div class="informationrightimg">
+		 						<img src="<{$member_data.headimgurl}>" id="userphoto">
+		 					</div>
+		 				</div>
+		 			</div>
+		 		</div>
+				</form>
+		 	</div>
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<{plupload('userphoto',['width'=>300,'height'=>300])}>
+	<script type="text/javascript" >
+		//验证表单
+		$(function(){
+			$.Tipmsg.r=null;
+			$("#info").Validform({
+				tiptype:function(msg){
+					layer.msg(msg);
+				},
+				tipSweep:true,
+				ajaxPost:true,
+				callback:function(data){
+					if(data.status=="y"){
+						layer.msg('修改成功');
+						setTimeout(function(){
+							window.location.href="<{site_url("/member")}>";
+						},1000)
+					}
+				}
+			});
+
+			//表单回填
+			var formObj = new Form('info');
+			formObj.init(<{ch_json_encode($member_user_data)}>);
+		})
+
+		//添加图片展示
+		function show_plupload(pic_data){
+			if(pic_data.url!='') {
+				$.ajax({
+					type:"POST",
+					url: "<{site_url("/member/welcome/headimgurl_save")}>",
+					data: "headimgurl="+pic_data.url,
+					dataType:"json",
+					success: function(data){
+						if (data.status=='y') {
+							$("#userphoto").attr('src',pic_data.url);
+						} else {
+							layer.msg(data.info);
+						}
+					}
+				});
+			}
+		}
+
+		//地区加载area_name 选择框名称 parent_id 上级id default_id默认id
+		function area_list(area_name, parent_id, default_id){
+			$.ajax({
+				type:"POST",
+				url: '<{site_url("/api/area/get_list")}>',
+				data: 'parent_id='+parent_id+'&default_id='+default_id,
+				dataType:"html",
+				success: function(data){
+					$('[name="'+area_name+'"]').html(data);
+				}
+			});
+		}
+
+		//省市区回填
+		area_list('prov', 0 <{if $member_user_data.prov!=''}>,<{$member_user_data.prov}><{/if}>);//省份选择
+		<{if $member_user_data.city!='' && $member_user_data.prov!=''}>
+		area_list('city', <{$member_user_data.prov}>, <{$member_user_data.city}>);//市
+		<{/if}>
+		<{if $member_user_data.area!='' && $member_user_data.city!=''}>
+		area_list('area', <{$member_user_data.city}>, <{$member_user_data.area}>);//区
+		<{/if}>
+	</script>
+</body>
+</html>

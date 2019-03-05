@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		<!-- banner -->
+		<div class="bannerbox">
+			<{show_adv(2)}>
+		</div>
+		<!-- 广告 -->
+		<div class="wrapbox">
+			<ul class="aditems clear">
+				<{show_adv(3,'<li>','</li>')}>
+			</ul>
+		</div>
+		<!-- 产品列表 -->
+		<div class="indexprowrap">
+			<div class="indexprobox">
+				<div class="wrapbox">
+					<div class="indexpro_titlebox clear">
+						<div class="indexpro_title">
+							<div class="indexpro_T">
+								<a href="JavaScript:void(0)">推荐</a>
+							</div>
+						</div>
+					</div>
+					<div class="indexpro_listwrap">
+						<div class="indexpro_listbox" style="display: block;">
+							<ul class="indexpro_list clear">
+								<{assign goods_list ym_goods_list(['is_flag'=>1], 4, 1)}>
+								<{foreach $goods_list as $g}>
+								<li>
+									<a href="<{site_url("/goods/product/<{$g.id}>")}>">
+									<div class="indexpro_listimg">
+										<img src="<{image_thumb($g.image,240,240)}>" width="240" height="240">
+									</div>
+									<div class="indexpro_listTitlebox">
+										<{$g.name}>
+									</div>
+									<div class="indexpro_listpbox">
+										<div class="indexpro_listpleft">
+											市场价：<span>￥<{$g.market_price}></span>
+										</div>
+										<div class="indexpro_listpRight">
+											销售价：￥<{$g.sell_price}>
+										</div>
+									</div>
+									</a>
+								</li>
+								<{/foreach}>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="indexprobox">
+				<div class="wrapbox">
+					<div class="indexpro_titlebox clear">
+						<div class="indexpro_title">
+							<div class="indexpro_T">
+								<a href="JavaScript:void(0)">最新</a>
+							</div>
+						</div>
+					</div>
+					<div class="indexpro_listwrap">
+						<div class="indexpro_listbox" style="display: block;">
+							<ul class="indexpro_list clear">
+								<{assign goods_list ym_goods_list(['is_new'=>1], 4, 1)}>
+								<{foreach $goods_list as $g}>
+								<li>
+									<a href="<{site_url("/goods/product/<{$g.id}>")}>">
+									<div class="indexpro_listimg">
+										<img src="<{image_thumb($g.image,240,240)}>" width="240" height="240">
+									</div>
+									<div class="indexpro_listTitlebox">
+										<{$g.name}>
+									</div>
+									<div class="indexpro_listpbox">
+										<div class="indexpro_listpleft">
+											市场价：<span>￥<{$g.market_price}></span>
+										</div>
+										<div class="indexpro_listpRight">
+											销售价：￥<{$g.sell_price}>
+										</div>
+									</div>
+									</a>
+								</li>
+								<{/foreach}>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="indexprobox">
+				<div class="wrapbox">
+					<div class="indexpro_titlebox clear">
+						<div class="indexpro_title">
+							<div class="indexpro_T">
+								<a href="JavaScript:void(0)">最热</a>
+							</div>
+						</div>
+					</div>
+					<div class="indexpro_listwrap">
+						<div class="indexpro_listbox" style="display: block;">
+							<ul class="indexpro_list clear">
+								<{assign goods_list ym_goods_list(['is_hot'=>1], 4, 1)}>
+								<{foreach $goods_list as $g}>
+								<li>
+									<a href="<{site_url("/goods/product/<{$g.id}>")}>">
+									<div class="indexpro_listimg">
+										<img src="<{image_thumb($g.image,240,240)}>" width="240" height="240">
+									</div>
+									<div class="indexpro_listTitlebox">
+										<{$g.name}>
+									</div>
+									<div class="indexpro_listpbox">
+										<div class="indexpro_listpleft">
+											市场价：<span>￥<{$g.market_price}></span>
+										</div>
+										<div class="indexpro_listpRight">
+											销售价：￥<{$g.sell_price}>
+										</div>
+									</div>
+									</a>
+								</li>
+								<{/foreach}>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- 单层 -->
+			<{assign cat_list ym_list('goods_category',['where'=>['reid'=>0]], 10, 1, 'sortnum asc,id asc')}>
+			<{foreach $cat_list as $val=>$key}>
+			<div class="indexprobox">
+				<div class="wrapbox">
+					<div class="indexpro_titlebox clear">
+						<div class="indexpro_title">
+							<div class="indexpro_icon">
+								<{$val+1}>F
+							</div>
+							<div class="indexpro_T">
+								<a href="<{site_url("/goods/goods_list?cat_id=<{$key.id}>")}>"><{$key.name}></a>
+							</div>
+						</div>
+						<div class="indexpro_navbox">
+							<ul class="indexpro_navitem">
+								<{assign cat_list ym_list('goods_category',['where'=>['reid'=>$key.id]], 10, 1, 'sortnum asc,id asc')}>
+								<{foreach $cat_list as $v=>$k}>
+								<li data-class="<{$val+1}>"><a href="<{site_url("/goods/goods_list?cat_id=<{$k.id}>")}>"><{$k.name}></a></li>
+								<{/foreach}>
+							</ul>
+						</div>
+					</div>
+					<div class="indexpro_listwrap">
+						<div class="indexpro_listbox" id="<{$val+1}><{$v}>" style="display: block;">
+							<ul class="indexpro_list clear">
+								<{assign goods_list ym_goods_list(['cat_id'=>$key.id], 4, 1)}>
+								<{foreach $goods_list as $g}>
+								<li>
+									<a href="<{site_url("/goods/product/<{$g.id}>")}>">
+										<div class="indexpro_listimg">
+											<img src="<{image_thumb($g.image,240,240)}>" width="240" height="240">
+										</div>
+										<div class="indexpro_listTitlebox">
+											<{$g.name}>
+										</div>
+										<div class="indexpro_listpbox">
+											<div class="indexpro_listpleft">
+												市场价：<span>￥<{$g.market_price}></span>
+											</div>
+											<div class="indexpro_listpRight">
+												销售价：￥<{$g.sell_price}>
+											</div>
+										</div>
+									</a>
+								</li>
+								<{/foreach}>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<{/foreach}>
+		</div>
+		<{include file="web/footer.html"}>
+	</div>
+</body>
+</html>

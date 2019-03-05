@@ -1,0 +1,382 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}.left-title{float: left;height: 32px;line-height: 31px;margin-right: 10px;}
+    .form-horizontal .form-label{padding-right:50px;}
+</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/admin/personnel/add_people')}>" method="post" class="form form-horizontal" id="add">
+		<div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>员工工号：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.position_no}>" name="position_no" datatype="*1-50" nullmsg="员工工号不能为空">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>姓名：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.name}>" name="name" datatype="*1-50" nullmsg="员工姓名不能为空">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>身份证号：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.identify_number}>" name="identify_number" datatype="*1-50" nullmsg="身份证不能为空">
+                </div>
+            </div>
+		</div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>性别：</label>
+                <div class="formControls col-2 skin-minimal">
+                    <div class="radio-box">
+                        <input type="radio" id="type-3" name="gender" value="1" <{if $info.gender == 1}>checked<{/if}> nullmsg="性别不能为空">
+                        <label for="type-1">男</label>
+                    </div>
+                    <div class="radio-box">
+                        <input type="radio" id="type-4" name="gender" value="2" <{if $info.gender == 2}>checked<{/if}> nullmsg="性别不能为空">
+                        <label for="type-2">女</label>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>名族：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.nation}>" name="nation" datatype="*1-50" nullmsg="名族不能为空">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>入职日期：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text laydate-icon" value="<{$info.entrytime}>" name="entrytime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" datatype="*" nullmsg="请选择入职时间" style="padding-right:0;height:auto;">
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>出生日期：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.birthday}>" name="birthday" datatype="*1-50" nullmsg="出生日期不能为空">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">年龄：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.age}>" name="age">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">辞职时间：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text laydate-icon" value="<{$info.resigntime}>" name="resigntime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" style="padding-right:0;height:auto;">
+
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>联系方式1：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.phone}>" name="phone" datatype="m" nullmsg="联系方式不能为空">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">联系方式2：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.phone1}>" name="phone1">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>员工类别：</label>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="cat_id" class="select" datatype="*" nullmsg="请选择类别">
+                            <option value="">请选择类别</option>
+                            <option value="1" <{if $info.cat_id == 1}>selected<{/if}>>一线员工</option>
+                            <option value="2" <{if $info.cat_id == 2}>selected<{/if}>>二线员工</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2">毕业院校：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.school}>" name="school">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">学历：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.eductional}>" name="eductional">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>工资星级：</label>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="level_id" class="select" datatype="*" nullmsg="请选择工资星级">
+                            <option value="">无</option>
+                            <option value="1" <{if $info.level_id == 1}>selected<{/if}>>一星级</option>
+                            <option value="2" <{if $info.level_id == 2}>selected<{/if}>>二星级</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2">所属公司：</label>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="company" disabled class="select">
+                            <option value="重庆公司">重庆公司</option>
+                        </select>
+                    </span>
+                </div>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="shop" class="select" onchange="sub_shop_all(this.value)">
+                            <option value="总店">--请选择总店--</option>
+                            <{foreach $shop_list as $v}>
+                            <{if $v.name == $info.shop}>
+                            <option selected value="<{$v.name}>"><{$v.name}></option>
+                            <{else}>
+                            <option value="<{$v.name}>"><{$v.name}></option>
+                            <{/if}>
+                            <{/foreach}>
+                        </select>
+                    </span>
+                </div>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="sub_shop" class="select">
+                            <option value="分店">--请选择分店--</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>所属部门：</label>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="department_id" class="select" datatype="*" nullmsg="请选择部门">
+                            <option value="">--请选择部门--</option>
+                             <{foreach $department_list as $v}>
+                                <option  value="<{$v.id}>" <{if $info.department_id == $v.id}> selected <{/if}>><{$v.name}></option>
+                            <{/foreach}>
+                        </select>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>职务：</label>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="job" class="select" onchange="cat_id_select(this.value)">
+                            <option value="">请选择职务</option>
+                               <{foreach $desc_list as $v}>
+                                <option  value="<{$v.name}>" <{if $info.job == $v.name}> selected <{/if}>><{$v.name}></option>
+                                <{/foreach}>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>休息日：</label>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="day_off" class="select">
+                            <option value="1" <{if $info.day_off == 1}>selected<{/if}>>星期一</option>
+                            <option value="2" <{if $info.day_off == 2}>selected<{/if}>>星期二</option>
+                            <option value="3" <{if $info.day_off == 3}>selected<{/if}>>星期三</option>
+                            <option value="4" <{if $info.day_off == 4}>selected<{/if}>>星期四</option>
+                            <option value="5" <{if $info.day_off == 5}>selected<{/if}>>星期五</option>
+                            <option value="6" <{if $info.day_off == 6}>selected<{/if}>>星期六</option>
+                            <option value="0" <{if $info.day_off == 0}>selected<{/if}>>星期日</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">合同开始时间：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text laydate-icon" value="<{$info.contract_start}>" name="contract_start" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" style="padding-right:0;height:auto;">
+
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>在职状态：</label>
+                <div class="formControls col-2">
+                    <span class="select-box">
+                        <select name="status" class="select">
+                            <option value="1" <{if $info.status == 1}>selected<{/if}>>在职</option>
+                            <option value="2" <{if $info.status == 2}>selected<{/if}>离职</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">保险单号：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.safe_number}>" name="safe_number">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">合同结束时间：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text laydate-icon" value="<{$info.contract_end}>" name="contract_end" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" style="padding-right:0;height:auto;">
+
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2">银行账号：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.bank_account}>" name="bank_account">
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">档案编号：</label>
+                <div class="formControls col-2">
+                    <input type="text" class="input-text" value="<{$info.file_number}>" name="file_number" >
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>员工小时工资：</label>
+                <div class="formControls col-1" style="line-height:31px;"><{$time.month}>月</div>
+                <input type="hidden" class="input-text" value="<{$time.year}>-<{$time.month}>" name="month" >
+                <div class="formControls col-1" style="width:auto">
+                   <span class="select-box">
+                        <select name="money" class="select" datatype="*" nullmsg="员工小时工资不能为空">
+                            <option value="8" <{if $info.hour_money == 8}>selected<{/if}>>8</option>
+                            <option value="8.5" <{if $info.hour_money == 8.5}>selected<{/if}>>8.5</option>
+                            <option value="9" <{if $info.hour_money ==9}>selected<{/if}>>9</option>
+                            <option value="9.5" <{if $info.hour_money == 9.5}>selected<{/if}>>9.5</option>
+                            <option value="10" <{if $info.hour_money == 10}>selected<{/if}>>10</option>
+                            <option value="10.5" <{if $info.hour_money == 10.5}>selected<{/if}>>10.5</option>
+                            <option value="11" <{if $info.hour_money == 11}>selected<{/if}>>11</option>
+                            <option value="11.5" <{if $info.hour_money == 11.5}>selected<{/if}>>11.5</option>
+                            <option value="12" <{if $info.hour_money == 12}>selected<{/if}>>12</option>
+                            <option value="12.5" <{if $info.hour_money == 12.5}>selected<{/if}>>12.5</option>
+                            <option value="13" <{if $info.hour_money == 13}>selected<{/if}>>13</option>
+                            <option value="13.5" <{if $info.hour_money == 13.5}>selected<{/if}>>13.5</option>
+                            <option value="14" <{if $info.hour_money == 14}>selected<{/if}>>14</option>
+                            <option value="14.5" <{if $info.hour_money == 14.5}>selected<{/if}>>14.5</option>
+                        </select>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>记录考勤：</label>
+                <div class="formControls col-2">
+                    <select name="is_check" class="select" datatype="*" nullmsg="请选择">
+                        <option value="0"<{if $info.is_check == 0}>selected<{/if}> >是</option>
+                        <option value="1" <{if $info.is_check == 1}>selected<{/if}>>否</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="form-label col-2">平台服务商：</label>
+                <div class="formControls col-2">
+                    <select name="is_merchant" class="select">
+                        <option value="0" <{if $info.is_merchant == 0}>selected<{/if}>>是</option>
+                        <option value="1" <{if $info.is_merchant == 1}>selected<{/if}>>否</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>现住地址：</label>
+                <div class="formControls col-4">
+                    <input type="text" class="input-text" value="<{$info.address}>" name="address" datatype="*" nullmsg="现住地址不能为空">
+                </div>
+            </div>
+            <input type="hidden" class="input-text" value="0" name="type">
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2"><span class="c-red">*</span>证件地址：</label>
+                <div class="formControls col-4">
+                    <input type="text" class="input-text" value="<{$info.ident_address}>" name="ident_address" datatype="*" nullmsg="证件地址不能为空">
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div>
+                <label class="form-label col-2">备注：</label>
+                <div class="formControls col-4">
+                    <textarea style="height:50px;" class="input-text" name="note"><{$info.note}></textarea>
+                </div>
+            </div>
+
+        </div>
+        <input type="hidden" class="input-text" value="<{$info.id}>" name="id">
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit">修改</button>
+                <button onClick="layer_close()" class="btn radius" type="submit">取消</button>
+			</div>
+		</div>
+	</form>
+
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+
+    $(function(){
+        sub_shop_all('<{$info.shop}>','<{$info.sub_shop}>')
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    //layer_close();
+                    window.history.go(-1);
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        //formObj.init(<{ch_json_encode($item)}>);
+
+    })
+
+
+</script>
+</body>
+</html>

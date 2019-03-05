@@ -1,0 +1,31 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+$config['website_domain'] = 'http://wap.huiyunzhi.cn/';
+$config['website_title'] = '商城系统';
+$config['website_logo'] = '';
+$config['website_keywords'] = '商城系统';
+$config['website_desc'] = '商城系统';
+$config['website_icp'] = '';
+$config['goods_list_pagesize'] = '20';
+$config['goods_list_orderby'] = 'up_time';
+$config['goods_list_orderby_type'] = 'desc';
+$config['cache_type'] = 'file';
+$config['share_type'] = '0';
+$config['share_one_proportion'] = '10';
+$config['share_two_proportion'] = '5';
+$config['share_price_type'] = 'balance';
+$config['wx_appid'] = '';
+$config['wx_secret'] = '';
+$config['wx_flag_sms_tmp_id'] = '';
+$config['wx_cashback_sms_tmp_id'] = '';
+$config['sms_open'] = '2';
+$config['sms_appkey'] = '';
+$config['sms_secret'] = '';
+$config['delivery_appid'] = '';
+$config['delivery_appkey'] = '';
+$config['order_auto_confirm'] = '10080';
+$config['order_auto_cancel'] = '2880';
+$config['shop_withdraw_commission'] = '10';
+$config['goods_store_nums'] = '100';
+$config['authentication_string'] = '~!@#$%^&*()_3BYS_BBC_AUTHENTICATION_STRING';
+

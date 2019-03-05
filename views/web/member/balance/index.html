@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox clear">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+		 	<div class="userbox clear">
+		 		<div class="useraside">
+					<{include file="web/member/menu.html"}>
+		 		</div>
+		 		<div class="usercontent">
+		 			<div class="usertitle">
+		 				我的现金
+		 			</div>
+		 			<div class="addressbox" style="font-weight:normal;">
+ 						您当前的账户余额：<span style="color:#ff0000;font-weight:bold;">￥<{$member_user_data.balance}></span>
+ 						<div class="fenbtnbox">
+ 							<input type="button" value="充值" class="fenbtn" style="cursor: pointer" onclick="window.location.href='<{site_url("/member/balance/online_recharge")}>'">
+							<input type="button" value="提现" class="fenbtn" style="cursor: pointer" onclick="window.location.href='<{site_url("/member/balance/withdraw")}>'">
+ 						</div>
+ 					</div>
+ 					<div class="fenitembox">
+ 						<div class="fenitemTitle">
+ 							消费明细查询
+ 						</div>
+ 						<table class="fen-table">
+ 							<tr>
+ 								<th>积分日期</th>
+ 								<th>积分</th>
+ 								<th>说明</th>
+ 							</tr>
+							<{foreach $list as $key}>
+							<tr>
+								<td class="fentitle"><{date('Y-m-d',$key.addtime)}></td>
+								<td>¥ <{$key.amount}></td>
+								<td class="fenshow"><{$event_name[$key.event]}></td>
+							</tr>
+							<{/foreach}>
+ 						</table>
+						<!--分页-->
+						<{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+ 					</div>
+		 		</div>
+		 	</div>
+		 	
+		 	
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+<script>
+$(function(){
+	
+
+})	
+</script>
+</body>
+</html>

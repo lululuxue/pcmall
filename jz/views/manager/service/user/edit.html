@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+	<link href="/public/H-ui/css/style.css" rel="stylesheet" type="text/css">
+	<style>
+		.Nodisplay{display:none}
+		.icon_btn{cursor:pointer;font-size:20px;color:deepskyblue}
+	</style>
+</head>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/manager/service/user/save')}>" method="post" class="form form-horizontal" id="add" enctype="multipart/form-data">
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>服务分店：</label>
+			<div class="formControls col-2"> <span class="select-box">
+				<select name="company" class="select" value='重庆公司' onchange="cat_id_select(this.value)">
+					<option value="重庆公司">重庆公司</option>
+				</select>
+				</span>
+			</div>
+			<div class="formControls col-2">
+				<span class="select-box">
+					<select name="shop" class="select" onchange="sub_shop_all(this.value)">
+						<option value="">--请选择总店--</option>
+						<{foreach $shop_list as $v}>
+						<{if $v.name == $item.shop}>
+						<option selected value="<{$v.name}>"><{$v.name}></option>
+						<{else}>
+						<option value="<{$v.name}>"><{$v.name}></option>
+						<{/if}>
+						<{/foreach}>
+					</select>
+				</span>
+			</div>
+			<div class="formControls col-2">
+				<span class="select-box">
+					<select name="sub_shop" class="select">
+
+					</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>联系电话：</label>
+			<div class="formControls col-3">
+				<input type="text" class="input-text" value="<{$item.phone}>" name="phone" datatype="m" nullmsg="手机号码不能为空">
+			</div>
+			<label class="form-label col-2"><span class="c-red">*</span>服务项目：</label>
+			<div class="formControls col-2"> <span class="select-box">
+				<select name="cat_id" class="select" datatype="*" nullmsg="请选择分类" onchange="cat_id_select(this.value)">
+					<!--分类模板-->
+					<{function name=type level=0}>
+					<{foreach $data as $key}>
+					<{if $key.id == $item.service_id}>
+						<option value="<{$key.id}>" selected="selected"><{section name=loop loop=$level}>├<{/section}><{$key.name}></option>
+					<{else}>
+						<option value="<{$key.id}>"><{section name=loop loop=$level}>├<{/section}><{$key.name}></option>
+					<{/if}>
+					<{call name=type data=$key.down level=$level+1}>
+					<{/foreach}>
+					<{/function}>
+					<!--调用模板函数-->
+					<{call name=type data=$cat_list}>
+				</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>服务时间：</label>
+			<div class="formControls col-3">
+				<input type="text" class="input-text laydate-icon" value="<{$item.addtime}>" name="start_time" onclick="laydate({min:laydate.now(),istime: true, format: 'YYYY-MM-DD hh:mm:ss'})" readonly="" datatype="*" nullmsg="请选择服务时间" style="padding-right:0;height:auto;">
+			</div>
+			<label class="form-label col-2"><span class="c-red">*</span>详细地址：</label>
+			<div class="formControls col-3">
+				<textarea style="height:50px;" class="input-text" value="" name="address" datatype="*1-50" nullmsg="地址不能为空"><{$item.address}></textarea>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>约单备注：</label>
+			<div class="formControls col-3">
+				<textarea style="height:50px;" class="input-text" value="" name="note" datatype="*1-50" nullmsg="备注不能为空"><{$item.note}></textarea>
+			</div>
+			<label class="form-label col-2"><span class="c-red"></span>所带工具：</label>
+			<div class="formControls col-3">
+				<textarea  style="height:50px;" class="input-text" value="" name="tool"><{$item.tool}></textarea>
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>客户姓名：</label>
+			<div class="formControls col-3">
+				<input type="text" class="input-text" value="<{$item.full_name}>" name="name" datatype="*1-50" nullmsg="客户姓名不能为空">
+			</div>
+			<label class="form-label col-2"><span class="c-red"></span>联系电话2：</label>
+			<div class="formControls col-3">
+				<input type="text" class="input-text" value="<{$item.tel}>" name="tel" >
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>有无防护网：</label>
+			<div class="formControls col-3 skin-minimal">
+				<div class="radio-box">
+					<{if $item.is_pro == 1}>
+					<input type="radio" id="type-0" name="is_pro" value="1" checked>
+					<{else}>
+					<input type="radio" id="type-0" name="is_pro" value="1" >
+					<{/if}>
+					<label for="type-0">有</label>
+				</div>
+				<div class="radio-box">
+					<{if $item.is_pro == 0}>
+					<input type="radio" id="type-2" name="is_pro" value="0" checked>
+					<{else}>
+					<input type="radio" id="type-2" name="is_pro" value="0">
+					<{/if}>
+					<label for="type-2">无</label>
+				</div>
+			</div>
+			<label class="form-label col-2"><span class="c-red">*</span>应收金额：</label>
+			<div class="formControls col-3">
+				<input type="text" class="input-text" value="<{$item.price_real}>" name="price_real" datatype="*1-10000" nullmsg="手机号码不能为空">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red">*</span>是否擦玻璃：</label>
+			<div class="formControls col-3 skin-minimal">
+				<div class="radio-box">
+					<{if $item.is_boli == 1}>
+					<input type="radio" id="type-3" name="is_boli" value="1" checked>
+					<{else}>
+					<input type="radio" id="type-3" name="is_boli" value="1">
+					<{/if}>
+					<label for="type-0">擦</label>
+				</div>
+				<div class="radio-box">
+					<{if $item.is_boli == 0}>
+					<input type="radio" id="type-4" name="is_boli" value="0" checked>
+					<{else}>
+					<input type="radio" id="type-4" name="is_boli" value="0">
+					<{/if}>
+					<label for="type-2">不擦</label>
+				</div>
+			</div>
+			<label class="form-label col-2"><span class="c-red">*</span>工作人员：</label>
+			<div class="formControls col-1" style="min-width:100px;">
+				<label style='width:auto' class="form-label col-1">男</label>
+				<input type="text" style='width:50%;' class="input-text" value="<{$item.gender1}>" name="gender1" datatype="*0-50" nullmsg="请输入人数">
+			</div>
+			<div class="formControls col-1" style="min-width:100px;">
+				<label style='width:auto;' class="form-label col-1">女</label>
+				<input type="text" style='width:50%;' class="input-text" value="<{$item.gender2}>" name="gender2" datatype="*0-50" nullmsg="请输入人数">
+			</div>
+			<div class="formControls col-1" style="min-width:150px;">
+				<label style='width:auto' class="form-label col-1">男女不限</label>
+				<input type="text" style='width:50%;' class="input-text" value="<{$item.gender0}>" name="gender0" datatype="*0-50" nullmsg="请输入人数">
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-2"><span class="c-red"></span>指定人员：</label>
+			<div class="formControls col-3">
+				<input type="text" class="input-text" value="<{$item.people}>" name="people" >
+			</div>
+			<label class="form-label col-2"><span class="c-red"></span>客服提成：</label>
+			<div class="formControls col-3">
+				<input type="text" class="input-text" value="<{$item.percentage}>" name="percentage" >
+			</div>
+		</div>
+
+		<input type="hidden" name="order_status" value=""/>
+
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+				<button onClick="$('input[name=order_status]').val(1);$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 录入</button>
+				<{if $item.order_status == 0}>
+				<button onClick="$('input[name=order_status]').val(0);$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 待联系</button>
+				<{/if}>
+				<button onClick="window.history.back(-1)" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+		<input type="hidden" name="id" value="<{$item.id}>" />
+	</form>
+	<div class="mt-20">
+		<div class="title-notice" style="margin-bottom:10px;"><i title="展开" class="icon_btn Hui-iconfont up">&#xe6d6;</i>客户档案信息(以下栏目非操作内容，客户来电或快速录单时查看客户信息，方便与客户沟通)</div>
+		<table class="table table-border table-bordered table-bg table-hover table-sort Nodisplay">
+			<thead>
+			<tr class="text-c">
+				<th>卡号</th>
+				<th>剩余金额</th>
+				<th>钟点工折扣</th>
+				<th>保养折扣</th>
+				<th>到期时间</th>
+				<th>保养券剩余金额</th>
+				<th>剩余积分</th>
+				<th>备注</th>
+			</tr>
+			</thead>
+			<tbody>
+			<{foreach $data as $key}>
+			<tr class="text-c">
+				<td><{$key.card_no}></td>
+				<td>￥<{$key.count}></td>
+				<td><{$key.care_discount}></td>
+				<td><{$key.people_discount}></td>
+				<td><{$key.endtime|date_format:"%Y-%m-%d"}></td>
+				<td>￥<{$key.care_count}></td>
+				<td>0</td>
+				<td><{$key.note}></td>
+			</tr>
+			<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="mt-20">
+		<div class="title-notice" style="margin:10px 0 "><i title="展开" class="icon_btn Hui-iconfont up">&#xe6d6;</i>最近十次用工记录</div>
+		<table class="table table-border table-bordered table-bg table-hover table-sort Nodisplay">
+			<thead>
+			<tr class="text-c">
+				<th>流水号</th>
+				<th>客户姓名</th>
+				<th>业务来源</th>
+				<th>联系电话</th>
+				<th>会员卡号</th>
+				<th>服务项目</th>
+				<th>详细地址</th>
+				<th>工作人员</th>
+				<th>应收金额</th>
+				<th>发单时间</th>
+				<th>服务时间</th>
+				<th>服务分店</th>
+				<th>约单备注</th>
+				<th>工单状态</th>
+			</tr>
+			</thead>
+			<tbody>
+			<{foreach $list as $key}>
+			<tr class="text-c">
+				<td><{$key.order_no}></td>
+				<td><{$key.full_name}></td>
+				<td class="text-l"></td>
+				<td class="text-l"><{$key.phone}></td>
+				<td class="text-l"><{$key.card_no}></td>
+				<td class="text-l"><{$key.name}></td>
+				<td class="text-l"><{$key.address}></td>
+				<td class="text-l"><{$key.admin_name}></td>
+				<td class="text-l"><{$key.price_real}></td>
+				<td class="text-l"><{$key.addtime}></td>
+				<td class="text-l"><{$key.dealtime}></td>
+				<td class="text-l"><{$key.sub_shop}></td>
+				<td class="text-l"><{$key.note}></td>
+				<{if $key.status == 1}>
+				<td class="text-l">未派单</td>
+				<{else if $key.status == 2}>
+				<td class="text-l">暂派</td>
+				<{else}>
+				<td class="text-l">已派</td>
+				<{/if}>
+			</tr>
+			<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script language="JavaScript">
+	$(".icon_btn").click(function(){
+	    if($(this).hasClass('up')){
+            $(this).removeClass('up');
+            $(this).parent('.title-notice').next('table').removeClass('Nodisplay');
+            $(this).html('&#xe6d5;');
+            $(this).attr('title','折叠');
+		}else{
+            $(this).addClass('up');
+            $(this).parent('.title-notice').next('table').addClass('Nodisplay');
+            $(this).html('&#xe6d6;');
+            $(this).attr('title','展开');
+		}
+	})
+	var spec_num = 0;
+	$(function() {
+
+        sub_shop_all('<{$item.shop}>','<{$item.sub_shop}>')
+		//验证表单
+		$.Tipmsg.r = null;
+		$("#add").Validform({
+			tiptype: function (msg) {
+				layer.msg(msg);
+			},
+			tipSweep: true,
+			ajaxPost: true,
+			callback: function (data) {
+				if (data.status == "y") {
+					//layer_close();
+                    window.history.back(-1);
+				}
+			}
+		});
+	});
+
+
+
+	$(function(){
+		//模型选择
+		$('[name="model_id"]').change(function(){
+			model_select($(this).val());
+		})
+
+		//表单回填
+		//var formObj = new Form();
+		//formObj.init(<{ch_json_encode($item)}>);
+
+	})
+
+</script>
+</body>
+</html>

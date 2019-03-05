@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<title><{config_item('website_title')}></title>
+	<link rel="stylesheet" href="/views/mobile/skin/css/style.css" />
+	<script type="text/javascript" src="/public/js/jquery.js" ></script>
+	<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+	<script type="text/javascript" src="/public/js/layer_m/layer.js"></script>
+	<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+	<script type="text/javascript" src="/public/js/laypage/laypage.js"></script>
+	<style type="text/css">
+		.pages_bar{ text-align: center; margin-top: 10px; font-size: 0.26rem;}
+	</style>
+</head>
+<body>
+<div class="wrap">
+<!-- header start -->
+<header class="topbar ">
+    <div class="conwrap flexbox">
+        <div class="topbarL">
+            <a class="topbar_a" href="javascript:history.go(-1)">
+                <img src="/views/mobile/skin/images/left_arrow.png"/>
+            </a>
+        </div>
+        <div class="topbarM"><{$cat_data.name}></div>
+        <div class="topbarR" ></div>
+    </div>
+</header>
+<!-- header end -->
+	<section class="wrap" id="article_list">
+		<!--帖子模板start-->
+		<script type='text/html' id='article_list_Template'>
+			{{each result.list}}
+			<div class="borderbox" onclick="window.location.href='<{site_url("/<{get_web_type()}>/article/view")}>?id={{$value.id}}'">
+				<div class="newsbox">
+					<p class="newsT">
+						{{$value.title}}
+						<span class="newsTime">{{$value.addtime}}</span>
+					</p>
+					<p class="newsDes">
+						{{$value.desc}}
+					</p>
+				</div>
+			</div>
+			{{/each}}
+		</script>
+		<!--帖子模板end-->
+	</section>
+	<div class="pages_bar" id="pages_bar" onclick="ajax_list();">加载更多</div>
+</div>
+<{include file="mobile/footer.html"}>
+<script language="JavaScript">
+	var per_page = 1;
+	var all_page = 1;
+	$(function(){
+		ajax_list();
+	})
+	//ajax文字列表
+	function ajax_list(){
+		if(per_page>all_page) {
+			return false;
+		}
+		$.ajax({
+			type:"POST",
+			url: "/<{get_web_type()}>/article/ajax_index",
+			data: "<{array_to_link($search_where)}>&per_page="+per_page,
+			dataType:"json",
+			success: function(data){
+				if (data.status=='y') {
+					var html = template('article_list_Template',data);
+					$('#article_list').append(html);
+					per_page++;
+					all_page = data.result.page_count;//总页数
+					if(per_page>all_page) {
+						$('#pages_bar').text('没有更多了');
+						return false;
+					}
+				} else {
+					layer.open({content: data.info,time: 1});
+				}
+			}
+		});
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+    <style>#image_pic{display:none}</style>
+</head>
+<body>
+<div class="pd-20">
+    <form action="<{site_url('/admin/personnel/upload_picture')}>" method="post" class="form form-horizontal" id="add">
+        <div class="row cl" style="text-align: center">
+            <{if $info.identify}>
+            <img style="width:100%" class='change-img' src="<{$info.identify}>" onerror="this.src='/public/images/IDcard.png'"/>
+            <{else}>
+            <img style="width:100%" class='change-img' src="/public/images/IDcard.png"/>
+            <{/if}>
+        </div>
+        <input type="hidden" value="<{$id}>" name="id">
+
+        <div class="row cl">
+            <div class="col-10 col-offset-2">
+                <button class="btn radius select-picture" type="button">选择图片文件</button>
+                <input type="hidden" value="" name="identify">
+                <input type="file" name="image_pic" id="image_pic" onchange="upload_file(this);" style="width: 150px;">
+                <button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>上传</button>
+                <button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<{ajax_upload()}>
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    layer_close();
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        formObj.init(<{ch_json_encode($item)}>);
+        img_position(); //固定图片的高度或者宽度
+    })
+
+    $('.select-picture').click(function () {
+        //触发file的点击事件
+        $('#image_pic').click();
+    });
+
+    //添加图片展示
+    function show_upload(spec_pic, url){
+        $('.change-img').attr('style','height:auto;widht;auto');
+        $(".change-img").attr('src',url);
+        $("input[name=identify]").val(url);
+        setTimeout('img_position()',50);//固定图片的高度或者宽度
+        //img_position(); //固定图片的高度或者宽度
+    }
+
+
+    //固定图片的高度或者宽度
+    function img_position(){
+        var width =  $('.change-img').width();
+        var height =  $('.change-img').height();
+        // alert(height)
+        // alert(width);
+        if (height/width > 340/560){
+            $('.change-img').attr('style','height:340px;widht;auto');
+        }else{
+            $('.change-img').attr('style','width:560px;height;auto');
+        }
+    }
+</script>
+</body>
+</html>

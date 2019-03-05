@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/css/style.css" />
+	<title><{config_item('website_title')}></title>
+</head>
+<body style="background:#fff;">
+<div class="wrap" style="overflow:hidden;">
+	<form name="reg" id="reg" method="post" action="<{site_url('/api/user/reg/user_reg')}>">
+		<div class="bordercells">
+			<!-- 账户 -->
+			<div class="infobox flexbox">
+				<div class="infochar">
+					账户
+				</div>
+				<div class="inputTextwrap">
+					<input type="tel" name="username" class="inputText" placeholder="请输入手机号码" datatype="m" nullmsg="请输入手机号码" errormsg="手机格式不正确" ajaxurl="<{site_url('/api/user/reg/repeat_username')}>">
+				</div>
+			</div>
+			<{if config_item('sms_open')=='1'}>
+			<div class="infobox flexbox">
+				<div class="infochar">
+					验证码
+				</div>
+				<div class="inputTextwrap">
+					<input type="tel" name="code" class="inputText" style="width: 70%" placeholder="请输入验证码" class="iphoneinput" datatype="n" nullmsg="请输入验证码！" errormsg="验证码只能是数字"/>
+				</div>
+				<div class="inputTextwrap">
+					<input type="button" name="get_code" class="verifystyle" value="获取验证码" >
+				</div>
+			</div>
+			<{/if}>
+			<div class="infobox flexbox">
+				<div class="infochar">
+					密码
+				</div>
+				<div class="inputTextwrap">
+					<input type="password" name="password" class="inputText" placeholder="密码" datatype="*" nullmsg="请输入密码">
+				</div>
+			</div>
+		</div>
+		<div class="infosub">
+			<input type="submit" value="注 册"  class="infosubbtn">
+		</div>
+	</form>	
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/views/mobile/conf_js/code.js"></script>
+<script type="text/javascript" >
+	//验证表单
+	$(function(){
+		$.Tipmsg.r=null;
+		$("#reg").Validform({
+			tiptype:function(msg){
+				layer.msg(msg);
+			},
+			tipSweep:true,
+			ajaxPost:true,
+			callback:function(data){
+				if(data.status=="y"){
+					window.location.href="<{$redirect_url}>";
+				}
+			}
+		});
+	})
+</script>
+</body>
+</html>

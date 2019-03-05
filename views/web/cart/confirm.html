@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="<{config_item('website_keywords')}>" name="Keywords">
+    <meta content="<{config_item('website_desc')}>" name="description"/>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/jcarousel.connected-carousels.css">
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css"/>
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script type="text/javascript" src="/public/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/artTemplate.js"></script>
+    <script type="text/javascript" src="/views/web/conf_js/cart.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox">
+        <div class="scrapnav">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="javascript:void(0)">我的购物车</a>
+        </div>
+        <form action="<{site_url("/cart/commit")}>" method="post" id="commit">
+            <input type="hidden" name="sku_id" value="<{$sku_id}>">
+            <input type="hidden" name="buy_type" value="<{$buy_type}>">
+            <input type="hidden" name="buy_num" value="<{$buy_num}>">
+            <div class="contenwrap" style="margin-bottom:20px;">
+                <div class="cartTitlebox">
+                    <div class="cartTitleleft">
+                        <img src="/views/web/skin/images/icon14.png" width="18" height="25">
+                        填写核对订单信息
+                    </div>
+                    <div class="breadcrumb">
+                        <a href="<{site_url("/cart")}>">查看购物车</a>
+                        <a href="javascript:void(0)" class="active">填写核对订单信息</a>
+                        <a href="javascript:void(0)">成功提交订单</a>
+                    </div>
+                </div>
+                <div class="billshowlistbox" id="shop_list">
+                    <!--店铺列表start-->
+                    <script type='text/html' id='shop_list_Template'>
+                        {{each result.list as shop_list}}
+                        <div class="shop_view">
+                            <input type="hidden" class="all_sell_price" name="all_sell_price[{{shop_list.shop_data.m_id}}]" value="{{shop_list.all_sell_price}}">
+                            <input type="hidden" class="all_ticket_price" name="all_ticket_price[{{shop_list.shop_data.m_id}}]" value="{{shop_list.all_ticket_price}}">
+                            <div class="billshowTitlewrap">
+                                <ul class="clear">
+                                    <li class="billshowleft">店铺宝贝</li>
+                                    <li class="billshowleftcenter">商品属性</li>
+                                    <li class="billshowcenter">市场价</li>
+                                    <li class="billshowcenter">销售价</li>
+                                    <li class="billshowright">数量</li>
+                                </ul>
+                            </div>
+                            <div class="billshopbox">
+                                <div class="billshoptitle">
+                                    店铺：{{shop_list.shop_data.shop_name}}
+                                </div>
+                                <!-- 产品列表 -->
+                                <div class="billshoplistwrap">
+                                    <!--店铺商品列表-->
+                                    {{each shop_list.sku_list as sku}}
+                                    <div class="billshoplist">
+                                        <ul class="clear">
+                                            <li class="billshowleft" style="text-align:left;">
+                                                <a href="">
+                                                    <div class="billshowimgbox">
+                                                        <img src="{{sku.image}}" alt="">
+                                                    </div>
+                                                    <div class="item-info">
+                                                        {{sku.name}}
+                                                    </div>
+                                                </a>
+                                            </li>
+                                            <li class="billshowleftcenter">
+                                                颜色：<!--商品规格start-->
+                                                {{each sku.value as spec}}
+                                                <!--商品规格文字-->
+                                                {{if spec.type==1}}
+                                                {{spec.name}}:{{spec.value}}
+                                                {{/if}}
+                                                <!--商品规格图片-->
+                                                {{if spec.type==2}}
+                                                {{spec.name}}:{{spec.note}}
+                                                {{/if}}
+                                                {{/each}}
+                                                <!--商品规格end-->
+                                            </li>
+                                            <li class="billshowcenter">¥{{sku.market_price}}</li>
+                                            <li class="billshowcenter">¥{{sku.sell_price}}</li>
+                                            <li class="billshowright">{{sku.num}}件</li>
+                                        </ul>
+                                    </div>
+                                    {{/each}}
+                                </div>
+                                <div class="billtipsbox clear">
+                                    <div class="billtipsright">
+                                        {{if shop_list.promotion_data}}
+                                        <!-- 优惠活动 -->
+                                            优惠活动：
+                                            <input type="hidden" name="promotion_price[]" value="{{shop_list.promotion_price}}">
+                                            {{shop_list.promotion_data.name}} ¥{{shop_list.promotion_price}}
+                                        {{/if}}
+                                        &nbsp;&nbsp;
+                                        {{if shop_list.coupons_list}}
+                                        <!-- 优惠券方式 -->
+                                        优惠券：
+                                        <select class="coupons_list" name="coupons_id[{{shop_list.shop_data.m_id}}]">
+                                            {{each shop_list.coupons_list as coupons i}}
+                                            {{if i==0}}
+                                            <option value="{{coupons.id}}" couponsamount="{{coupons.amount}}"> {{coupons.name}}¥{{coupons.amount}} </option>
+                                            {{/if}}
+                                            {{/each}}
+                                            <option value="" couponsamount="0"> 不使用优惠券</option>
+                                        </select>
+                                        &nbsp;&nbsp;
+                                        {{/if}}
+                                        配送方式：
+                                        <select class="delivery_list" name="delivery_id[{{shop_list.shop_data.m_id}}]">
+                                            {{each shop_list.delivery_list as delivery i}}
+                                            <option value="{{delivery.id}}" deliveryprice="{{delivery.price}}"> {{delivery.name}} {{if delivery.price==0}}包邮{{else}}运费 {{delivery.price}}{{/if}}
+                                            </option>
+                                            {{/each}}
+                                        </select>
+                                        &nbsp;&nbsp;
+                                        配送时间：
+                                        <select name="delivery_time[{{shop_list.shop_data.m_id}}]">
+                                            <option value="任意"> 任意</option>
+                                            <option value="周一到周五"> 周一到周五</option>
+                                            <option value="周末"> 周末</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="billtipsbox" style="text-align:right;">
+                                    <div class="billtipsleft">
+                                        备注：<input type="text" class="billtipsinput" name="m_desc[{{shop_list.shop_data.m_id}}]" placeholder="选填，可填写您与卖家达成一致的要求">
+                                    </div>
+                                    <p class="billtoalsize">
+                                        共计<span class="billredcolor">{{shop_list.all_count_sku}}</span>件商品
+                                        合计：<span class="billredcolor shop_all_price">￥0</span>
+                                        <input type="hidden" class="shop_sell_price" name="shop_sell_price[{{shop_list.shop_data.m_id}}]" value="{{shop_list.all_sell_price}}">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </script>
+                    <!--店铺列表end-->
+                </div>
+                <div class="yuwrap" style="margin-top:20px;">
+                    <div class="paystylebox">
+                        <img src="/views/web/skin/images/icon17.png" alt="">
+                        <span style="padding:0 5px;">收货地址</span>
+                        <input type="button" value="新增地址" class="addresschoicebtn" style="cursor: pointer;" onclick="window.location.href='<{site_url("/member/address")}>'">
+                    </div>
+                    <table class="addresschioce" id="address_list">
+                        <!--地址列表模板start-->
+                        <script type='text/html' id='address_list_Template'>
+                            {{each result}}
+                            <tr>
+                                <td>
+                                    <label for="address_id_{{$value.id}}">
+                                        <div class="radiobox" style="width:auto;height:auto;">
+                                            <input type="radio" name="address_id" value="{{$value.id}}" id="address_id_{{$value.id}}" class="inputradio" {{if $value.id==<{$address_data.id}>}}checked{{/if}}>
+                                            <span></span>
+                                        </div>
+                                    </label>
+                                </td>
+                                <td>{{$value.full_name}}</td>
+                                <td>{{$value.prov_str}}{{$value.city_str}}{{$value.area_str}}{{$value.address}}</td>
+                                <td>{{$value.tel}}</td>
+                            </tr>
+                            {{/each}}
+                        </script>
+                    </table>
+
+                    <div class="paystylebox">
+                        请选择支付方式
+                    </div>
+                    <div class="paystyleitem" id="payment_list">
+                        <!--支付方式start-->
+                        <script type='text/html' id='payment_list_Template'>
+                            {{each result as payment_list i}}
+                            <div class="paystylelist clear">
+                                <label for="payment_{{payment_list.id}}">
+                                    <div class="radiobox">
+                                        <input type="radio" value="{{payment_list.id}}" name="payment_id" id="payment_{{payment_list.id}}" class="inputradio" {{if i==0}}checked{{/if}}>
+                                        <span></span>
+                                    </div>
+                                    <div class="paystyleimg">
+                                        <img src="{{payment_list.logo}}">
+                                    </div>
+                                </label>
+                            </div>
+                            {{/each}}
+                        </script>
+                    </div>
+                </div>
+                <div class="billtipsbox" style="text-align:right;">
+                    <p class="billtoalsize">
+                        合计<span class="billredcolor" id="order_all_price"></span>
+                    </p>
+                </div>
+                <input type="submit" value="确认订单" class="cart_tablebutton" style="background:#d0161b; float: right;">
+                <div style="clear: both;"></div>
+            </div>
+        </form>
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+<script>
+    $(function () {
+        $('#address_list').on('click', 'input', function () {
+            alert('更改收货地址了需要重新确认订单');
+            window.location.href = '<{$redirect_url}>&address_id=' + $(this).val();
+        })
+
+        //商品详细展示start
+        var html = template('shop_list_Template', <{ch_json_encode($shop_list)}>);
+        $('#shop_list').html(html);
+        //商品详细展示end
+
+        //列出所有收货地址
+        $.ajax({
+            type: "POST",
+            url: '<{site_url("api/member/address")}>',
+            data: '',
+            dataType: "json",
+            success: function (data) {
+                if (data.status == "y") {
+                    var html = template('address_list_Template', data);
+                    $('#address_list').append(html);
+                }
+            }
+        });
+
+        //支付方式展示start
+        $.ajax({
+            type:"POST",
+            url: '/api/payment',
+            data: '',
+            dataType:"json",
+            success: function(data){
+                if (data.status=='y') {
+                    var html = template('payment_list_Template',data);
+                    $('#payment_list').html(html);
+                    sum_order_price();
+                }
+            }
+        });
+        //支付方式展示end
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="blank">
+	<meta name="format-detection" content="telephone=no, email=no">
+	<meta name="msapplication-tap-highlight" content="no">
+	<link rel="stylesheet" type="text/css" href="/views/mobile/skin/css/style.css" />
+	<title><{config_item('website_title')}></title>
+</head>
+<body>
+<div class="wrap">
+<form class="form form-horizontal" name="add" id="add" method="post" action="<{site_url("/<{get_web_type()}>/member/balance/online_recharge_save")}>">
+	<div class="bordercells">
+		<div class="addListbox">
+			<div class="add_new  flexbox" style="padding:0.2rem 0;">
+				<div style="color: #343434;font-size: 0.26rem;margin-right:0.2rem;" >
+					充值金额
+				</div>
+				<div class="addListR flexbox">
+					<input type="tel" class="addinputText" style="background:#ededed;border:1px solid #ededed;font-size:0.26rem;color:#000;" name="amount" datatype="price" nullmsg="请输入充值金额" errormsg="金额格式错误">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bordercells">
+			<!-- 支付方式 -->
+		<div class="paystyle">
+			<div class="sellerbox flexbox">
+				<div class="payimg">
+					<img src="/views/mobile/skin/images/icon20.png" >
+				</div>
+				<div class="sellerN">
+					支付方式
+				</div>
+			</div>
+			<div id="payment_list">
+			</div>
+			<!--支付方式start-->
+			<script type='text/html' id='payment_list_Template'>
+				{{each result as payment_list i}}
+				<label for="radio{{payment_list.id}}">
+					<div class="sellerbox flexbox">
+						<div class="paymentimg">
+							<img src="{{payment_list.logo}}" >
+						</div>
+						<div class="sellerN">
+							<!--{{payment_list.name}}-->
+						</div>
+						<div class="radiobox">
+					  		<input {{if i==0}}checked{{/if}} class="inputradio" type="radio" id="radio{{payment_list.id}}" value="{{payment_list.id}}" name="payment_id">
+					  		<span></span>
+					  	</div>
+					</div>
+				</label>
+				{{/each}}
+			</script>
+		</div>
+	</div>
+	<div class="infosub">
+		<input type="submit" value="确认充值"  class="infosubbtn">
+	</div>
+</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+<{include file="mobile/footer.html"}>
+<script>
+	//验证表单
+	$(function(){
+		$.Tipmsg.r=null;
+		$("#add").Validform({
+			tiptype:function(msg){
+				layer.msg(msg);
+			},
+			tipSweep:true,
+			ajaxPost:false,
+			callback:function(data){
+			}
+		});
+	})
+
+	$(function(){
+		//支付方式展示start
+		$.ajax({
+			type:"POST",
+			url: '/api/payment/online_recharge_list',
+			data: '',
+			dataType:"json",
+			success: function(data){
+				if (data.status=='y') {
+					var html = template('payment_list_Template',data);
+					$('#payment_list').html(html);
+				}
+			}
+		});
+		//支付方式展示end
+	})
+</script>
+</body>
+</html>

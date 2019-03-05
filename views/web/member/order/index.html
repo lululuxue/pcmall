@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><{config_item('website_title')}></title>
+    <meta content="<{config_item('website_keywords')}>" name="Keywords">
+    <meta content="<{config_item('website_desc')}>" name="description"/>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+    <script type="text/javascript" src="/public/js/jquery.js"></script>
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/layer/layer.js"></script>
+    <script src="/public/js/laypage/laypage.js"></script>
+    <script src="/views/web/conf_js/order.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox clear">
+        <div class="scrapnav">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+        </div>
+        <div class="userbox clear">
+            <div class="useraside">
+                <{include file="web/member/menu.html"}>
+            </div>
+            <div class="usercontent">
+                <div class="usertitle">
+                    我的订单
+                </div>
+                <table class="bill-table">
+                    <{foreach $list as $key}>
+                    <tr>
+                        <th class="cart-tablecheck">商品信息</th>
+                        <th width="100">数量</th>
+                        <th width="100">金额</th>
+                        <th width="100">状态</th>
+                        <th width="100">操作</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3"  style="text-align:left;background: #f5f5f5;padding:10px;border:none;">
+                            <label style="vertical-align:middle;">订单编号：<{$key.order_no}></label>
+                        </td>
+                        <td colspan="2"  style="background: #f5f5f5;border:none;" >
+                            订单时间：<{date('Y-m-d H:i',$key.addtime)}>
+                        </td>
+                    </tr>
+                    <{foreach $key.order_sku as $v=>$k}>
+                    <tr>
+                        <td class="bill-tableleft" style="text-align:left;" onclick="window.location.href='<{site_url("/member/order/view/<{$key.id}>")}>'">
+                            <div class="cart_tableimg">
+                                <img src="<{$k.sku_image}>" width="83" height="83">
+                            </div>
+                            <p><{$k.goods_name}></p>
+                        </td>
+                        <td><{$k.sku_num}></td>
+                        <td>￥<{$k.sku_sell_price_real}></td>
+                        <{if $v==0}>
+                        <td rowspan="<{count($key.order_sku)}>">
+                            <a href="<{site_url("/member/order/view/<{$key.id}>")}>" class="billstatus billstatus_active"><{get_order_status_text($key)}></a>
+                        </td>
+                        <td rowspan="<{count($key.order_sku)}>">
+                            <{if is_delete($key)}>
+                            <input type="button" value="删除订单" class="cart_tablebtn" onclick="order_delete('<{$key.id}>');">
+                            <{/if}>
+                            <{if is_pay($key)}>
+                            <input type="button" value="取消订单" class="cart_tablebtn" onclick="order_cancel('<{$key.id}>');">
+                            <input type="button" value="更换支付方式" class="cart_tablebtn cart_tablebtnstyle" onclick="select_payment('<{$key.id}>','<{$key.payment_id}>');">
+                            <input type="button" value="去支付" class="cart_tablebtn cart_tablebtnstyle" onclick="window.location.href='<{site_url("/api/pay/do_pay?client=&order_no=<{$key.order_no}>")}>'">
+                            <{/if}>
+                            <{if is_confirm($key)}>
+                            <input type="button" value="查看物流" class="cart_tablebtn" onclick="window.location.href='<{site_url("/member/order/delivery_status/<{$key.id}>")}>'">
+                            <input type="button" value="确认收货" class="cart_tablebtn cart_tablebtnstyle" onclick="order_confirm('<{$key.id}>');">
+                            <{/if}>
+                            <{if is_comment($key)}>
+                            <input type="button" value="去评价" class="cart_tablebtn cart_tablebtnstyle" onclick="window.location.href='<{site_url("/member/order/comment/<{$key.id}>")}>'">
+                            <{/if}>
+                        </td>
+                        <{/if}>
+                    </tr>
+                    <{/foreach}>
+                    <{/foreach}>
+                </table>
+                <!--分页-->
+                <{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+            </div>
+        </div>
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+</body>
+</html>

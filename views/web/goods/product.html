@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="<{config_item('website_keywords')}>" name="Keywords">
+    <meta content="<{config_item('website_desc')}>" name="description"/>
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/jcarousel.connected-carousels.css">
+    <link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css"/>
+    <script type="text/javascript" src="/public/js/jquery.js" ></script>
+    <script type="text/javascript" src="/public/js/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/echo.min.js"></script>
+    <script type="text/javascript" src="/views/web/conf_js/product.js"></script>
+    <script type="text/javascript" src="/views/web/skin/js/jquery.jcarousel.min.js"></script>
+    <script type="text/javascript" src="/views/web/skin/js/jcarousel.connected-carousels.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <{include file="web/header.html"}>
+    <!-- 内容 -->
+    <div class="wrapbox">
+        <div class="scrapnav" style=" border-bottom: 1px dashed #e7e7e7;">
+            您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/goods/goods_list?cat_id=<{$goods_category_data.id}>")}>"><{$goods_category_data.name}></a>
+        </div>
+        <div class="proshowwrap clear">
+            <div class="proshowleft">
+                <div class="connected-carousels">
+                    <div class="stage">
+                        <div class="carousel carousel-stage">
+                            <ul>
+                                <{foreach $goods_data.image_list as $key}>
+                                <li><img src="<{image_thumb($key.url,400,400)}>" id="sku_image" width="400" height="400"></li>
+                                <{/foreach}>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="navigation">
+                        <a href="javascript:void(0)" class="prev prev-navigation"><img src="/views/web/skin/images/icon09.png" width="20" height="20"></a>
+                        <a href="javascript:void(0)" class="next next-navigation"><img src="/views/web/skin/images/icon10.png" width="20" height="20"></a>
+                        <div class="carousel carousel-navigation">
+                            <ul>
+                                <{foreach $goods_data.image_list as $key}>
+                                <li><img src="<{image_thumb($key.url,60,60)}>"></li>
+                                <{/foreach}>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- JiaThis Button BEGIN -->
+                <div class="sharebox">
+                    <p style="float:left">分享到：</p>
+                    <div class="jiathis_style">
+                        <a class="jiathis_button_qzone"></a>
+                        <a class="jiathis_button_tsina"></a>
+                        <a class="jiathis_button_tqq"></a>
+                        <a class="jiathis_button_weixin"></a>
+                        <a class="jiathis_button_renren"></a>
+                        <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis"
+                           target="_blank"></a>
+                        <a class="jiathis_counter_style"></a>
+                    </div>
+                    <script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+                    <div class="collectbox">
+                        <a href="javascript:void(0)" id="godos_favorite_<{$goods_data.id}>" onclick="favorite_add(<{$goods_data.id}>)">
+                            <{if $goods_data.favorite==1}>
+                            <!--已经收藏-->
+                            取消收藏
+                            <{else}>
+                            <!--未收藏-->
+                            收藏商品
+                            <{/if}>
+                        </a>
+                    </div>
+                </div>
+                <!-- JiaThis Button END -->
+            </div>
+            <div class="proshowRight">
+                <div class="proshowTitlebox">
+                    <{$goods_data.name}>
+                </div>
+                <div class="proshowpricebox clear">
+                    <div class="proshowprice">
+                    <{if min($goods_data.max_min_sell_price)!=max($goods_data.max_min_sell_price)}>
+                    市场价：<span id="market_price" class="market_price">￥<{min($goods_data.max_min_market_price)}>-￥<{max($goods_data.max_min_market_price)}></span>
+                    销售价：<span id="sell_price">￥<{min($goods_data.max_min_sell_price)}>-￥<{max($goods_data.max_min_sell_price)}></span>
+                    <{else}>
+                    市场价：<span id="market_price" class="market_price">￥<{$goods_data.market_price}></span>
+                    销售价：<span id="sell_price">￥<{min($goods_data.max_min_sell_price)}></span>
+                    <{/if}>
+                    </div>
+                </div>
+                <div class="proshowstockbox">
+                    库存：<span id="store_nums"><{$goods_data.store_nums}></span>件
+                </div>
+                <div class="productsizebox">
+                    <!-- 规格参数 -->
+                    <{foreach $goods_data.spec_select_list as $key}>
+                    <div class="productsize clear goods_attr">
+                        <div class="productsizeleft">
+                            <{$key.name}>：
+                        </div>
+                        <ul class="productsizeright">
+                            <{foreach $key.value as $k}>
+                                <{if $key.type==1}>
+                                <a href="javascript:void(0);" class="parameter_a goods_sku" val="<{$k}>" data-type="1" style="padding: 3px;"><{$k}></a>
+                                <{elseif $key.type==2}>
+                                <a href="javascript:void(0);" class="parameter_a goods_sku" val="<{$k}>" data-type="2"><img src="<{image_thumb($k,40,40)}>"></a>
+                                <{/if}>
+                            <{/foreach}>
+                        </ul>
+                    </div>
+                    <{/foreach}>
+                    <!--已经选择的商品skuid-->
+                    <input type="hidden" id="sku_id" value="<{if $goods_data.spec_select_list==''}><{$goods_data.one_sku_data.sku_id}><{/if}>">
+                    <!--起订量-->
+                    <input type="hidden" id="sku_minimum" value="<{if $goods_data.spec_select_list==''}><{$goods_data.one_sku_data.minimum}><{/if}>">
+                    <div style="clear: both;"></div>
+                    <div class="productnumbox clear">
+                        <div class="productsizeleft">
+                            购买数量：
+                        </div>
+                        <div class="productsizeright">
+                            <input type="text" class="product_num" id="buy_num" onblur="check_sku_num();" value="<{if $goods_data.spec_select_list==''}><{$goods_data.one_sku_data.minimum}><{else}>1<{/if}>" maxlength="5">
+                            <div class="productsize_btnbox">
+                                <input type="button" class="productsize_add" onclick="update_num(1);">
+                                <input type="button" class="productsize_reduce" onclick="update_num(-1);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="productbuybox">
+                    <div class="productbuyleft">
+                        <a href="javascript:void(0)" id="add_order_button" onclick="add_order();"><img src="/views/web/skin/images/icon11.png" width="133" height="45"></a>
+                    </div>
+                    <div class="productbuyleft">
+                        <a href="javascript:void(0)" id="add_cart_button" onclick="add_cart();"><img src="/views/web/skin/images/icon12.png" width="193" height="45"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="proshow_contentbox clear">
+            <div class="proshow_asidebox">
+                <div class="proshow_asideTitle">
+                    推荐产品
+                </div>
+                <ul class="proshow_asideitem ">
+                    <{assign goods_list ym_goods_list(['cat_id'=>$cat_data.id,'is_flag'=>1], 5, 1)}>
+                    <{foreach $goods_list as $v=>$k}>
+                    <li class="clear">
+                        <a href="<{site_url("/goods/product/<{$k.id}>")}>">
+                        <div class="proshow_asideimg">
+                            <img src="<{$k.image}>" width="94" height="91">
+                        </div>
+                        <div class="proshow_asideRight">
+                            <p class="proshow_asideprotitle"><{$k.name}></p>
+                            <p>
+                                价格：<span style="font-size:14px;color:#cb1919;font-weight:bold;">￥<{$k.sell_price}></span>
+                            </p>
+                            <p class="proshow_asideservice">市场价：￥<{$k.market_price}></p>
+                        </div>
+                        </a>
+                    </li>
+                    <{/foreach}>
+            </div>
+            <div class="proshow_content">
+                <div class="proshow_contentTitlebox">
+                    <div class="proshow_contentTitle">
+                        商品展示
+                    </div>
+                </div>
+                <div class="proshow_detailbox clear">
+                    <div class="proshow_detail clear">
+                        <ul class="proshow_detailleft">
+                            <{foreach $goods_data.goods_attr as $k}>
+                            <li class="proshow_detaillist">
+                                <{$k.name}>:<{$k.attr_value}>
+                            </li>
+                            <{/foreach}>
+                        </ul>
+                    </div>
+                </div>
+                <div class="proshow_detailimg">
+                    <{$goods_data.desc}>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <{include file="web/footer.html"}>
+</div>
+<script language="JavaScript">
+    //图片延迟加载
+    Echo.init({
+        offset: 500,
+        throttle: 0
+    });
+
+    //SKU信息
+    var sku_list = <{ch_json_encode($goods_data.sku_list)}>;
+
+    //评论
+    /*$(function(){
+     comment_list(<{$goods_data.id}>);
+     })*/
+
+</script>
+</body>
+</html>

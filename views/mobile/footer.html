@@ -1,0 +1,57 @@
+<footer>
+    <div class="blank"></div>
+    <div class="navbar">
+        <div class="navwrap  flexbox">
+		<!--
+        <a href="<{site_url("/<{get_web_type()}>/welcome")}>" class="navbar_a <{if get_segment(2)=='' || get_segment(2)=='welcome' || get_segment(2)=='goods'}>navbarF<{/if}>" >
+            <div class="navbar_imgbox">
+                <img src="/views/mobile/skin/images/foot0<{if get_segment(2)=='' || get_segment(2)=='welcome' || get_segment(2)=='goods'}>0<{/if}>2.png" >
+            </div>
+            <p class="navbar_label">首页</p>
+        </a>
+        <a href="<{site_url("/<{get_web_type()}>/cart")}>" class="navbar_a  <{if get_segment(2)=='cart'}>navbarF<{/if}>">
+            <div class="navbar_imgbox">
+                <img src="/views/mobile/skin/images/foot0<{if get_segment(2)=='cart'}>0<{/if}>3.png" >
+                <div class="dot"  id="my_cart_count">0</div>
+            </div>
+            <p class="navbar_label">预约</p>
+        </a>
+        <a href="<{site_url("/<{get_web_type()}>/member/order")}>" class="navbar_a  <{if get_segment(2)=='member' && get_segment(3)=='order'}>navbarF<{/if}>">
+            <div class="navbar_imgbox">
+                <img src="/views/mobile/skin/images/foot0<{if get_segment(2)=='member' && get_segment(3)=='order'}>0<{/if}>1.png" >
+            </div>
+            <p class="navbar_label">订单</p>
+        </a>
+        <a href="<{site_url("/<{get_web_type()}>/member")}>"  class="navbar_a <{if get_segment(2)=='member' && get_segment(3)!='order'}>navbarF<{/if}>">
+            <div class="navbar_imgbox">
+                <img src="/views/mobile/skin/images/foot0<{if get_segment(2)=='member' && get_segment(3)!='order'}>0<{/if}>4.png">
+            </div>
+            <p class="navbar_label">个人中心</p>
+        </a>
+		-->
+    </div>
+  </div>
+</footer>
+<!--<{get_copyright()}>-->
+<script language="JavaScript">
+    $(function(){
+        //购物车基本信息展示
+        $.ajax({
+            type:"POST",
+            url: "/api/cart/cart_count",
+            data: "",
+            dataType:"json",
+            success: function(data){
+                if (data.status=='y') {
+                    if (data.result.sku_count>0) {
+                        $('#my_cart_count').text(data.result.sku_count);
+                        $('#my_cart_count').show();
+                    } else {
+                        $('#my_cart_count').hide();
+                        $('#top_my_cart_count').hide();
+                    }
+                }
+            }
+        });
+    })
+</script>

@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}</style>
+<body>
+<div class="pd-20">
+	<form action="<{site_url('/admin/work/save')}>" method="post" class="form form-horizontal" id="add">
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">工单信息</label>
+        </div>
+		<div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">流水号：</label>
+                <div class="formControls col-3">
+                    <span><{$info.id}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">添加日期：</label>
+                <div class="formControls col-3">
+                    <span><{$info.addtime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+		</div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客户姓名：</label>
+                <div class="formControls col-3">
+                    <span><{$info.full_name}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">服务项目：</label>
+                <div class="formControls col-3">
+                    <span><{$info.name}></span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">联系电话1：</label>
+                <div class="formControls col-3">
+                    <span><{$info.phone}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">指定人员：</label>
+                <div class="formControls col-3">
+                    <span><{$info.people}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">应收金额：</label>
+                <div class="formControls col-3">
+                    <span><{$info.price_real}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">是否擦玻璃：</label>
+                <div class="formControls col-3">
+                    <span><{if $info.is_boli == 1}>是<{else}>否<{/if}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工作人数：</label>
+                <div class="formControls col-3">
+                    <span><{if $info.gender1}><{$info.gender1}> 男 <{/if}><{if $info.gender2}><{$info.gender2}> 女 <{/if}><{if $info.gender0}><{$info.gender0}> 男女不限<{/if}>
+                </span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">是否有防护网：</label>
+                <div class="formControls col-3">
+                    <span><{if $info.is_pro == 1}>是<{else}>否<{/if}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">服务时间：</label>
+                <div class="formControls col-3">
+                    <span><{$info.dealtime|date_format:"%Y-%m-%d %H:%M:%S"}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">所带工具：</label>
+                <div class="formControls col-3">
+                    <span><{$info.tool}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">地址：</label>
+                <div class="formControls col-3">
+                    <span><{$info.address}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">录入人：</label>
+                <div class="formControls col-3">
+                    <span><{$info.admin_name}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">本次约单备注：</label>
+                <div class="formControls col-3">
+                    <span><{$info.note}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">录入人工号：</label>
+                <div class="formControls col-3">
+                    <span><{$info.job_no}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">提成信息</label>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">员工提成：</label>
+                <div class="formControls col-3">
+                    <span><{$info.percentage}></span>
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">客服提成：</label>
+                <div class="formControls col-3">
+                    <span><{$info.percentage}></span>
+                </div>
+            </div>
+        </div>
+        <div class="row cl" style="border-bottom:2px solid #eee;padding-bottom:10px;">
+            <label class="form-label col-2" style="font-weight:bold;font-size:16px;text-align:center;">派工信息</label>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工作人员姓名：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="<{$info.real_people}>" datatype="*" name="real_people" placeholder="请输入工作人员姓名" >
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">收款人：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="<{$info.fee_people}>" name="fee_people" placeholder="请输入收款人" >
+                </div>
+            </div>
+        </div>
+        <div class="row cl">
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">工作人员电话：</label>
+                <div class="formControls col-3">
+                    <input type="text" class="input-text" value="<{$info.people_phone}>" name="people_phone" placeholder="请输入工作人员电话" >
+                </div>
+            </div>
+            <div class="width:40%:float:left;">
+                <label class="form-label col-2">派工备注信息：</label>
+                <div class="formControls col-3">
+                    <textarea  style="height:50px;" class="input-text" name="work_note" placeholder="请输入派工备注信息" ><{$info.work_note}></textarea>
+                </div>
+            </div>
+
+        </div>
+        <input type="hidden" name="id" value="<{$info.id}>"/>
+        <input type="hidden" name="status" value="1"/>
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="<{$info.id}>">
+				<button onClick="$('input[name=status]').val(3);$('#add').submit();" class="btn btn-primary radius" type="submit">派单</button>
+                <button onClick="$('input[name=status]').val(2);$('#add').submit();" class="btn btn-primary radius" type="submit">添加暂派人员</button>
+                <button onClick="$('input[name=status]').val(1);$('#add').submit();" class="btn btn-primary radius" type="submit">保存备注</button>
+				<button onClick="data_update(this,'<{site_url('/admin/work/work_delete/')}>','<{$info.id}>')" class="btn btn-default radius" type="button">取消派单</button>
+                <span class="select-box" style="width:100px">
+                    <select name="send_shop" class="select">
+                        <option value="">--请选择分店--</option>
+                    </select>
+                </span>
+                <button onClick="$('input[name=status]').val(3);$('#add').submit();" class="btn btn-default radius" type="button">发送</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        $.Tipmsg.r=null;
+        $("#add").Validform({
+            tiptype:function(msg){
+                layer.msg(msg);
+            },
+            tipSweep:true,
+            ajaxPost:true,
+            callback:function(data){
+                if(data.status=="y"){
+                    //layer_close();
+                    window.history.go(-1);
+                }
+            }
+        });
+        //表单回填
+        var formObj = new Form();
+        //formObj.init(<{ch_json_encode($item)}>);
+        sub_shop_id('<{$info.shop}>','<{$info.sub_shop}>')
+    })
+
+    function sub_shop_id(name,name1){
+        $.ajax({
+            type:"POST",
+            url: "/manager/service/user/sub_shop",
+            data:{name:name},
+            dataType:"json",
+            success: function(data){
+                console.log(data)
+                if(data.status!='y'){
+                    layer.msg(data.info);
+                }else{
+                    var str = '<option value="">--请选择分店--</option>';
+                    $.each(data.result,function(i,item){
+                        if(item.name != name1){
+                            str += '<option value="'+item.name+'">'+item.name+'</option>';
+                        }
+                    });
+                    $("select[name=send_shop]").html(str);
+                }
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

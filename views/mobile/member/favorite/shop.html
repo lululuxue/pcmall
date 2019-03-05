@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><{config_item('website_title')}></title>
+    <meta content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <link rel="stylesheet" href="/views/mobile/skin/css/style.css">
+</head>
+<body style="background:#fff;">
+<!-- content start -->
+<section class="wrap">
+    <!-- 导航条 -->
+    <div class="pronavbox">
+        <div class="pronav" style="width:80%;margin:0 auto;">
+            <a href="<{site_url("/<{get_web_type()}>/member/favorite/goods")}>" class="collectnav_a">
+                <p class="billnavT">宝贝</p>
+            </a>
+            <a href="<{site_url("/<{get_web_type()}>/member/favorite/shop")}>" class="collectnav_a">
+                <p class="billnavT pronav_active">店铺</p>
+            </a>
+        </div>
+    </div>
+    <div class="goodsListwrap" id="dpsc_list">
+        <!-- 单个商品 start -->
+        <{foreach $list as $key}>
+        <div class="collectListbox" id="favorite_list_<{$key.id}>">
+            <label for="checkbox_a<{$key.id}>">
+                <div class="collectListL flexbox">
+                    <div class="checkbox">
+                        <input type="checkbox" name="f_id[]" id="checkbox_a<{$key.id}>" class="inputcheck" value="<{$key.id}>" onclick="check_f()"/>
+                        <span></span>
+                    </div>
+                </div>
+            </label>
+            <a href="<{site_url("/<{get_web_type()}>/shop?shop_id=<{$key.shop_id}>")}>" class="goodsList_a">
+                <div class="collectListC">
+                    <img src="<{$key.logo}>">
+                </div>
+                <div class="goodsListR">
+                    <div class="collectDbox">
+                        <p class="collectT">
+                            <{$key.shop_name}>
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <{/foreach}>
+        <!-- 单个商品 end -->
+        <!--分页-->
+        <{page_view('pages_bar',$page_count,search_array_to_link($search_where),0,false,false)}>
+    </div>
+</section>
+<!--content end  -->
+<div class="blank"></div>
+<div class="cartNav" style="height:0.8rem;padding:0;">
+    <label for="checkbox_all" style="width:50%;">
+        <div class="btnwrapL">
+            <div class="checkbox">
+                <input type="checkbox" id="checkbox_all" class="inputcheck" />
+                <span></span>
+            </div>
+            <p style="font-size:0.26rem;">全选</p>
+        </div>
+    </label>
+    <div class="btnboxR">
+        <input type="button" onclick="delete_all()" class="surebtn" value="删除">
+    </div>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laypage/laypage.js"></script>
+<script type="text/javascript" src="/views/mobile/skin/js/public.js"></script>
+<{include file="mobile/footer.html"}>
+<script language="JavaScript">
+    //全选
+    $(function () {
+        $('#checkbox_all').click(function () {
+            if ($('#checkbox_all').prop('checked') == true) {
+                $('#dpsc_list [name="f_id[]"]').prop('checked', true);
+            } else {
+                $('#dpsc_list [name="f_id[]"]').prop('checked', false);
+            }
+        })
+
+    })
+    //选择店铺判断是否全部选择
+    function check_f() {
+        var total_shop_num = $('#dpsc_list [name="f_id[]"]').length;//总数
+        var checked_shop_num = $('#dpsc_list [name="f_id[]"]:checked').length;//选中的总数
+
+        if (checked_shop_num >= total_shop_num) {
+            $('#checkbox_all').prop('checked', true);
+        } else {
+            $('#checkbox_all').prop('checked', false);
+        }
+    }
+
+    //批量取消收藏
+    function delete_all() {
+        var id = new Array();
+        $('#dpsc_list [name="f_id[]"]:checked').each(function () {
+            var f_id = $(this).val();
+            id.push(f_id);
+        })
+        $.ajax({
+            type: "POST",
+            url: "<{site_url('/api/member/shop_favorite/delete_favorite')}>",
+            data: {'id': id},
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 'y') {
+                    $.each(id, function (index, content) {
+                        $('#favorite_list_' + content).remove();
+                    });
+
+                }
+            }
+        });
+    }
+
+    //单个取消收藏
+    function delete_all(id) {
+        $.ajax({
+            type: "POST",
+            url: "<{site_url('/api/member/shop_favorite/delete_favorite')}>",
+            data: {'id': id},
+            dataType: "json",
+            success: function (data) {
+                if (data.status == 'y') {
+                    $('#favorite_list_' + id).remove();
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>
+
+
+
+

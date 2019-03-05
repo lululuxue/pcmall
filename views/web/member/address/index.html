@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+	<title><{config_item('website_title')}></title>
+	<meta content="<{config_item('website_keywords')}>" name="Keywords">
+	<meta content="<{config_item('website_desc')}>" name="description"/>
+	<script type="text/javascript" src="/public/js/jquery.js"></script>
+	<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+	<script type="text/javascript" src="/public/js/artTemplate.js"></script>
+	<script type="text/javascript" src="/public/js/validform.js"></script>
+	<link rel="stylesheet" type="text/css" href="/views/web/skin/css/style.css" />
+</head>
+<body>
+	<div class="wrap">
+		<{include file="web/header.html"}>
+		 <!-- 内容 -->
+		 <div class="wrapbox clear">
+		 	<div class="scrapnav">
+				您的当前位置：<a href="<{site_url("/welcome")}>">首页</a>><a href="<{site_url("/member")}>">我的账户</a>
+		 	</div>
+		 	<div class="userbox clear">
+		 		<div class="useraside">
+					<{include file="web/member/menu.html"}>
+		 		</div>
+		 		<div class="usercontent">
+		 			<div class="usertitle">
+		 				收货地址
+		 			</div>
+		 			<div class="addressbox">
+ 						已有收货地址
+ 					</div>
+		 			<table class="address-table">
+		 				<tr>
+		 					<th width="100">收货人</th>
+		 					<th style="text-align: left;">地址</th>
+		 					<th>电话/手机</th>
+		 					<th>默认</th>
+		 					<th>操作</th>
+		 				</tr>
+						<tbody id="address_list">
+						<!--地址列表模板start-->
+						<script type='text/html' id='address_list_Template'>
+							{{each result}}
+							<tr id="add_list_{{$value.id}}">
+								<td>{{$value.full_name}}</td>
+								<td style="text-align: left;">{{$value.prov_str}}{{$value.city_str}}{{$value.area_str}}{{$value.address}}</td>
+								<td>{{$value.tel}}</td>
+								<td>{{if $value.is_default==1}}默认{{else}}非默认{{/if}}</td>
+								<td>
+									<a href="javascript:void(0)" onclick="update_delete({{$value.id}})">修改</a>|<a href="javascript:void(0)" onclick="address_delete({{$value.id}})">删除</a>
+								</td>
+							</tr>
+							{{/each}}
+						</script>
+						</tbody>
+		 			</table>
+					<input id="address_addbtn" type="submit" class="yubtn" value="添加收货地址" onclick="address_add();">
+ 					<div class="information clear">
+						<form action="<{site_url('/api/member/address/edit')}>" method="post" id="edit">
+							<div class="informationleft" id="add_address">
+							</div>
+						</form>
+						<!--地址添加模板start-->
+						<script type='text/html' id='address_edit_Template'>
+							<input type="hidden" name="id" value="{{id}}">
+							<table class="infortable">
+								<tr>
+									<td class="infortableleft">
+										<span style="color:#cc1b1b;">*</span> 收货人姓名：
+									</td>
+									<td >
+										<input type="text" class="infortableright" name="full_name" datatype="*" nullmsg="收货人不能为空" value="{{full_name}}">
+									</td>
+								</tr>
+								<tr>
+									<td class="infortableleft">
+										电话号码：
+									</td>
+									<td >
+										<input type="text" class="infortableright" name="tel" datatype="m" nullmsg="电话不能为空" errormsg="手机号码格式错误" value="{{tel}}">
+									</td>
+								</tr>
+								<tr>
+									<td class="infortableleft">
+										<span style="color:#cc1b1b;">*</span>所在地：
+									</td>
+									<td >
+										<select name="prov" class="select" onchange="area_list('city',this.value);">
+										</select>
+										<select name="city" class="select" onchange="area_list('area',this.value);">
+											<option>请选择市</option>
+										</select>
+										<select name="area" class="select">
+											<option>请选择区</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td class="infortableleft"><span style="color:#cc1b1b;">*</span>详细地址:</td>
+									<td><input type="text" class="infortableright" name="address" datatype="*" nullmsg="详细地址不能为空" value="{{address}}">(不需要填写省/市/区)</td>
+								</tr>
+								<tr>
+									<td class="infortableleft">
+
+									</td>
+									<td >
+										<input name="is_default" value="1" type="checkbox" style="vertical-align:middle;"> <label  style="vertical-align:middle;">设为默认</label>
+									</td>
+								</tr>
+							</table>
+							<div class="usersavebox">
+								<input type="submit" value="保存" class="usersavebtn">
+							</div>
+						</script>
+						<!--地址添加模板end-->
+ 					</div>
+		 		</div>
+		 	</div>
+		 	
+		 	
+		 </div>
+		<{include file="web/footer.html"}>
+	</div>
+	<script language="JavaScript">
+		$(function() {
+			//验证表单
+			$.Tipmsg.r = null;
+			$("#edit").Validform({
+				tiptype: function (msg) {
+					layer.msg(msg);
+				},
+				tipSweep: true,
+				ajaxPost: true,
+				callback: function (data) {
+					if (data.status == "y") {
+						window.location.reload();
+					}
+				}
+			});
+
+			//列出所有收货地址
+			$.ajax({
+				type:"POST",
+				url: '<{site_url("/api/member/address")}>',
+				data: '',
+				dataType:"json",
+				success: function(data){
+					if (data.status == "y") {
+						var html = template('address_list_Template', data);
+						$('#address_list').append(html);
+					}
+				}
+			});
+		})
+
+		//新增收货地址
+		function address_add(){
+			$('#address_addbtn').hide();
+			var html = template('address_edit_Template');
+			$('#add_address').html(html);
+			area_list('prov', 0);//省份选择
+
+		}
+
+		//编辑收货地址
+		function update_delete(id){
+			$.ajax({
+				type:"POST",
+				url: '<{site_url("/api/member/address/get_id")}>',
+				data: 'id='+id,
+				dataType:"json",
+				success: function(data){
+					if (data.status == "y") {
+						var html = template('address_edit_Template',data.result);
+						$('#add_address').html(html);
+						//省市区回填
+						area_list('prov', 0, data.result.prov);//省份选择
+						area_list('city', data.result.prov, data.result.city);//市区选择
+						area_list('area', data.result.city, data.result.area);//地区选择
+						$('body').scrollTop( $('body').height());//到页面底部
+					}
+				}
+			});
+		}
+
+		//删除收货地址
+		function address_delete(id){
+			$.ajax({
+				type:"POST",
+				url: '<{site_url("/api/member/address/delete")}>',
+				data: 'id='+id,
+				dataType:"json",
+				success: function(data){
+					if (data.status == "y") {
+						$("#add_list_"+id).remove()
+					}
+				}
+			});
+		}
+
+		//地区加载area_name 选择框名称 parent_id 上级id default_id默认id
+		function area_list(area_name, parent_id, default_id){
+			$.ajax({
+				type:"POST",
+				url: '<{site_url("/api/area/get_list")}>',
+				data: 'parent_id='+parent_id+'&default_id='+default_id,
+				dataType:"html",
+				success: function(data){
+					$('[name="'+area_name+'"]').html(data);
+				}
+			});
+		}
+
+		//设置默认
+		function set_default(id,obj){
+			$.ajax({
+				type:"POST",
+				url: '<{site_url("/api/member/address/set_default")}>',
+				data: 'id='+id,
+				dataType:"json",
+				success: function(data){
+					if (data.status == "y") {
+						$('#address_list [type="radio"]').prop('checked', false);
+						$(obj).prop('checked', true);
+						layer.msg('设置成功');
+					}
+				}
+			});
+		}
+	</script>
+</body>
+</html>

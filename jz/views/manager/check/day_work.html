@@ -1,0 +1,148 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<title><{config_item('manager_title')}></title>
+	<link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+	<link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="breadcrumb">
+	日常考勤 <a class="btn btn-success radius r mr-20" style="line-height:1.6em" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20" style="padding-top: 0px;">
+	<div class="text-c pt-20" style="text-align:left;">
+		<form action="<{site_url('/manager/check/check/day_work/')}>" method="post" class="form form-horizontal" id="search" name="search">
+			<span class="select-box" style="width:100px">
+				<select name="company" class="select">
+					<option value="">重庆公司</option>
+
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="shop" class="select" onchange="sub_shop_all(this.value)">
+					<option value="">--请选择总店--</option>
+					<{foreach $shop_list as $v}>
+					<option value="<{$v.name}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="sub_shop" class="select">
+
+				</select>
+			</span>
+			<span class="select-box" style="width:100px">
+				<select name="cat_id" class="select">
+					<option value="">--选择员工类别--</option>
+					<option value="">全部</option>
+				</select>
+			</span>
+			<span class="select-box" style="width:100px">
+				<select name="job" class="select">
+					<option value="">--请选择职务--</option>
+					<{foreach $desc_list as $v}>
+					<option value="<{$v.name}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:100px">
+				<select name="department_id" class="select">
+					<option value="">--请选择部门--</option>
+					<{foreach $department_list as $v}>
+					<option value="<{$v.id}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:100px">
+				<select name="date" class="select">
+					<{foreach $date_list as $v}>
+					<option value="<{$v.date}>"><{$v.date}></option>
+					<{/foreach}>
+				</select>
+			</span>
+			<span class="select-box" style="width:150px">
+				<select name="type" class="select">
+					<option value="">-请选择条件-</option>
+					<option value="phone">联系电话</option>
+					<option value="reid">项目类别</option>
+					<option value="service_name">服务项目</option>
+				</select>
+			</span>
+			<input type="text" name="name" placeholder="请输入查询内容" style="width:150px" class="input-text">
+			<button class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		</form>
+	</div>
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+			<tr class="text-c">
+				<th>姓名</th>
+				<th>午别</th>
+				<{foreach $list.0.list.morning as $k=>$v}>
+				<th><{$v.day}></th>
+				<{/foreach}>
+				<th>操作</th>
+			</tr>
+			</thead>
+			<tbody>
+			<{foreach $list as $key}>
+			<tr class="text-c">
+				<td rowspan="2"><{$key.name}></td>
+				<td>上午</td>
+				<{foreach $key.list.morning as $k=>$v}>
+				<td class="text-l">
+					<span style="display:block;"><{if $v.is_work == 1}>/<{else if $v.is_work == 2}>请假<{else if $v.is_work == 3}>缺勤<{/if}></span>
+					<{if $v.over_time}><span style="display:block;"><{$v.over_time}></span><{/if}>
+					<{if $v.add_money}><span style="display:block;color:deepskyblue"><{$v.add_money}></span><{/if}>
+					<{if $v.reduce_money}><span style="display:block;color:red"><{$v.reduce_money}></span><{/if}>
+				</td>
+				<{/foreach}>
+				<td rowspan="2">
+					<a style="text-decoration:none;color:#2691FD" class="ml-5" onClick="open_iframe('修改','<{site_url("/manager/check/check/day_check?id=<{$key.id}>&date=<{$search_where.date}>")}>')" href="javascript:;" title="修改">修改</a>
+				</td>
+			</tr>
+			<tr class="text-c">
+				<td>下午</td>
+				<{foreach $key.list.after as $k=>$v}>
+				<td class="text-l">
+					<span style="display:block;"><{if $v.is_work == 1}>/<{else if $v.is_work == 2}>请假<{else if $v.is_work == 3}>缺勤<{/if}></span>
+					<{if $v.over_time}><span style="display:block;"><{$v.over_time}></span><{/if}>
+					<{if $v.add_money}><span style="display:block;color:deepskyblue"><{$v.add_money}></span><{/if}>
+					<{if $v.reduce_money}><span style="display:block;color:red"><{$v.reduce_money}></span><{/if}>
+				</td>
+				<{/foreach}>
+
+			</tr>
+			<{/foreach}>
+			</tbody>
+		</table>
+	</div>
+</div>
+<!--分页-->
+
+<{page_view('page',$page_count,search_array_to_link($search_where))}>
+
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+<script language="JavaScript">
+	$(function(){
+		//表单回填
+		var formObj = new Form();
+		formObj.init(<{ch_json_encode($search_where)}>);
+        sub_shop_all('<{$search_where.shop}>','<{$search_where.sub_shop}>')
+	})
+
+</script>
+</body>
+</html>

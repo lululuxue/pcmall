@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title><{config_item('manager_title')}></title>
+    <link href="/public/H-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="/public/H-ui/hui-iconfont/iconfont.css" rel="stylesheet" type="text/css">
+</head>
+<style>.Nodisplay{display:none}</style>
+<body>
+<nav class="breadcrumb">
+    <{if $user_data.Id}>修改<{else}>新增<{/if}>客户<a class="btn btn-success radius r mr-20" style="line-height:1.6em;" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a>
+</nav>
+<div class="pd-20">
+	<form action="<{site_url('/admin/user/user_save')}>" method="post" class="form form-horizontal" id="add">
+		<div class="row cl">
+			<label class="form-label col-3">用户名：</label>
+			<div class="formControls col-5">
+                <{if $user_data.username}>
+                <span><{$user_data.username}></span>
+                <{else}>
+                <input type="text" style='width:50%;' class="input-text" value="<{$user_data.username}>" name="username" datatype="m" placeholder="请输入用户名手机号" nullmsg="手机号码错误">
+                <{/if}>
+			</div>
+		</div>
+        <div class="row cl">
+            <label class="form-label col-3">客户名称：</label>
+            <div class="formControls col-5">
+                <input type="text" style='width:50%;' class="input-text" value="<{$user_data.name}>" name="name" datatype="*" nullmsg="请输入客户名称">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">备注：</label>
+            <div class="formControls col-5">
+                <input type="text" style='width:50%;' class="input-text" value="<{$user_data.note}>" name="note" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3">总店：</label>
+            <div class="formControls">
+               <span class="select-box" style="width:150px">
+                   <select name="shop" class="select" onchange="sub_shop_all(this.value)">
+					<option value="">--请选择总店--</option>
+					<{foreach $shop_list as $v}>
+					<option value="<{$v.name}>"><{$v.name}></option>
+					<{/foreach}>
+				    </select>
+			    </span>
+                <span class="select-box" style="width:150px">
+                    <select name="sub_shop" class="select">
+					<option value="">--请选择总店--</option>
+					<{foreach $shop_list as $v}>
+					<option value="<{$v.name}>"><{$v.name}></option>
+					<{/foreach}>
+				</select>
+			    </span>
+            </div>
+
+        </div>
+<!--
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red"></span>总积分：</label>
+            <div class="formControls col-5">
+                <input type="text" style="width:50%" class="input-text" value="<{$user_data.jifen}>" name="jifen" >
+            </div>
+        </div>
+        -->
+
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red"></span>家庭住址：</label>
+            <div class="formControls col-5">
+                <input type="text" class="input-text" value="<{$user_data.address}>" name="address" >
+            </div>
+        </div>
+        <!--
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red"></span>总充值金额：</label>
+            <div class="formControls col-5">
+                <input type="text" style="width:50%" class="input-text" value="<{$user_info.count}>" name="count" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red"></span>总赠送金额：</label>
+            <div class="formControls col-5">
+                <input type="text" style="width:50%" class="input-text" value="<{$user_info.add_money}>" name="add_money" >
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-3"><span class="c-red"></span>总金额：</label>
+            <div class="formControls col-5">
+                <input type="text" style="width:50%" class="input-text" value="<{$user_info.total_count}>" name="total_count" >
+            </div>
+        </div>
+-->
+		<div class="row cl">
+			<div class="col-10 col-offset-2">
+                <input type="hidden" name="id" value="<{$item.id}>">
+                <input type="hidden" name="m_id" value="<{$user_data.Id}>">
+				<button onClick="$('#add').submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript" src="/public/js/jquery.js"></script>
+<script type="text/javascript" src="/public/js/validform.js"></script>
+<script type="text/javascript" src="/public/js/layer/layer.js"></script>
+<script type="text/javascript" src="/public/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/public/js/form.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.js"></script>
+<script type="text/javascript" src="/public/H-ui/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        //验证表单
+        //验证表单
+        $.Tipmsg.r = null;
+        $("#add").Validform({
+            tiptype: function (msg) {
+                layer.msg(msg);
+            },
+            tipSweep: true,
+            ajaxPost: true,
+            callback: function (data) {
+                if (data.status == "y") {
+                    //layer_close();
+                    window.history.back(-1);
+                }
+            }
+        });
+    })
+
+    function change_day(value){
+        if(value && value > 1){
+            $("#week").addClass('Nodisplay');
+            $("#day").removeClass('Nodisplay');
+        }else{
+            $("#week").removeClass('Nodisplay');
+            $("#day").addClass('Nodisplay');
+        }
+
+    }
+
+</script>
+</body>
+</html>
